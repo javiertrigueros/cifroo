@@ -1,0 +1,32 @@
+{% if channels|length == 1 %}
+<li class="px-nav-item {% if menuSection is defined and menuSection == "wall" %} active {% endif %}">
+    <a href="{{ path('wall') }}">
+        <i class="px-nav-icon fa ion-pound"></i>
+        <span class="px-nav-label">{% trans %}control_panel.wall{% endtrans %}</span>
+    </a>
+</li>    
+{% else %}
+<li class="configurador-menu px-nav-item px-nav-dropdown {% if menuSection is defined and menuSection == "wall" %} px-open {% endif %}">
+        <a href="#">
+            <i class="px-nav-icon fa ion-pound"></i>
+            <span class="px-nav-label">{% trans %}navbar.channels{% endtrans %}</span>
+        </a>
+
+        <ul class="px-nav-dropdown-menu">
+            {% for channel in channels %}
+              <li class="px-nav-item {% if currentChannelId is defined  and currentChannelId == channel.id %} active {% endif %}">
+              {% if channel.id is constant('Arquematics\\WallBundle\\Entity\\ArChannel::GENERAL') %}
+              <a href="{{ path('wall', {"channel_slug": channel.slug } ) }}">
+                  <span class="px-nav-label">{{ channel.name | trans }}</span>
+              </a>
+              {% else %}
+              <a href="{{ path('wall', {"channel_slug": channel.slug } ) }}">
+                  <span class="px-nav-label">{{ channel.name }}</span>
+              </a>  
+              {% endif %}
+              </li>  
+            {% endfor %}
+            
+        </ul>
+</li>
+{% endif %}

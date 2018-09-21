@@ -1,0 +1,14 @@
+{
+  "name": "remotestorage.js",
+  "homepage": "https://github.com/remotestorage/remotestorage.js",
+  "version": "0.10.0-beta3",
+  "_release": "0.10.0-beta3",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.10.0-beta3",
+    "commit": "1ba2e73844d94dd522c66dfee9b0c01666b5366e"
+  },
+  "_source": "git://github.com/remotestorage/remotestorage.js.git",
+  "_target": "0.10.0-beta3",
+  "_originalSource": "git://github.com/remotestorage/remotestorage.js.git"
+}

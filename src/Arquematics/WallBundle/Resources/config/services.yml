@@ -1,0 +1,48 @@
+services:
+    user.publish.listener:
+        class: Arquematics\WallBundle\Listener\UserPostPersist
+        arguments: ['@session']
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
+            
+    message.publish.listener:
+        class: Arquematics\WallBundle\Listener\WallMessagePostPersist
+        arguments: ['@session']
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
+    
+    custom.event.facebook_publish:
+        class: Arquematics\WallBundle\Listener\SocialFacebook
+        arguments: [ '@service_container', '@doctrine.orm.entity_manager']
+        tags:
+            - { name: kernel.event_listener, event: custom.event.facebook_publish_event, method: onPublish }
+    
+    custom.event.facebook_unpublish:
+        class: Arquematics\WallBundle\Listener\SocialFacebook
+        arguments: [ '@service_container', '@doctrine.orm.entity_manager']
+        tags:
+            - { name: kernel.event_listener, event: custom.event.facebook_un_publish_event, method: onDestroy }
+  
+    custom.event.twitter_publish:
+        class: Arquematics\WallBundle\Listener\SocialTwitter
+        arguments: [ '@service_container', '@doctrine.orm.entity_manager']
+        tags:
+            - { name: kernel.event_listener, event: custom.event.twitter_publish_event, method: onPublish }
+    
+    custom.event.twitter_unpublish:
+        class: Arquematics\WallBundle\Listener\SocialTwitter
+        arguments: [ '@service_container', '@doctrine.orm.entity_manager']
+        tags:
+            - { name: kernel.event_listener, event: custom.event.twitter_un_publish_event, method: onDestroy }
+            
+    custom.event.linkedin_publish:
+        class: Arquematics\WallBundle\Listener\SocialLinkedin
+        arguments: [ '@service_container', '@doctrine.orm.entity_manager']
+        tags:
+            - { name: kernel.event_listener, event: custom.event.linkedin_publish_event, method: onPublish }
+    
+    custom.event.linkedin_unpublish:
+        class: Arquematics\WallBundle\Listener\SocialLinkedin
+        arguments: [ '@service_container', '@doctrine.orm.entity_manager']
+        tags:
+            - { name: kernel.event_listener, event: custom.event.linkedin_un_publish_event, method: onDestroy }

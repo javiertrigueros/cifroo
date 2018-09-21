@@ -1,0 +1,13 @@
+{
+  "name": "pagedown",
+  "homepage": "https://github.com/ujifgc/pagedown",
+  "_release": "f1ae0f5626",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "f1ae0f5626e044f64b937836962a9941c60c7596"
+  },
+  "_source": "git://github.com/ujifgc/pagedown.git",
+  "_target": "*",
+  "_originalSource": "git://github.com/ujifgc/pagedown.git"
+}

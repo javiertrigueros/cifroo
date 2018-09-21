@@ -1,0 +1,35 @@
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix: /connect
+    
+hwi_oauth_connect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
+    prefix: /connect
+
+#hwi_oauth_login:
+#    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+#    prefix: /connect
+    
+twitter_login:
+    path: /connect/check-twitter
+    options: { i18n: false }
+    
+facebook_login:
+    path: /connect/check-facebook
+    options: { i18n: false }
+    
+linkedin_login:
+    path: /connect/check-linkedin
+    options: { i18n: false }
+    
+api_login_check:
+    path: /api/login_check
+    
+arquematics_wall:
+    resource: "@WallBundle/Resources/config/routing.yml"
+
+backend:
+    resource: "@BackendBundle/Resources/config/routing.yml"
+    
+userbundle:
+    resource: "@UserBundle/Resources/config/routing.yml"

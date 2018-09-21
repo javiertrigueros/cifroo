@@ -1,0 +1,20 @@
+{
+  "name": "remotestoragejs",
+  "desc": "Client side JavaScript library for integrating remoteStorage",
+  "version": "0.10.0-beta3",
+  "private": false,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/remotestorage/remotestorage.js.git"
+  },
+  "homepage": "http://remotestorage.io",
+  "devDependencies": {
+    "jaribu": "0.1.x",
+    "uglify-js": "2.4.x",
+    "xhr2": "0.0.7"
+  },
+  "scripts": {
+    "test": "node_modules/jaribu/bin/jaribu"
+  }
+}

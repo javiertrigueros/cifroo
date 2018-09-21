@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf8">
+        <title>Arquematics Compressed Archive Viewer</title>
+        <link rel="stylesheet" type="text/css" href="/arquematicsPlugin/js/components/ViewCompressed/css/master.css" />
+        <link rel="stylesheet" type="text/css" href="/arquematicsPlugin/js/components/ViewCompressed/js/w2ui/dist/w2ui.min.css" />
+        
+    </head>
+    <body>
+        <div id="main" style="width: 100%; height: 90%"></div>
+ 
+    </body>
+    <script type="text/javascript" src="/arquematicsPlugin/js/vendor/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/arquematicsPlugin/js/arquematics/arquematics.mime.js"></script>
+    <script type="text/javascript" src="/arquematicsPlugin/js/components/ViewCompressed/js/zip.js/zip.js"></script>
+    <script type="text/javascript" src="/arquematicsPlugin/js/components/ViewCompressed/js/rar.js/dist/rar.js"></script>
+    <script type="text/javascript" src="/arquematicsPlugin/js/components/ViewCompressed/js/w2ui/dist/w2ui.min.js"></script>
+    <script type="text/javascript">
+
+
+(function($,arquematics, w2utils, w2ui, zip, RarArchive) {
+    
+zip.workerScriptsPath = '/arquematicsPlugin/js/components/ViewCompressed/js/zip.js/';
+
+var filearr = []
+, tablearr = []
+, entries
+, isEs
+, langExt;
+
+function humanFileSize(bytes, si) {
+    var thresh = si ? 1000 : 1024;
+    if(Math.abs(bytes) < thresh) {
+        return bytes + ' B';
+    }
+    var units = ['kB','MB','GB','TB','PB','EB','ZB','YB'];
+    var u = -1;
+    do {
+        bytes /= thresh;
+        ++u;
+    } while(Math.abs(bytes) >= thresh && u < units.length - 1);
+    return bytes.toFixed(1)+' '+units[u];
+}
+
+function show(result){
+    
+    var config = {
+        grid: { 
+            name: 'grid',
+            show: { 
+                footer    : true,
+                toolbar    : true
+            },
+            columns: [                
+                { field: 'name', caption: (isEs)?'Nombre':'Name', size: '300px', sortable: true, searchable: 'text', resizable: true },
+                { field: 'type', caption: (isEs)?'Tipo':'Type', size: '140px', sortable: true, searchable: 'text', resizable: true },
+                { field: 'size', caption: (isEs)?'Tamaño':'Size', size: '140px', sortable: true, searchable: 'text', resizable: true },
+            ]
+        }
+    };
+    
+    $().w2grid(config.grid);
+    
+    for (var i = 0; i < result.length; i++) {
+        w2ui['grid'].records.push({ 
+            name: result[i].name,
+            type: result[i].type,
+            size: result[i].size
+        });
+    }
+    
+    w2ui.grid.refresh();
+    $('#main').w2render('grid');
+    $('#grid_grid_column_0').click();
+}
+
+//https://github.com/43081j/rar.js
+function unrar(rar)
+{
+    RarArchive(rar, function(err) {
+        if(err && console) {
+            console.log(err);
+            return;
+        }
+
+        this.entries.forEach(function(file) {
+
+            filearr.push(file);
+            
+            var name = file.name
+            , blobType = name                
+            , extension = blobType.split('.').pop()
+            , mime =  arquematics.mime.mimeTypesMap[extension]?arquematics.mime.mimeTypesMap[extension][0]: 'text/plain';
+        
+            if (mime === 'text/plain')
+            {
+                var extension = name.split('.').pop();
+                if (extension.slice(-1) == '/')
+                {
+                    mime = (isEs)?'directorio':'directory';   
+                }
+            }
+            
+            tablearr.push({
+                "name": name,
+                "type": mime,
+                "size": file.size > 0 ? humanFileSize(file.size, false): ''
+               }); 
+        });
+        
+        show(tablearr);
+    });
+}
+            
+function unzip(blob)
+{
+    model.getEntries(blob, function(entries) {
+     entries.forEach(function(entry) {
+        model.getEntryFile(entry, "Blob");
+        });
+    });
+}
+
+window.extract = function (data, contentType, lang)
+{
+    langExt = (lang === 'es')?'es-es':'en-en';
+    isEs = (langExt == 'es-es');
+    
+    w2utils.locale('/arquematicsPlugin/js/components/ViewCompressed/js/w2ui/dist/locale/' + langExt + '.json');
+    
+    if (arquematics.mime.isZip(contentType))
+    {
+        unzip(data);    
+    }
+    else if (arquematics.mime.isRar(contentType))
+    {
+        unrar(data)      
+    }
+}
+//model for zip.js
+//https://github.com/gildas-lormeau/zip.js
+
+            var model = (function() {
+                var acount = 0
+                , bcount = 0;
+
+                return {
+                    getEntries : function(file, onend) {
+
+                        zip.createReader(new zip.BlobReader(file), function(zipReader) {
+                            zipReader.getEntries(onend);
+                        }, onerror);
+                    },
+                    getEntryFile : function(entry, creationMethod, onend, onprogress) {
+
+                        acount++;
+
+                        var writer;
+
+                        function getData() {
+                            entry.getData(writer, function(blob) {
+                                
+                                var blobType = blob.type;
+                                
+                                //detecta si es un directorio
+                                //y cambia si es necasario
+                                if (blobType === 'text/plain')
+                                {
+                                   var extension = entry.filename.split('.').pop();
+                                   
+                                   if (extension.slice(-1) == '/')
+                                   {
+                                     blobType = (isEs)?'directorio':'directory';   
+                                   }
+                                }
+                                
+                                bcount++;
+                                
+                                filearr.push(blob);
+
+                                tablearr.push({
+                                    "name":entry.filename,
+                                    "type":blobType,
+                                    "size":blob.size > 0 ? humanFileSize(blob.size, false): ''
+                                    }); 
+                                
+                                
+                                if(acount == bcount){
+                                    show(tablearr);
+                                }
+                         
+                            }, onprogress);
+                        }
+                            
+                        var extension = entry.filename.split('.').pop()
+                        //el tipo principal es [0] los demas on alias
+                        , mime =  arquematics.mime.mimeTypesMap[extension]?arquematics.mime.mimeTypesMap[extension][0]: 'text/plain';
+
+                        writer = new zip.BlobWriter(mime);
+                        getData();
+                    }
+                };
+            })();  
+   
+         })(jQuery, arquematics, w2utils, w2ui, zip, RarArchive);          
+         
+        </script>
+
+</html>

@@ -1,0 +1,196 @@
+.navbar-right li.dropdown
+{
+  display: block !important;  
+}
+
+.idea-document
+{
+  display: block;
+  float: left;
+  margin-right: 18px;
+}
+
+.bg-color-line-par {
+    background-color: #f9f9f9;
+}
+
+.form-line-separation
+{
+   border-top: 2px dotted #cccccc;
+   padding-top: 22px;
+   padding-bottom: 10px;
+   padding-left: 0;
+   padding-right: 0;
+}
+
+.idea-bottom {
+    display: block;
+    font-size: 26px !important;
+    padding: 10px;
+    margin-bottom: 40px;
+}
+
+.btn-document
+{
+  margin-top: 2px;
+  display: block;
+  float: left;
+}
+.idea-head {
+    border-bottom: 2px dotted #cccccc;
+    display: block;
+    margin-top: -5px;
+    padding: 10px;
+}
+
+.idea-head-text
+{
+   padding: 0 !important;
+   margin: 0 !important;
+}
+
+.ui-control-text {
+   padding: 10px;
+   margin-bottom: 10px;
+}
+
+.input-group
+{
+  width: 100%;   
+}
+
+#ui-category label,
+#ui-source label,
+#ui-reason label,
+#ui-system label,
+#ui-created-at label
+{
+  cursor: pointer;  
+}
+
+.ui-control-text label
+{
+   padding-bottom: 12px; 
+}
+
+.form-group-small
+{
+    margin: 8px !important;  
+}
+
+.profile-head-text
+{
+    padding-right: 20px;
+}
+
+.ui-control-edit:hover
+{
+    background-color: #99bbe8;
+    cursor: pointer;
+}
+
+.edit-group
+{
+    width: 100%;
+    padding-bottom: 35px;
+}
+
+.control-source
+{
+  padding-left: 26px; 
+  padding-top: 15px;  
+}
+
+.control-close
+{
+  padding-left:10px;
+}
+
+.control-close .bootstrap-switch-container span
+{
+   line-height: 20px;
+   padding: 5px;
+}
+
+.clockface-btn i
+{
+  padding-top:4px;  
+}
+
+.flowchar-dialog
+{
+   width: 65%;
+}
+
+.task-has-document
+{
+  margin-top: 24px; 
+}
+
+.task-file
+{
+    display:block;
+    float:left;
+    margin-right: 8px;
+    margin-top: -2px;
+}
+
+
+#scrollUp {
+	background: #D8433F;
+	font-weight: bold;
+}
+
+.indicadores_view_table thead{
+	background-color:rgb(225, 225, 226);
+}
+
+
+.small_calendar_header{
+	background-image: linear-gradient(#9BD2F5, #DBF1FF 85%, #F7F7F7) !important;
+}
+
+.small_calendar_header h5{
+	font-weight: bold;
+}
+
+.fc-widget-header{
+    background-color:rgb(176, 207, 255);
+}
+
+input[type=checkbox]{
+	zoom: 1;
+	-moz-transform: scale(1);
+}
+
+
+.fc-center h2{
+	font-weight: bold;
+}
+
+
+.dropdown-alertas p{
+	color: #333333 !important;
+}
+
+.datepicker-days thead,tfoot{
+	background-color: #337ab7;
+	color: #FFFFFF;
+}
+
+.datepicker table tr td, .datepicker table tr th {
+	text-align: center;
+	width: 30px;
+	height: 30px;
+	border-radius: 0px !important;
+	border: none;
+}
+
+.datepicker thead tr:first-child th:hover,
+.datepicker tfoot tr th:hover {
+	background-color: rgb(176, 207, 255) !important;
+}
+
+.comment-png {
+	height: 20px;padding-left: 10px;
+}

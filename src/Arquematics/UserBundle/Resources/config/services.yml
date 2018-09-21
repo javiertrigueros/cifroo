@@ -1,0 +1,9 @@
+parameters:
+#    user.example.class: Arquematics\UserBundle\Example
+
+services:
+    login_listener:
+        class: Arquematics\UserBundle\Listener\LoginListener
+        arguments: ["@doctrine.orm.entity_manager", "@request_stack" ]
+        tags:
+        - { name: kernel.event_listener, event: security.interactive_login, method: onSecurityInteractiveLogin }

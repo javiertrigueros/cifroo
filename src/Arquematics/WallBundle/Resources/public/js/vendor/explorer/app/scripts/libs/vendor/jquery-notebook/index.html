@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>jQuery Notebook Demo</title>
+        <meta charset='utf-8'>
+        <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" type="text/css" href="src/js/jquery.notebook.css">
+    </head>
+    <body>
+        <a href="https://github.com/raphaelcruzeiro/jquery-notebook"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png" alt="Fork me on GitHub"></a>
+        <div class="editor">
+            <h1>JQUERY NOTEBOOK DEMO</h1>
+            <p>A simple, clean and elegant text editor. Inspired by the awesomeness of <a href="http://medium.com" target="_blank">Medium</a>.</p>
+            <p>This jQuery plugin is released under the MIT license. You can check out the project and see how extremely simple it is to use this editor on your application by clicking on the Github ribbon on the top corner of this page. Feel free to contribute with this project by registering any bug that you may encounter as an issue on Github, and working on the issues that are already there. I'm looking forward to seeing your pull request!</p>
+            <p>Now, just take a time to test the editor. Yes, <b>this div is the editor</b>. Try to edit this text, select a part of this text and don't forget to try the basic text editor keyboard shortcuts.</p>
+        </div>
+        <script type="text/javascript" src="src/js/libs/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="src/js/jquery.notebook.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('.editor').notebook({
+                    autoFocus: true,
+                    placeholder: 'Type something awesome...'
+                });
+            });
+        </script>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-46641093-3', 'raphaelcruzeiro.github.io');
+            ga('send', 'pageview');
+        </script>
+    </body>
+</html>

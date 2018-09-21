@@ -1,0 +1,61 @@
+{% extends '::frontend.html.twig' %}
+
+{% block title %}{% trans %}menu.sign_in{% endtrans %}{% endblock %}
+
+{% block body_params %}class="loading"{% endblock %}
+
+{% block container %}
+
+    <div class="modal-load modal-load-fix">
+        <div class="ar-container">
+           <div class="item-swip cssload-piano">
+            <div class="cssload-rect1"></div>
+            <div class="cssload-rect2"></div>
+            <div class="cssload-rect3"></div>
+          </div>
+        </div>
+    </div>
+    
+    <div class="px-responsive-bg">
+        <div class="px-responsive-bg-overlay" style="background: rgb(0, 0, 0) none repeat scroll 0% 0%; opacity: 0.2;"></div>
+        <img alt="" src="{{ asset('bundles/design/demo/bgs/3.jpg') }}" style="width: 100%; height: auto; top: -70px; left: 0px;">
+    </div>
+   
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('bundles/wall/css/animation_wait.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/design/css/fontello/css/fontello-embedded.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/design/css/login.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+
+<script src="{{ asset('bundles/user/js/bower_components/hideshowpassword/hideShowPassword.min.js') }}" type="text/javascript"></script>
+
+<script src="{{ asset('bundles/wall/js/vendor/jsencrypt/bin/jsencrypt.js') }}" type="text/javascript"></script>
+<script src="{{ asset('bundles/wall/js/bower_components/blob-util/dist/blob-util.js') }}" type="text/javascript"></script>
+<script src="{{ asset('bundles/wall/js/vendor/sjcl/sjcl.js') }}" type="text/javascript"></script>
+<script src="{{ asset('bundles/wall/js/arquematics/arquematics.core.js') }}" type="text/javascript"></script>
+<script src="{{ asset('bundles/user/js/arquematics/arquematics.autologin.js') }}" type="text/javascript"></script>
+<script type="text/javascript">
+    
+    $(document).ready(function()
+    {
+        //inicializa el scrip de login
+        arquematics.login.init({
+            api_send_public_key: '{{ path('api_send_public_key') }}',
+            api_send_private_mail: '{{ path('api_send_private_mail') }}',
+            api_request_private_mail: '{{ path('api_request_private_mail') }}',
+            api_userinfo: '{{ path('api_userinfo') }}',
+            api_logout: '{{ path('user_logout') }}',
+            api_wall: '{{ path('wall') }}',
+            sessionname: '{{ sessionname }}' });
+       
+    });
+</script>
+
+{% endblock %}

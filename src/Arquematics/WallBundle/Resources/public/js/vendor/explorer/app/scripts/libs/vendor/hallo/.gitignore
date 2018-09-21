@@ -1,0 +1,8 @@
+.idea
+docs/
+node_modules/
+docs_tmp/
+_site/
+dist/hallo-min.js
+bower_components/
+.DS_Store

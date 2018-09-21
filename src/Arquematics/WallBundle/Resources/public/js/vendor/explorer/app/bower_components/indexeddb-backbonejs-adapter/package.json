@@ -1,0 +1,26 @@
+{
+  "author": "Julien Genestoux <julien@superfeedr.com> (http://ouvre-boite.com)",
+  "name": "backbone-indexeddb",
+  "description": "A backbone adapter for indexeddb. Useless for most people until indexeddb is ported to the browser.",
+  "version": "0.0.13",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/superfeedr/indexeddb-backbonejs-adapter.git"
+  },
+  "main": "backbone-indexeddb.js",
+  "scripts": {
+    "start": "grunt",
+    "test": "grunt test"
+  },
+  "dependencies": {
+    "backbone": "*",
+    "underscore": "*"
+  },
+  "devDependencies": {
+    "grunt": "0.4.4",
+    "grunt-contrib-connect": "~0.7.1",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-saucelabs": "~5.1.1"
+  },
+  "optionalDependencies": {}
+}

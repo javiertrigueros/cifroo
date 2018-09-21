@@ -1,0 +1,320 @@
+<li id="search-box" class="search-box-container hidden-xs hidden-sm">
+    <div class="navbar-form">
+        <div class="input-group has-feedback has-clear" style="display:table;">
+            <% if (searchText) {%>
+            <input id="search-input" value="{{ searchText }}" name="search-input" autocomplete="off" class="form-control fuzzy-search" placeholder="{{ captionSearchText(docType) }}" type="text">
+            <% } else {%>
+            <input id="search-input" value="" name="search-input" autocomplete="off" class="form-control fuzzy-search" placeholder="{{ captionSearchText(docType) }}" type="text">
+            <% } %>
+            <i class="cmd-search-cancel form-control-clear fa fa-times-circle form-control-feedback hidden"></i>
+            <span class="input-group-btn cmd-select-type">
+                <button type="button" class="btn btn-info cmd-search"><i class="fa fa-search"></i></button>
+                <button type="button" class="btn btn-info dropdown-toggle cmd-search-select" data-toggle="dropdown" aria-expanded="false">
+                    <% if (docType == 'all') {%>
+        
+        <% } else if (docType == 'fav') {%>
+        <i class="selected-icon px-navbar-icon fa fa-star"></i>
+        <% } else if (docType == 'pdf') {%>
+        <i class="selected-icon px-navbar-icon fa fa-file-pdf-o"></i>
+        <% } else if (docType == 'stl') {%>
+        <i class="selected-icon px-navbar-icon icon-stl"></i>
+        <% } else if (docType == 'doc') {%>
+        <i class="selected-icon px-navbar-icon fa fa-file-word-o"></i>
+        <% } else if (docType == 'xls') {%>
+        <i class="selected-icon px-navbar-icon fa fa-file-excel-o"></i>
+        <% } else if (docType == 'ppt') {%>
+        <i class="selected-icon px-navbar-icon fa fa-file-powerpoint-o"></i>
+        <% } else if (docType == 'gif') {%>
+        <i class="selected-icon px-navbar-icon fa fa-file-photo-o"></i>
+        <% } else if (docType == 'svg') {%>
+        <i class="selected-icon px-navbar-icon fa fa-code"></i>
+        <% } else if (docType == 'psd') {%>
+        <i class="selected-icon px-navbar-icon icon-psd"></i>
+        <% } else if (docType == 'dwg') {%>
+        <i class="selected-icon px-navbar-icon icon-dwg"></i>
+        <% } else if (docType == 'zip') {%>
+        <i class="selected-icon px-navbar-icon fa fa-file-zip-o"></i>
+        <% } %>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                  <li>
+                      <a data-content="all" href="/explorer#all">
+                        <span class="icon-select bg-info">
+                                <i class=" fa fa-ellipsis-h" title="{{ i18n('All documents') }}"></i> 
+                        </span> 
+                        <span class="label-select-text">
+                              {{ i18n('All documents') }} 
+                        </span>
+                        
+                      </a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                      <a data-content="fav" href="/explorer#fav">
+                          <span class="icon-select bg-danger">
+                              <i class="fa fa-star" title="{{ i18n('All favorites') }}"></i>
+                          </span>
+                          <span class="label-select-text">
+                          {{ i18n('All favorites') }}
+                          </span>
+                      </a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                      <a data-content="pdf" href="/explorer#pdf">
+                          <span class="icon-select bg-info">
+                             <i class="fa fa-file-pdf-o" title="{{ i18n('PDF documents') }}"></i> 
+                          </span>
+                          <span class="label-select-text">
+                           {{ i18n('PDF documents') }}   
+                          </span>
+                      </a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                      <a data-content="doc docx odt" href="/explorer#doc">
+                          <span class="icon-select bg-success">
+                             <i class="fa fa-file-word-o" title="{{ i18n('DOC documents') }}"></i> 
+                          </span>
+                          <span class="label-select-text">
+                           {{ i18n('DOC documents') }}  
+                          </span>
+                      </a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                      <a data-content="ppt pptx pps odp" href="/explorer#ppt">
+                          <span class="icon-select bg-danger">
+                             <i class="fa fa-file-powerpoint-o" title="{{ i18n('PPT documents') }}"></i> 
+                          </span>
+                          <span class="label-select-text">
+                           {{ i18n('PPT documents') }} 
+                          </span>
+                      </a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                      <a data-content="xls xlsx ods" href="/explorer#xls">
+                          <span class="icon-select bg-warning">
+                             <i class="fa fa-file-excel-o" title="{{ i18n('XLS documents') }}"></i> 
+                          </span>
+                          <span class="label-select-text">
+                           
+                           {{ i18n('XLS documents') }}
+                          </span>
+                      </a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                      <a data-content="gif png jpeg jpg jpe jfif jp2 jpx xcf pic bmp tiff tif" href="/explorer#gif">
+                          <span class="icon-select bg-info">
+                             <i class="fa fa-file-photo-o" title="{{ i18n('Image documents') }}"></i> 
+                          </span>
+                          <span class="label-select-text">
+                           {{ i18n('Image documents') }}
+                          </span>
+                      </a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                      <a data-content="svg" href="/explorer#svg">
+                          <span class="icon-select bg-success">
+                             <i class="fa fa-code" title="{{ i18n('SVG documents') }}"></i> 
+                          </span>
+                          <span class="label-select-text">
+                           {{ i18n('SVG documents') }}
+                          </span>
+                      </a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                      <a data-content="psd" href="/explorer#psd">
+                          <span class="icon-select-extra bg-danger">
+                             <i class="icon-psd" title="{{ i18n('PSD documents') }}"></i> 
+                          </span>
+                          <span class="label-select-text">
+                           {{ i18n('PSD documents') }}
+                          </span>
+                      </a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                      <a data-content="stl" href="/explorer#stl">
+                          <span class="icon-select-extra bg-info">
+                             <i class="icon-stl" title="{{ i18n('STL documents') }}"></i> 
+                          </span>
+                          <span class="label-select-text">
+                           {{ i18n('STL documents') }}
+                          </span>
+                      </a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                      <a data-content="dwg dxf" href="/explorer#dwg">
+                          <span class="icon-select-extra bg-warning">
+                             <i class="icon-dwg" title="{{ i18n('DWG and DXF documents') }}"></i> 
+                          </span>
+                          <span class="label-select-text">
+                           {{ i18n('DWG and DXF documents') }}
+                          </span>
+                      </a>
+                  </li>
+                  <li class="divider"></li>
+                  <li>
+                      <a data-content="rar zip tgz" href="/explorer#zip">
+                          <span class="icon-select bg-danger">
+                             <i class="fa fa-file-zip-o" title="{{ i18n('Compresed documents') }}"></i> 
+                          </span>
+                          <span class="label-select-text">
+                           {{ i18n('Compresed documents') }}
+                          </span>
+                      </a>
+                  </li>
+                </ul>
+            </span>    
+        </div>
+    </div>
+</li>
+
+<li data-count="0" data-wait_ajax="false" class="dropdown documents-type hidden-sm hidden-md hidden-lg">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
+        
+        <% if (docType == 'all') {%>
+        <i class="px-navbar-icon fa fa-ellipsis-h"></i>
+        <% } else if (docType == 'fav') {%>
+        <i class="px-navbar-icon fa fa-star"></i>
+        <% } else if (docType == 'pdf') {%>
+        <i class="px-navbar-icon fa fa-file-pdf-o"></i>
+        <% } else if (docType == 'stl') {%>
+        <i class="px-navbar-icon icon-stl"></i>
+        <% } else if (docType == 'doc') {%>
+        <i class="px-navbar-icon fa fa-file-word-o"></i>
+        <% } else if (docType == 'xls') {%>
+        <i class="px-navbar-icon fa fa-file-excel-o"></i>
+        <% } else if (docType == 'ppt') {%>
+        <i class="px-navbar-icon fa fa-file-powerpoint-o"></i>
+        <% } else if (docType == 'gif') {%>
+        <i class="px-navbar-icon fa fa-file-photo-o"></i>
+        <% } else if (docType == 'svg') {%>
+        <i class="px-navbar-icon fa fa-code"></i>
+        <% } else if (docType == 'psd') {%>
+        <i class="px-navbar-icon icon-psd"></i>
+        <% } else if (docType == 'dwg') {%>
+        <i class="px-navbar-icon icon-dwg"></i>
+        <% } else if (docType == 'zip') {%>
+        <i class="px-navbar-icon fa fa-file-zip-o"></i>
+        <% } %>
+        <span class="px-navbar-icon-label">{{ i18n('Select view') }}</span>
+        <span class="px-navbar-label label label-success hi notifications-bell-count " style="display: none;">0</span>
+    </a>
+    <div class="dropdown-menu p-a-0" style="overflow:auto; width: 250px; height: 300px">
+        <div class="ps-container ps-theme-default">
+            <div class="widget-notifications-item">
+                <a data-content="all" href="/explorer#all" class="notification-item">
+                    <div class="widget-notifications-description">{{ i18n('All documents') }}</div>
+                    <div class="widget-notifications-date"></div>
+                    <div class="widget-notifications-icon fa fa-ellipsis-h bg-info" title="{{ i18n('All documents') }}"></div>
+                </a>
+            </div>
+            
+            <div class="widget-notifications-item">
+                <a data-content="fav" href="/explorer#fav" class="notification-item">
+                    <div class="widget-notifications-description">{{ i18n('All favorites') }}</div>
+                    <div class="widget-notifications-date"></div>
+                    <div class="widget-notifications-icon fa fa-star bg-danger" title="{{ i18n('All favorites') }}"></div>
+                </a>
+            </div>
+            
+            <div class="widget-notifications-item">
+                <a data-content="pdf" href="/explorer#pdf" class="notification-item">
+                    <div class="widget-notifications-description">{{ i18n('PDF documents') }}</div>
+                    <div class="widget-notifications-date">.pdf</div>
+                    <div class="widget-notifications-icon fa fa-file-pdf-o bg-info" title="{{ i18n('PDF documents') }}"></div>
+                </a>
+            </div>
+            
+            <div class="widget-notifications-item">
+                <a data-content="doc docx odt" href="/explorer#doc" class="notification-item">
+                    <div class="widget-notifications-description">{{ i18n('DOC documents') }}</div>
+                    <div class="widget-notifications-date">.doc .docx .odt</div>
+                    <div class="widget-notifications-icon fa fa-file-word-o bg-success" title="{{ i18n('DOC documents') }}"></div>
+                </a>
+            </div>
+            
+            <div class="widget-notifications-item">
+                <a data-content="ppt pptx pps odp" href="/explorer#ppt" class="notification-item">
+                    <div class="widget-notifications-description">{{ i18n('PPT documents') }}</div>
+                    <div class="widget-notifications-date">.ppt .pptx .pps .odp</div>
+                    <div class="widget-notifications-icon fa fa-file-powerpoint-o bg-danger" title="{{ i18n('PPT documents') }}"></div>
+                </a>
+            </div>
+            
+            <div class="widget-notifications-item">
+                <a data-content="xls xlsx ods" href="/explorer#xls" class="notification-item">
+                    <div class="widget-notifications-description">{{ i18n('XLS documents') }}</div>
+                    <div class="widget-notifications-date">.xls .xlsx .ods</div>
+                    <div class="widget-notifications-icon fa fa-file-excel-o bg-warning" title="{{ i18n('XLS documents') }}"></div>
+                </a>
+            </div>
+            
+            <div class="widget-notifications-item">
+                <a data-content="gif png jpeg jpg jpe jfif jp2 jpx xcf pic bmp tiff tif" href="/explorer#gif" class="notification-item">
+                    <div class="widget-notifications-description">{{ i18n('Image documents') }}</div>
+                    <div class="widget-notifications-date">.gif .png .jpeg .jpg ...</div>
+                    <div class="widget-notifications-icon fa fa-file-photo-o bg-success" title="{{ i18n('Image documents') }}"></div>
+                </a>
+            </div>
+            
+            <div class="widget-notifications-item">
+                <a data-content="svg" href="/explorer#svg" class="notification-item">
+                    <div class="widget-notifications-description">{{ i18n('SVG documents') }}</div>
+                    <div class="widget-notifications-date">.svg</div>
+                    <div class="widget-notifications-icon fa fa-code bg-danger" title="{{ i18n('SVG documents') }}"></div>
+                </a>
+            </div>
+            
+            <div class="widget-notifications-item">
+                <a data-content="psd" href="/explorer#psd" class="notification-item">
+                    <div class="widget-notifications-description">{{ i18n('PSD documents') }}</div>
+                    <div class="widget-notifications-date">.psd</div>
+                    <div class="widget-notifications-icon icon-psd bg-danger" title="{{ i18n('PSD documents') }}"></div>
+                </a>
+            </div>
+            
+            <div class="widget-notifications-item">
+                <a data-content="stl" href="/explorer#stl" class="notification-item">
+                    <div class="widget-notifications-description">{{ i18n('STL documents') }}</div>
+                    <div class="widget-notifications-date">.stl</div>
+                    <div class="widget-notifications-icon icon-stl bg-danger" title="{{ i18n('STL documents') }}"></div>
+                </a>
+            </div>
+            
+            <div class="widget-notifications-item">
+                <a data-content="dwg dxf" href="/explorer#dwg" class="notification-item">
+                    <div class="widget-notifications-description">{{ i18n('DWG and DXF documents') }}</div>
+                    <div class="widget-notifications-date">.dwg .dxf</div>
+                    <div class="widget-notifications-icon icon-dwg bg-danger" title="{{ i18n('DWG and DXF documents') }}"></div>
+                </a>
+            </div>
+            
+            <div class="widget-notifications-item">
+                <a data-content="rar zip tgz" href="/explorer#zip" class="notification-item">
+                    <div class="widget-notifications-description">{{ i18n('Compresed documents') }}</div>
+                    <div class="widget-notifications-date">.rar .zip .tgz</div>
+                    <div class="widget-notifications-icon fa fa-file-zip-o bg-danger" title="{{ i18n('Compresed documents') }}"></div>
+                </a>
+            </div>
+            
+        </div>
+    </div>
+</li>
+
+<li class="hidden-xs hidden-sm">
+    <a href="{{ user.url }}" class="dropdown-toggle" role="button" aria-haspopup="true" aria-expanded="false">
+        <img class="profile-image-icon px-navbar-image" alt="image" src="{{ user.image }}">
+                                
+        <span class="hidden-md" style="color: #2a94db;">
+                <strong>{{ user.completeName }}</strong>
+        </span>
+    </a>
+</li>

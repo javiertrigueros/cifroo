@@ -1,0 +1,371 @@
+.px-navbar-icon
+{
+   font-size: 15px; 
+   color:rgb(42,148,219);
+}
+
+
+
+.form-control-clear {
+  z-index: 10;
+  pointer-events: auto;
+  cursor: pointer;
+}
+/* arreglos css azul */
+
+.select2-selection
+{
+   background-color: #edf2f5 !important; 
+}
+
+.px-file-buttons
+{
+  background-color: #edf2f5 !important;  
+}
+
+.custom-file-control
+{
+    background-color: #edf2f5 !important;
+}
+
+
+textarea:not(.select2-search__field) {
+    resize: none;
+    background-color: #edf2f5 !important;
+}
+
+input:not(.select2-search__field):not(.login-form)
+{
+   background-color: #edf2f5 !important;
+}
+/* boton facebook */
+.btn-facebook {
+    color: #ffffff;
+    background-color: #428BCA;
+    border-color: #2B669A #2B669A #2B669A;
+}
+
+.btn-facebook:hover, 
+.btn-facebook:focus, 
+.btn-facebook:active, 
+.btn-facebook:hover {
+    color: #ffffff;
+    background-color: #2D6CA2;
+    border-color: #2B669A #2B669A #2B669A;
+}
+
+.btn-facebook:active, 
+.btn-facebook.active, 
+.open .btn-facebook { 
+  color: #ffffff !important;
+  background-image: none !important;
+  background-color: #428BCA !important;
+  border-color: #2B669A #2B669A #2B669A !important;
+} 
+ 
+.btn-facebook.disabled, 
+.btn-facebook[disabled], 
+fieldset[disabled] .btn-facebook, 
+.btn-facebook.disabled:hover, 
+.btn-facebook[disabled]:hover, 
+fieldset[disabled] .btn-back:hover, 
+.btn-facebook.disabled:focus, 
+.btn-facebook[disabled]:focus, 
+fieldset[disabled] .btn-facebook:focus, 
+.btn-facebook.disabled:active, 
+.btn-facebook[disabled]:active, 
+fieldset[disabled] .btn-back:active, 
+.btn-facebook.disabled.active, 
+.btn-facebook[disabled].active, 
+fieldset[disabled] .btn-facebook.active { 
+  background-color: #428BCA;
+  border-color: #2B669A #2B669A #2B669A;
+} 
+
+/* boton atras */
+.btn-back { 
+  color: #ffffff; 
+  background-color: #1E616E; 
+  border-color: #154852; 
+} 
+ 
+.btn-back:hover, 
+.btn-back:focus, 
+.btn-back:active, 
+.btn-back.active, 
+.open .dropdown-toggle.btn-back { 
+  color: #ffffff; 
+  background-color: #004B5A; 
+  border-color: #154852; 
+} 
+ 
+.btn-back:active, 
+.btn-back.active, 
+.open .dropdown-toggle.btn-back { 
+  background-image: none; 
+} 
+ 
+.btn-back.disabled, 
+.btn-back[disabled], 
+fieldset[disabled] .btn-back, 
+.btn-back.disabled:hover, 
+.btn-back[disabled]:hover, 
+fieldset[disabled] .btn-back:hover, 
+.btn-back.disabled:focus, 
+.btn-back[disabled]:focus, 
+fieldset[disabled] .btn-back:focus, 
+.btn-back.disabled:active, 
+.btn-back[disabled]:active, 
+fieldset[disabled] .btn-back:active, 
+.btn-back.disabled.active, 
+.btn-back[disabled].active, 
+fieldset[disabled] .btn-back.active { 
+  background-color: #1E616E; 
+  border-color: #154852; 
+} 
+ 
+.btn-back .badge { 
+  color: #1E616E; 
+  background-color: #ffffff; 
+}
+
+input::-ms-reveal {
+    display: none !important;
+}
+
+.datepicker table tr td.red:hover:not(.active),
+.datepicker table tr td.red:not(.active)
+{
+    color:#f9f9f9;
+    background-color: #E1120D;
+    opacity: .3;
+}
+
+.datepicker table tr td.now:hover:not(.active),
+.datepicker-days tr td.now:not(.active)
+{
+    color:#000;
+    background-color: #fcf8e3;
+}
+
+.button-time
+{
+  margin-left: 10px;  
+}
+
+.no-border-bottom
+{
+  border-bottom: none !important;  
+}
+
+.table-name-general
+{
+  white-space: nowrap;
+}
+
+.table-primary thead tr, 
+.table-primary thead th
+{
+    background: #2a94db none repeat scroll 0 0 !important;
+}
+
+.panel-heading-controls,
+.panel-heading-controls label, 
+.panel-heading-controls label span
+{
+  cursor:pointer !important;  
+}
+
+.switcher-indicator {
+   
+   background-color:#9F9F9F;
+}
+
+.switcher-lgg 
+{
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 80px;
+  font-size: 15px;
+  line-height: 1.4; 
+}
+.switcher-lgg.switcher-blank
+{
+    width: 160px;
+    height: 30px; 
+}
+
+.switcher-lgg .switcher-indicator
+{
+    width: 160px;
+    height: 30px;
+    margin-top: -15px;
+    font-size: 13px;
+    line-height: 30px; 
+}
+
+.switcher-lgg > input:checked ~ .switcher-indicator:after 
+{
+    left: 130px; 
+}
+
+.switcher-lgg .switcher-indicator:after
+{
+    width: 26px;
+    height: 26px;
+    margin: 2px 0 0 2px; 
+}
+
+.switcher-lgg .switcher-no 
+{
+    padding-left: 28px; 
+}
+
+.switcher-lgg .switcher-yes
+{
+    padding-right: 28px; 
+}
+
+.switcher-lggr-extra
+{
+   margin-top: 2px !important; 
+}
+
+
+.switcher-lggr 
+{
+  padding-top: 0px;
+  padding-bottom: 4px;
+  padding-left: 80px;
+  font-size: 15px;
+  line-height: 1.4; 
+}
+
+
+.switcher-lggr.switcher-blank
+{
+    width: 180px;
+    height: 26px; 
+}
+
+.switcher-lggr .switcher-no, 
+.switcher-lggr .switcher-yes
+{
+    top: -1px;
+}
+
+.switcher-lggr div.switcher-indicator
+{
+    width: 160px;
+    height: 26px;
+    margin-top: -14px;
+    font-size: 13px;
+    line-height: 28px; 
+}
+
+.switcher-lggr > input:checked ~ .switcher-indicator:after 
+{
+    left: 130px; 
+}
+
+.switcher-lggr .switcher-indicator:after
+{
+    width: 26px;
+    height: 22px;
+    margin: 2px 0 0 2px; 
+}
+
+.switcher-lggr .switcher-no 
+{
+    padding-left: 1px; 
+}
+
+.switcher-lggr .switcher-yes
+{
+    padding-right: 26px; 
+}
+
+
+.modal-header {
+    background: #248cd2;
+    color: #FFFFFF;
+}
+
+
+.bg-color-line-par {
+    background-color: #f9f9f9;
+}
+
+.form-line-separation
+{
+   border-top: 2px dotted #cccccc;
+   padding-top: 22px;
+   padding-bottom: 10px;
+   padding-left: 0;
+   padding-right: 0;
+}
+
+.ui-control-text {
+   padding: 10px;
+   margin-bottom: 10px;
+}
+
+.input-group
+{
+  width: 100%;   
+}
+
+.form-group-small
+{
+    margin: 8px !important;  
+}
+
+.ui-control-edit:hover
+{
+    background-color: #99bbe8;
+    cursor: pointer;
+}
+
+
+
+#scrollUp {
+	background: #D8433F;
+	font-weight: bold;
+}
+
+.fc-widget-header{
+    background-color:rgb(176, 207, 255);
+}
+
+input[type=checkbox]{
+	zoom: 1;
+	-moz-transform: scale(1);
+}
+
+
+.fc-center h2{
+	font-weight: bold;
+}
+
+
+.dropdown-alertas p{
+	color: #333333 !important;
+}
+
+.datepicker-days thead,tfoot{
+	background-color: #337ab7;
+	color: #FFFFFF;
+}
+
+.datepicker table tr td, .datepicker table tr th {
+	text-align: center;
+	width: 30px;
+	height: 30px;
+	border-radius: 0px !important;
+	border: none;
+}
+
+.datepicker thead tr:first-child th:hover,
+.datepicker tfoot tr th:hover {
+	background-color: rgb(176, 207, 255) !important;
+}

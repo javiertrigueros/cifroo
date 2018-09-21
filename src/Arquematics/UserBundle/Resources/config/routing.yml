@@ -1,0 +1,126 @@
+user_login:
+    path:     /login/
+    defaults: { _controller: UserBundle:User:login }
+    
+user_autologin:
+    path:     /autologin
+    defaults: { _controller: UserBundle:User:autologin }
+
+# javier 3.3
+user_login_check:
+    path:  /login_check
+    
+user_login_back:
+    path:     /loginBack
+    defaults: { _controller: UserBundle:User:loginBack }
+    methods:  [POST]
+
+user_logout:
+    # javier 3.3
+    path:  /logout
+    defaults: { _controller: UserBundle:User:logout }
+
+##useradmin
+company_users:
+    path:     /company/users
+    defaults: { _controller: UserBundle:UserAdmin:users }
+
+company_user_create:
+    path:     /company/user/create
+    defaults: { _controller: UserBundle:UserAdmin:userCreate }
+
+company_user_edit:
+    path:     /company/user/edit/{user_id}
+    defaults: { _controller: UserBundle:UserAdmin:userEdit }
+
+company_user_delete:
+    path:     /company/user/delete/{user_id}
+    defaults: { _controller: UserBundle:UserAdmin:userDelete }
+
+company_user_enable_disable:
+    path:     /company/user/change-actived/{user_id}
+    defaults: { _controller: UserBundle:UserAdmin:userEnableDisable }
+
+##friends controler
+user_list:
+    path:     /users
+    defaults: { _controller: UserBundle:Friends:index }
+    methods:  [GET]
+
+user_friend_block:
+    path:     /friendBlock/{slug}
+    defaults: { _controller: UserBundle:Friends:friendBlock, slug: false }
+    methods:  [POST]
+    requirements:
+        slug:    '\S+'
+        
+user_friend_remove:
+    path:     /friendRemove/{slug}
+    defaults: { _controller: UserBundle:Friends:friendRemove, slug: false }
+    methods:  [POST]
+    requirements:
+        slug:    '\S+'
+
+user_friend_accept:
+    path:     /friendAccept/{slug}
+    defaults: { _controller: UserBundle:Friends:friendAccept, slug: false }
+    methods:  [POST]
+    requirements:
+        slug:    '\S+'
+
+user_friend_request:
+    path:     /friendRequest/{slug}
+    defaults: { _controller: UserBundle:Friends:friendRequest, slug: false }
+    methods:  [POST]
+    requirements:
+        slug:    '\S+'
+
+user_register:
+    # javier 3.3
+    path:  /register/{code}
+    defaults: { _controller: UserBundle:User:register }
+
+user_resetpassword:
+    # javier 3.3
+    path: /resetpassword
+    defaults: { _controller: UserBundle:User:resetpassword }
+
+#profile
+user_profile_view:
+    path:  /users/{channel_slug}/{usename_slug}
+    defaults: { _controller: UserBundle:User:profileView }
+
+user_profile_avatar:
+    # javier 3.3
+    path:  /profile/avatar/{fileName}
+    defaults: { _controller: UserBundle:User:profileAvatar }
+
+
+user_profile_disconnect:
+    path:  /profile/disconnect/{socialname}
+    defaults: { _controller: UserBundle:User:disconnect }
+    
+user_profile_connect:
+    path:  /profile/connect/{socialname}
+    defaults: { _controller: UserBundle:User:connect }
+    
+user_profile_edit:
+    # javier 3.3
+    path:  /profile
+    defaults: { _controller: UserBundle:User:profileEdit }
+
+user_profile_change_pass:
+    # javier 3.3
+    path:  /updatePass
+    defaults: { _controller: UserBundle:User:updatePass }
+    
+    
+user_profile_image_edit:
+    # javier 3.3
+    path:  /updateImage
+    defaults: { _controller: UserBundle:User:updateProfileImage }
+
+user_profile_image_resize:
+    # javier 3.3
+    path:  /resizeImage
+    defaults: { _controller: UserBundle:User:resizeProfileImage }

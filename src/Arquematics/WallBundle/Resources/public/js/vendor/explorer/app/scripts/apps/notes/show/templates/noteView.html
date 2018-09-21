@@ -1,0 +1,33 @@
+<div class="ui-row ui-scroll-y ui-body">
+    <div class="main" data-id="{{ id }}">
+            <header>
+                <h1 class="input-group">
+                    <% if (canEdit) {%> 
+                    <input name="title" id="title" value="{{ getTitle() }}" class="form-control title" type="text" autocomplete="off" placeholder="{{ i18n('Title') }}" />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-info cmd-save">{{ i18n('Save') }}</button>
+                    </span>
+                    <% } else {%>
+                    {{ getTitle() }}
+                    <% } %>
+                </h1>
+            </header>
+            <article class="article-content" id="{{ id }}">
+                <% if (previewExt === 'pdf') {%> 
+                <iframe id="appViewer-pdf" src="/bundles/wall/js/vendor/pdf/build/generic/web/viewer.html" style="width: 100%; height: 250vh;" allowfullscreen="" webkitallowfullscreen="">
+                    
+                </iframe>
+                <% } else if (previewExt === 'stl') {%>
+                <iframe id="appViewer-3DSTL" src="/bundles/wall/js/vendor/stlviewer/index.html" style="width: 100%; height: 100vh;" allowfullscreen="" webkitallowfullscreen="">
+                    
+                </iframe>
+                <% } else if ((previewExt === 'zip') || (previewExt === 'rar')) {%>
+                <iframe id="appViewer-zip" src="/bundles/wall/js/vendor/ViewCompressed/index.html" style="width: 100%; height: 100vh;" allowfullscreen="" webkitallowfullscreen="">
+                    
+                </iframe>
+                <% } else {%>
+                
+                <% } %>
+            </article>
+    </div>
+</div>

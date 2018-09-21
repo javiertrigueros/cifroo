@@ -1,0 +1,165 @@
+users.err_no_delete_me: "No puedes borrar tu propio usuario"
+users.err_same_mail: "Este email ya está en uso por otro usuario, elige otro."
+users.err_not_found: "Usuario no encontrado."
+
+users.lock: Usuario bloqueado con éxito.
+users.unlock: Usuario desbloqueado con éxito.
+users.required: "Rellene este campo"
+users.email: "El correo debe ser válido"
+users.mail_help_block: "El usuario utilizará este email para acceder a la aplicación."
+users.modal_title: "¿Estás seguro?"
+users.modal_body: "El usuario se borrará y no se podrá recuperar."
+users.block_title: "Bloquear usuario"
+users.block_body: "El usuario se bloqueará y no podrá acceder a la aplicación."
+users.unblock_title: "Desbloquear usuario"
+users.unblock_body: "El usuario se desbloqueará y podrá acceder a la aplicación."
+users.name: "Nombre"
+users.status: "Estado"
+users.roles: "Roles"
+users.last_access: "Último acceso"
+users.actions: "Acciones"
+users.no_rols_asociation: "Sin roles asociados"
+
+users.mail_to_reset_pass: "Se ha enviado un email con las instrucciones para restablecer tu contraseña."
+users.no_mail: "El email no existe en el sistema."
+
+login.slogan_text1: "Plataforma"
+login.slogan_text2: "de Comunicación"
+login.slogan_text3: "Segura"
+
+
+user_form.name: "Nombre"
+user_form.lastname: "Apellido"
+user_form.email: "Email"
+user_form.roles: "Roles usuario"
+
+user_profile.btn_get_private: "Clave privada de usuario"
+
+login.private_key_title: "Introducir clave privada:"
+
+login.reset_password_subject: "Restablecer contraseña"
+
+mail.reset_title_caption: "Restablecer password en %pagename%." 
+mail.reset_hello_caption: "Buenos días"
+mail.reset_text_caption: "Pulse en el siguiente enlace para restablecer su contraseña."
+mail.reset_buttom_caption: "Restablecer contraseña"
+mail.reset_team_caption: "El equipo de %pagename%"
+
+login.wellcome_subject: "Bienvenido a %pagename%"
+
+mail.wellcome_title_caption: "Bienvenido a %pagename%."
+mail.wellcome_text_caption: "Bienvenido a %pagename%, la plataforma de intranet colaborativa y segura.<br /><br /> A partir de ahora puede acceder a la aplicación en la siguiente URL:"
+mail.wellcome_buttom_caption: "Ir a %pagename%"
+mail.wellcome_foot_caption: "Muchas gracias."
+mail.no_response: "No responda este mensaje, esta dirección de email se utiliza solo para realizar notificaciones."
+
+users.err_user_delete: "Usuario borrado con éxito."
+users.user_delete_email_subject: "Ha sido dado de baja de %pagename%."
+
+mail.delete_title_caption: "Ha sido eliminado." 
+mail.delete_title_box_caption: "Ha sido eliminado como usuario de %pagename%."
+mail.delete_text_caption: "Si tiene alguna duda al respecto consulte con el configurador de su cuenta."
+mail.delete_thanks_caption: "Muchas Gracias"
+
+control_panel.email_alta_subject: "Alta en %pagename%"
+
+mail.password_title_caption: "Establecer password." 
+mail.password_hello_caption: "Buenos días"
+mail.password_text_caption: "Ha sido dado de alta en '%pagename%'. Pulse en el siguiente enlace para establecer su contraseña inicial."
+mail.password_buttom_caption: "Establecer contraseña"
+mail.password_foot_caption: "A continuación recibirá un segundo mail con el enlace para acceder a su cuenta."
+mail.password_team_caption: "El equipo de %pagename%"
+mail.password_legal: "Esta notificación se ha enviado porque el configurador de tu organización, te ha añadido como usuario."
+
+user.select_roles: "Selecciona los roles."
+user.no_users: "Sin usuarios."
+user.no_users_ext: "No se ha creado aún ningún usuario aparte del administrador."
+
+#no view
+UserBundle.bussines_process_name_min_error: "El proceso de negocio debe tener un mínimo de 3 caracteres"
+UserBundle.bussines_process_name_unique_error: "Ya existe un rol con el mismo nombre, contacta con soporte@intool.es"
+"User account is disabled.": "Tu acceso a Intool ha sido bloqueado, contacta con el administrador de tu cuenta."
+"Bad credentials.": "Email o contraseña incorrectos."
+
+profile.error_login_not_confirmed: "Esta cuenta no está confirmada."
+profile.avatar: "Mi avatar"
+profile.avatar_view: "Avatar"
+profile.passwd_change: "La contraseña se ha actualizado con éxito."
+profile.passwd_must_match: "¡Las dos contraseñas deben coincidir! "
+profile.passwd_strong: "Contraseña correcta, nivel alto."
+profile.passwd_midrange: "Contraseña correcta."
+profile.passwd_weak: "Contraseña correcta."
+profile.passwd_has_error: "La contraseña debe estar compuesta, al menos, de 8 caracteres, y contener letras y números."
+profile.passwd_midrange_no_lowercase: "Contraseña correcta."
+profile.passwd_midrange_no_capital: "Contraseña correcta."
+profile.passwd_midrange_no_numbers: "Contraseña correcta."
+profile.passwd_midrange_no_special: "Contraseña correcta."
+profile.twitter: "Twitter"
+profile.departament: "Departamento/Área"
+profile.view: "Información usuario"
+profile.cargo: "Puesto/Cargo"
+profile.phones: "Teléfono de contacto"
+profile.twitter_error: "Debe ser un nombre de usuario Twitter válido 'ej: @nombre_usuario'"
+profile.image: "JPG, GIF o PNG. Tamaño máximo 3MB"
+profile.edit: "Editar perfil"
+profile.data: "Datos"
+profile.password: "Contraseña"
+profile.mail_alerts: "Alertas por email"
+profile.update: "Actualizar perfíl"
+profile.social_media: "Social Media"
+profile.twitter_connect: "Conectar con Twitter"
+profile.twitter_connect_as: "Conectado como '%username%'"
+profile.facebook_connect: "Conectar con facebook"
+profile.facebook_connect_as: "Conectado como '%username%'"
+profile.linkedin_connect: "Conectar con linkedin"
+profile.linkedin_connect_as: "Conectado como '%username%'"
+profile.linkedin_connect_as_next: "Conectar como '%username%'"
+profile.oldpass: "Antigua contraseña " 
+profile.newpass: "Nueva contraseña"
+profile.passhelp: "La contraseña debe estar compuesta, al menos, de 8 caracteres, y contener letras y números." 
+profile.passverify: "Repetir contraseña"
+profile.passchange: "Cambiar contraseña"
+profile.change_image: "Actualizar foto"
+
+
+profile.social_remove_twitter: "Eliminar sincronización con Twitter"
+profile.social_remove_text_twitter: "Se eliminará la sincronización con Twitter"
+profile.social_remove_facebook: "Eliminar sincronización con Facebook"
+profile.social_remove_text_facebook: "Se eliminará la sincronización con Facebook"
+profile.social_remove_linkedin: "Eliminar sincronización con Linkedin"
+profile.social_remove_text_linkedin: "Se eliminará la sincronización con Linkedin"
+
+profile.social_connected_twitter: "La aplicación se ha conectado correctamenta a su cuenta Twitter."
+profile.social_connected_facebook: "La aplicación se ha conectado correctamenta a su cuenta Facebook."
+profile.social_connected_linkedin: "La aplicación se ha conectado correctamenta a su cuenta Linkedin."
+profile.social_disconnec_twitter:   "La aplicación se ha desconectado de su cuenta Twitter."
+profile.social_disconnec_facebook:  "La aplicación se ha desconectado de su cuenta Facebook."
+profile.social_disconnec_linkedin:  "La aplicación se ha desconectado de su cuenta Linkedin."
+
+
+profile.twitter_connect_as_flashbag: "La aplicación se ha conectado a su cuenta Twitter como '%username%'."
+profile.facebook_connect_as_flashbag: "La aplicación se ha conectado a su cuenta Facebok como '%username%'."
+profile.linkedin_connect_as_flashbag: "La aplicación se ha conectado a su cuenta Linkedin como '%username%'."
+
+profile.subscribe: "Suscribirse"
+profile.subscribed: "Suscrito"
+profile.ignore: "Bloqueado"
+profile.request: "Petición de Suscripción"
+profile.requestWait: "Aceptar suscripción"
+
+notification.friend.short_message: "Aceptar usuario '%username%'"
+notification.friend.message: "Aceptar '%username%' como nuevo suscriptor"
+
+user_list.users_title_no_actives: "No se han encontarado usuarios."
+user_list.users_text_no_actives: "No se han encontrado usuarios que cumplan el criterio de busqueda."
+
+user_list.title_no_users_with_private_key: "No hay usuarios disponibles"
+user_list.text_no_users_with_private_key:  "Actualmente no están disponibles usuarios a los que suscribirse."
+
+control_panel.users_title_no_actives: "No se han encontarado usuarios."
+control_panel.users_text_no_actives: "No se han encontrado usuarios que cumplan el criterio de busqueda."
+
+control_panel.subscribers_list: "Lista de suscriptores"
+
+control_panel.send_all_messages_title: "¿Desea compartir el contenido antiguo?"
+control_panel.send_all_messages_text: "Si desea compartir el contenido antiguo, la operación puede durar un tiempo."

@@ -1,0 +1,25 @@
+{
+  "name": "google-code-prettify",
+  "main": [
+    "./bin/prettify.min.css",
+    "./bin/prettify.min.js"
+  ],
+  "dependencies": {},
+  "ignore": [
+    "closure-compiler",
+    "js-modules",
+    "tests",
+    "yui-compressor",
+    "Makefile"
+  ],
+  "homepage": "https://github.com/tcollard/google-code-prettify",
+  "_release": "0b242858d7",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "0b242858d7f704d9cba6db4c37d5eba00e2c718f"
+  },
+  "_source": "git://github.com/tcollard/google-code-prettify.git",
+  "_target": "master",
+  "_originalSource": "google-code-prettify"
+}

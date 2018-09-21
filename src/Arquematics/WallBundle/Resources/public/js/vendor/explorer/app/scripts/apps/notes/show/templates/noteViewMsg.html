@@ -1,0 +1,57 @@
+<div class="ui-row ui-scroll-y ui-body">
+    <div class="main">
+        <article class="editor">
+            <div class="alert alert-info alert-dark">
+                <% if (docType === 'all') {%> 
+                  {{ i18n('no all') }}
+                <% } else if (docType === 'fav') {%>
+                  {{ i18n('no favorite') }}
+                <% } else if (docType === 'txt') {%>
+                  {{ i18n('no notes') }}
+                <% } else if (docType === 'doc') {%>
+                  {{ i18n('no doc') }}
+                <% } else if (docType === 'stl') {%>
+                  {{ i18n('no stl') }}
+                <% } else if (docType === 'xls') {%>
+                  {{ i18n('no xls') }}
+                <% } else if (docType === 'ppt') {%>
+                  {{ i18n('no ppt') }}
+                <% } else if (docType === 'odp') {%>
+                  {{ i18n('no odp') }}
+                <% } else if (docType === 'ods') {%>
+                  {{ i18n('no ods') }}
+                <% } else if (docType === 'odt') {%>
+                  {{ i18n('no odt') }}
+                <% } else if (docType === 'gif') {%>
+                  {{ i18n('no gif') }}
+                <% } else if (docType === 'psd') {%>
+                  {{ i18n('no psd') }}
+                <% } else if (docType === 'dwg') {%>
+                  {{ i18n('no dwg') }}
+                 <% } else if (docType === 'zip') {%>
+                  {{ i18n('no zip') }}
+                <% } else if (docType === 'pdf') {%>
+                  {{ i18n('no pdf') }}
+                <% } else if (docType === 'svg') {%>
+                  {{ i18n('no vector images') }}
+                <% } else if (docType === 'rawchart') {%>
+                  {{ i18n('no rawchart') }}
+                <% } else if (docType === 'mindmaps') {%>
+                  {{ i18n('no mindmaps') }}
+                <% } else if (docType === 'bpmn') {%>
+                  {{ i18n('no bpmn') }}
+                <% } else if (docType === 'epc') {%>
+                  {{ i18n('no epc') }}
+                <% } else if (docType === 'uml') {%>
+                  {{ i18n('no uml') }}
+                <% } else if (docType === 'wireframe') {%>
+                  {{ i18n('no wireframe') }}
+                <% } else if (docType === 'umlsequence') {%>
+                  {{ i18n('no umlsequence') }}
+                <% } else if (docType === 'umlusecase') {%>
+                  {{ i18n('no umlusecase') }}
+                <% } %>
+            </div>
+        </article>
+    </div>
+</div>

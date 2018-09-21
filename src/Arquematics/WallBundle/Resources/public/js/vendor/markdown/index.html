@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Arquematics Markdown Viewer</title>
+        <link href="css/simditor.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="simditor">
+            <div class="simditor-wrapper">
+                <div class="simditor-body">
+                    
+                </div>
+            </div>
+        </div>
+    </body>
+    <script type="text/javascript" src="bower_components/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="bower_components/marked/lib/marked.js"></script>
+
+    <script type="text/javascript">
+        (function($, marked) {
+            window.loadDoc = function(data, files) {
+             $('.simditor-body').append(marked(data));
+             
+            function resizeimg($image, w, h, maxW,maxH)
+            {
+                var ratio = $image.width() / $image.height();
+                
+                w = (w == 0)? 100 : w;
+                
+                $image.width(w + '%');
+                $image.height('auto');
+                
+                if ($image.width() > maxW)
+                {
+                    $image.width('100%');
+                }
+        
+                if ($image.height() > maxH)
+                {
+                    $image.height(maxH);
+                    $image.width(maxH * ratio);  
+                }
+            }
+            //carga las imagenes
+            if (files && files.length > 0)
+            {
+                for (var i = 0; i < files.length; ++i) {
+                 var imageModel = files[i]
+                 , image;
+                 
+                 image = this.$('img[alt="' + imageModel.guiFile + '"]').get(0);
+                
+                 if ((image) && (image.nodeName.toLowerCase() === 'img'))
+                 {
+                    image.onload = function() {
+                            var h = window.innerHeight
+                                        || document.documentElement.clientHeight
+                                        || document.body.clientHeight
+                               , w = window.innerWidth
+                                        || document.documentElement.clientWidth
+                                        || document.body.clientWidth;
+                           
+                          
+                           resizeimg($(this),  imageModel.w , imageModel.h , w,  h); 
+                     } 
+                     
+                     image.onerror=function(e){}
+                        
+                     image.src =  imageModel.blob;            
+                 }
+             }      
+            }
+          }            
+     })(jQuery, marked);
+    </script>
+</html>

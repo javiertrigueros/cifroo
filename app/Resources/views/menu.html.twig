@@ -1,0 +1,92 @@
+<nav class="px-nav px-nav-left" id="px-demo-nav">
+    <button type="button" class="px-nav-toggle" data-toggle="px-nav">
+      <span class="px-nav-toggle-arrow"></span>
+      <span class="navbar-toggle-icon"></span>
+      <span class="px-nav-toggle-label font-size-11">
+          {% trans %}menu.hidemenu{% endtrans %}
+      </span>
+    </button>
+
+    <ul id="sidebar-menu" class="px-nav-content">
+      <li class="px-nav-box p-a-3 b-b-1" id="demo-px-nav-box">
+        
+        {% if app.user.profile.image %}
+            <img style="width: 54px; height: 54px;" class="profile-image-icon pull-xs-left m-r-2 border-round" alt="image" src="{{ path("user_profile_avatar",  {'fileName':app.user.profile.image}) }}" />
+        {% else %}
+            <img style="width: 54px; height: 54px;" class="profile-image-icon pull-xs-left m-r-2 border-round" alt="image" src="{{ asset('bundles/user/img/avatars/unknown.png') }}" />
+        {% endif %}
+        <div class="font-size-16"><span class="font-weight-light">{% trans %}menu.welcome{% endtrans %}, </span><strong>{{ app.user.profile.name }}</strong></div>
+        <div class="btn-group" style="margin-top: 4px;">
+          <a href="{{ path('user_profile_edit') }}" class="btn btn-xs btn-primary btn-outline"><i class="fa fa-user"></i></a>
+          
+          <a href="{{ path('user_logout') }}" class="btn btn-xs btn-danger btn-outline">
+              <i class="fa fa-power-off"></i>
+          </a>
+        </div>
+      </li>
+      
+      
+    {% if app.user.isConfigurador %}
+      <li class="configurador-menu px-nav-item px-nav-dropdown {% if menuSection is defined and menuSection == "control_panel" %} px-open {% endif %}">
+        <a href="#">
+            <i class="px-nav-icon fa fa-cog"></i>
+            <span class="px-nav-label">{% trans %}navbar.control{% endtrans %}</span>
+        </a>
+
+        <ul class="px-nav-dropdown-menu">
+          
+          <li class="px-nav-item {% if menuItem is defined and menuItem == "company_avatar" %} active {% endif %}">
+              <a href="{{ path('company_avatar') }}">
+                  <span class="px-nav-label">{% trans %}control_panel.menu_logo{% endtrans %}</span>
+              </a>
+          </li>
+          
+          <li class="px-nav-item {% if menuItem is defined and menuItem == "company_channel" %} active {% endif %}">
+              <a href="{{ path('channels') }}">
+                  <span class="px-nav-label">{% trans %}control_panel.menu_channels{% endtrans %}</span>
+              </a>
+          </li>
+          
+          <li class="px-nav-item {% if menuItem is defined and menuItem == "company_users" %} active {% endif %}">
+              <a href="{{ path('company_users') }}">
+                  <span class="px-nav-label">{% trans %}control_panel.menu_users{% endtrans %}</span>
+              </a>
+          </li>
+         
+          <li class="px-nav-item {% if menuItem is defined and menuItem == "backup" %} active {% endif %}">
+              <a href="{{ path('system_backup') }}">
+                  <span class="px-nav-label">{% trans %}control_panel.menu_backup{% endtrans %}</span>
+              </a>
+          </li>
+          
+        </ul>
+      </li>
+    {% endif %}
+
+    <li class="px-nav-item {% if menuSection is defined and menuSection == "lists" %} active {% endif %}">
+             <a href="{{ path('user_list') }}">
+                 <i class="px-nav-icon fa fa-list-ul"></i>
+                 <span class="px-nav-label">{% trans %}control_panel.subscribers{% endtrans %}</span>
+             </a>
+    </li>
+    
+    {% if currentChannelId is defined %}
+    {{ render(controller("WallBundle:Channel:showList", { 'menuSection': menuSection, 'currentChannelId':  currentChannelId })) }}
+    {% else %}
+    {{ render(controller("WallBundle:Channel:showList", { 'menuSection': menuSection})) }}   
+    {% endif %}
+    <li class="px-nav-item {% if menuSection is defined and menuSection == "explorer" %} active {% endif %}">
+            <a href="{{ path('explorer') }}">
+                <i class="px-nav-icon ion-document"></i>
+                <span class="px-nav-label">{% trans %}control_panel.explorer{% endtrans %}</span>
+            </a>
+    </li>
+      
+    <li class="px-nav-box b-t-1 p-a-2">
+        <a href="#" class="btn btn-primary btn-block btn-outline cmd-menu-close">
+            {% trans %}menu.closemenu{% endtrans %}
+        </a>
+    </li>
+      
+    </ul>
+</nav>

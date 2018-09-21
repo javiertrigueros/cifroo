@@ -1,0 +1,186 @@
+<html>
+<head>
+<link rel="stylesheet" type="text/css" media="screen" href="../dist/w2ui.css" />
+<script type="text/javascript" src="../libs/jquery/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../src/w2utils.js"></script>
+<script type="text/javascript" src="../src/w2fields.js"></script>
+<script type="text/javascript" src="../src/w2form.js"></script>
+<script type="text/javascript" src="../src/w2tabs.js"></script>
+<script type="text/javascript" src="../src/w2toolbar.js"></script>
+<script type="text/javascript" src="../src/w2popup.js"></script>
+<script>
+//<![CDATA[
+    jQuery.noConflict();
+    jQuery(function () {
+        jQuery('#form').w2form({
+            name      : 'form',
+            // routeData : { id: 4 },
+            url       : { get1: 'http://w2ui.com', save: 'http://w2ui.com' },
+            // page      : 2,
+            // url       : 'form.php',
+            // formURL   : 'form-template.html',
+            recid    : 4,
+            header   : 'Edit header',
+            style1     : 'border: 1px solid red;',
+            tabs: [
+                { id: 'tab1', caption: 'General' },
+                { id: 'tab2', caption: 'Inputs' },
+                { id: 'tab3', caption: 'HTML' }
+            ],
+            onProgress: function (event) {
+                console.log('progress');
+                event.preventDefault();
+            },
+            toolbar: {
+                items: [
+                    { type: 'button', id: 'button1', caption: 'Button1', img: 'icon-add' },
+                    { type: 'break' },
+                    { type: 'check', id: 'button2', caption: 'Button2', img: 'icon-add' },
+                    { type: 'check', id: 'button3', caption: 'Button3', img: 'icon-add' },
+                    { type: 'spacer' },
+                    { type: 'button', id: 'save', caption: 'Save', img: 'icon-folder' }
+                ]
+
+            },
+            record: {
+                "field.toggle"  : '0',
+                "field.text"    : 'some text',
+                "field.textarea": 'more text',
+                "field.date"    : '1/15/2014',
+                "field.time"    : '10:11 am',
+                "field.color"   : '999999',
+                "field.list"    : 5,
+                "field.combo"   : { id: 1, text: 'Item 1' },
+                "field.enum"    : [{ id: '1', text: 'item 1'}, { id: 2, text: 'item 2'}],
+                "field.file"    : [{ name: 'file.txt', size: 3033, type: 'text', modified: '1/1/2014' }],
+                "field.email"   : 'see@mail.com',
+                "field.password": 'pass',
+                "field.int"     : '10',
+                "field.float"   : '20',
+                "field.money"   : '30',
+                "field.currency": '40',
+                "field.percent" : '50',
+                "field.alpha"   : '60',
+                "field.select"  : 'second',
+                "field.check"   : 33
+                // "field.radio"   : '1'
+            },
+            fields: [
+                // first page
+                { field: 'field.toggle', type: 'toggle', required: true },
+                { field: 'field.text', type: 'text', required: true, html: { group: 'General' } },
+                { field: 'field.textarea', type: 'textarea', required: true },
+                { field: 'field.date', type: 'date', required: false },
+                { field: 'field.time', type: 'time', required: false, html: { group: 'General' } },
+                { field: 'field.color', type: 'color', required: true },
+                { field: 'field.list', type: 'list', required: true,
+                    options: {
+                        match: 'contains',
+                        compare: function (item) {
+                            if (item.id < 4) return false;
+                        },
+                        items: [
+                            { id: 0, text: 'Pickle, Susan' },
+                            { id: 1, text: 'Adams, John' },
+                            { id: 2, text: 'Openhimer, Peter' },
+                            { id: 3, text: 'Woznyak, Steve' },
+                            { id: 4, text: 'Rusevelt, Franklin' },
+                            { id: 5, text: 'Stalone, Silvester' },
+                            { id: 6, text: 'Mann, Fred' },
+                            { id: 6, text: 'Ford, Mary' },
+                            { id: 8, text: 'Purky, Mon' },
+                            { id: 9, text: 'Min, Hla' }
+                        ]
+                    }
+                },
+                { field: 'field.combo', type: 'combo', required: false,
+                    options: {
+                        applyFilter: true,
+                        url : 'listdat.json'
+                    }
+                },
+                { field: 'field.enum', type: 'enum', required: false,
+                    options: { items: [{id: 1, text: 'Adams, John'}, 'Johnson, Peter', 'Lewis, Frank', 'Cruz, Steve', 'Donnun, Nick'] } },
+                { field: 'field.file', type: 'file', required: false },
+                // second page
+                { field: 'field.email', type: 'email', required: true, html: { page: 1 } },
+                { field: 'field.password', type: 'pass', required: false, html: { page: 1 } },
+                { field: 'field.int', type: 'int', options: { arrows: false }, required: false, html: { page: 1 } },
+                { field: 'field.float', type: 'float', required: false, html: { page: 1 } },
+                { field: 'field.money', type: 'money', required: false, html: { page: 1 } },
+                { field: 'field.currency', type: 'currency', required: false, html: { page: 1 } },
+                { field: 'field.percent', type: 'percent', required: false, html: { page: 1 } },
+                { field: 'field.alpha', type: 'alphanumeric', required: false, html: { page: 1 } },
+                // third page
+                { field: 'field.select', type: 'select', required: false, options: { items: ['fist', 'second'] }, html: { page: 2 } },
+                { field: 'field.check', type: 'checkbox', required: false, html: { page: 2 } },
+                { field: 'field.radio', type: 'radio', required: false, html: { page: 2 }, options: {
+                        items: [
+                            { id: 0, text: 'Pickle, Susan' },
+                            { id: 1, text: 'Adams, John' },
+                            { id: 2, text: 'Openhimer, Peter' },
+                            { id: 3, text: 'Woznyak, Steve' },
+                            { id: 4, text: 'Rusevelt, Franklin' },
+                            { id: 5, text: 'Stalone, Silvester' },
+                            { id: 6, text: 'Mann, Fred' },
+                            { id: 6, text: 'Ford, Mary' },
+                            { id: 8, text: 'Purky, Mon' },
+                            { id: 9, text: 'Min, Hla' }
+                        ]
+                    }
+                }
+            ],
+            onChange: function (event) {
+                // console.log('change', event);
+            },
+            postData1: {
+                a1: 1,
+                a2: 2
+            },
+            actions: {
+                reset: {
+                    caption : 'Some Action',
+                    style   : '',
+                    "class" : '',
+                    onClick : function () {
+                        this.clear();
+                    }
+                },
+                save: function () {
+                    console.log('save', this.record);
+                    var obj = this;
+                    this.save({}, function (data) {
+                        console.log(data);
+                        if (data.status == 'error') {
+                            console.log('ERROR: '+ data.message);
+                            return;
+                        }
+                        //obj.clear();
+                    });
+                }
+            }
+        });
+        // w2ui.form.formHTML = w2ui.form.generateHTML()
+        // w2ui.form.render();
+        // all event listener
+        w2ui.form.on('change', function (event) {
+            event.onComplete = function () {
+                console.log('--------');
+                console.log('change:', event);
+                console.log('record:', w2ui.form.record);
+            }
+        });
+});
+//]]>
+</script>
+<body>
+
+    <div class="w2ui-reset">
+        <input name="field.toggle" type="checkbox" class="w2ui-input1 w2ui-toggle"/><div><div></div></div>
+        <br/><br/>
+    </div>
+
+    <!-- <div id="form" style="width: 700px; height: 600px;"></div> -->
+    <div id="form" style="width: 700px; height: 700px;">    </div>
+</body>
+</html>

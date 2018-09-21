@@ -1,0 +1,188 @@
+{% extends '::backend.html.twig' %}
+
+{% block container %}
+<div class="modal-load modal-load-fix">
+    <div class="ar-container">
+           <div class="item-swip cssload-piano">
+            <div class="cssload-rect1"></div>
+            <div class="cssload-rect2"></div>
+            <div class="cssload-rect3"></div>
+          </div>
+     </div>
+</div>    
+<div class="px-content">
+    <div class="page-header">
+        <div class="row">
+                <div class="col-md-4 text-xs-center text-md-left text-nowrap">
+                    <h1>
+                        <i class=" page-header-icon fa fa-list-ul"></i>
+                        {% trans %}control_panel.subscribers_list{% endtrans %} 
+                    </h1>
+                </div>
+                    
+                <!-- Spacer -->
+                <div class="m-b-2 visible-xs visible-sm clearfix"></div>
+                    
+                <form class="navbar-form visible-xs visible-sm" role="search">
+                    <div class="input-group has-feedback has-clear" style="display:table;">
+                        <input type="text" id="search-input" name="search-input" autocomplete="off" class="form-control fuzzy-search" data-search-file="{% trans %}system.search_file{% endtrans %}" placeholder="">
+              
+                        <i class="cmd-search-cancel form-control-clear fa fa-times-circle form-control-feedback hidden"></i>
+                    </div>
+                </form>
+                    
+                <!-- Spacer -->
+                <div class="m-b-2 visible-xs visible-sm clearfix"></div>
+        </div>
+    </div>
+                    
+            <div class="note note-warning note-no-users-find hide">
+                <h4 class="note-title">
+                    {% trans %}user_list.users_title_no_actives{% endtrans %}
+                </h4>
+                <p>{% trans %}user_list.users_text_no_actives{% endtrans %}</p>
+            </div>
+            
+            <div class="note note-warning note-has-no-users hide">
+                <h4 class="note-title">
+                    {% trans %}user_list.title_no_users_with_private_key{% endtrans %}
+                </h4>
+                <p>{% trans %}user_list.text_no_users_with_private_key{% endtrans %}</p>
+            </div>
+            
+            <div class="row m-t-1">
+                
+                <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                    <div id="list-followers" class="tab-content tab-content-bordered p-a-0 bg-white">
+                        <div id="profile-followers" class="list list-group tab-pane fade active in">
+                            <ul class="pagination normal-list-pagination" style="clear:both;float:left"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>          
+</div>
+            
+<div class="modal fade" id="sendMessages" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title" id="myModalLabel">
+                    {% trans %}control_panel.send_all_messages_title{% endtrans %}	
+                </h4>
+            </div>
+            <div class="modal-body">
+		{% trans %}control_panel.send_all_messages_text{% endtrans %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default cmd-send-cancel" data-dismiss="modal">{% trans %}cmd.cancel{% endtrans %}</button>
+                <button type="button" class="btn btn-primary cmd-send-accept">{% trans %}cmd.accept{% endtrans %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+                                    
+                             
+<script id="template-follower" type="text/x-jquery-tmpl">
+{% verbatim %}
+<div id="friend-{{id}}" data-id="{{id}}" class="user-item widget-followers-item">
+    <img alt="image" class="widget-followers-avatar" src="{{image}}">
+    <div class="widget-followers-controls">
+        {{#accept}}
+        <a data-id="{{ id }}" data-url="{{ url }}" href="{{ url }}" class="btn btn-sm btn-success cmd-friend">
+            <i class="fa fa-check"></i>&nbsp;&nbsp;{% endverbatim %}{% trans %}profile.subscribed{% endtrans %}{% verbatim %}
+        </a>
+        {{/accept}}
+        {{#requestWait}}
+        <div class="widget-followers-controls">
+            <a data-id="{{ id }}" data-url="{{url}}" href="{{url}}" class="btn btn-sm btn-warning cmd-friend">
+                {% endverbatim %}{% trans %}profile.requestWait{% endtrans %}{% verbatim %}
+            </a>
+        </div>       
+        {{/requestWait}}
+        {{#request}}
+        <div class="widget-followers-controls">
+            <a data-id="{{ id }}" data-url="{{url}}" href="{{url}}" class="btn btn-sm btn-info cmd-friend">
+                {% endverbatim %}{% trans %}profile.request{% endtrans %}{% verbatim %}
+            </a>
+        </div> 
+        {{/request}}
+        {{#ignore}}
+        <div class="widget-followers-controls">
+            <a data-id="{{id}}" data-url="{{url}}" href="{{url}}" class="btn btn-sm btn-danger cmd-friend">
+                {% endverbatim %}{% trans %}profile.ignore{% endtrans %}{% verbatim %}
+            </a>
+        </div> 
+        {{/ignore}}
+        {{#none}}
+        <div class="widget-followers-controls">
+            <a data-id="{{id}}" data-url="{{url}}" href="{{url}}" class="btn btn-sm btn-outline cmd-friend">
+                {% endverbatim %}{% trans %}profile.subscribe{% endtrans %}{% verbatim %} 
+            </a>
+        </div>  
+        {{/none}}  
+    </div>  
+    <a href="#" class="widget-followers-name">{{completeName}}</a>
+    <a href="#" class="widget-followers-username">{{name}}</a>
+</div>
+{% endverbatim %}
+</script>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('bundles/wall/css/animation_wait.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/wall/js/vendor/sjcl/sjcl.overwrite.js') }}" type="text/javascript"></script>
+    
+    <script src="{{ asset('bundles/wall/js/bower_components/mustache/mustache.js') }}" type="text/javascript"></script>
+        
+    <script src="{{ asset('bundles/wall/js/bower_components/list.js/dist/list.js')}}" type="text/javascript"></script>
+    
+    <script src="{{ asset('bundles/wall/js/arquematics/core/arquematics.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/arquematics/core/arquematics.ecc.js') }}" type="text/javascript"></script> 
+    <script src="{{ asset('bundles/wall/js/arquematics/core/arquematics.mime.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/arquematics/core/arquematics.codec.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/arquematics/utils/arquematics.store.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/arquematics/utils/arquematics.utils.js') }}" type="text/javascript"></script>
+    
+    <script src="{{ asset('bundles/user/js/arquematics/arquematics.userMessages.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/user/js/arquematics/arquematics.userFriend.js') }}" type="text/javascript"></script>
+    <script>
+        $(document).ready(function(){
+            
+            arquematics.crypt = arquematics.utils.read('{{ authUser.id }}-{{ sessionname }}-key'  ,'arquematics.ecc');
+            
+            {% if authUser.lock %}
+            arquematics.userMessages.init({
+                status: true,
+                url_messages: '{{ path("user_messages")  }}',
+                url_lock: '{{ path("user_messages_lock")  }}',
+                url_count: '{{ path("user_messages_count")  }}',
+                url_api_userinfo: '{{ path("api_userinfo")  }}'
+                });
+            {% else %}
+            arquematics.userMessages.init({
+                status: false,
+                url_messages: '{{ path("user_messages")  }}',
+                url_lock: '{{ path("user_messages_lock")  }}',
+                url_count: '{{ path("user_messages_count")  }}',
+                url_api_userinfo: '{{ path("api_userinfo")  }}'
+                });
+            {% endif %}
+            
+            arquematics.userFriend.init({
+                url:    '{{ path("user_list") }}',
+                text_search: '{% trans %}system.search_user{% endtrans %}',
+                showControls: true
+            });
+            
+        });
+    </script>
+
+    
+    
+{% endblock %}

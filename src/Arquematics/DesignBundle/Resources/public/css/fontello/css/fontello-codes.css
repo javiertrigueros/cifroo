@@ -1,0 +1,4 @@
+
+.icon-user:before { content: '\e800'; } /* '' */
+.icon-eye-open:before { content: '\e801'; } /* '' */
+.icon-eye-close:before { content: '\e802'; } /* '' */

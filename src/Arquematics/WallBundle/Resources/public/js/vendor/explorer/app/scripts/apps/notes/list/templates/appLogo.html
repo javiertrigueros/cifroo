@@ -1,0 +1,61 @@
+<% if (isFavorite) {%> 
+ <a href="#" title="{{ i18n('Favorites') }}">
+  <span class="ar-mm-text mm-text">{{ i18n('Favorites') }}</span>
+  <i class="fa fa-star"></i>
+ </a>
+<% } else if (trash) {%>
+ <a href="#" title="{{ i18n('Trash') }}">
+  <span class="ar-mm-text mm-text">{{ i18n('Trash') }}</span>
+  <i class="fa fa-trash-o"></i>
+ </a>
+ <% } else if (docType === 'note') {%>
+ <a href="#" title="{{ i18n('Text documents') }}">
+  <span class="ar-mm-text mm-text">{{ i18n('Text documents') }}</span>
+  <i class="ar-icon-document ar-icon-small-title"></i>
+ </a>
+ <% } else if (docType === 'svg') {%>
+ <a href="#" title="{{ i18n('Vector Images') }}">
+    <span class="ar-mm-text mm-text">{{ i18n('Vector Images') }}</span>
+    <span class="ar-icon-image ar-icon-small-title"></span>
+ </a>
+ <% } else if (docType === 'rawchart') {%>
+ <a href="#" title="{{ i18n('Data Analysis') }}">
+    <span class="ar-mm-text mm-text">{{ i18n('Data Analysis') }}</span>
+    <span class="ar-icon-bar-chart ar-icon-small-title"></span>
+ </a>
+ <% } else if (docType === 'mindmaps') {%>
+ <a href="#" title="{{ i18n('Mind Maps') }}">
+    <span class="ar-mm-text mm-text">{{ i18n('Mind Maps') }}</span>
+    <span class="ar-icon-minmaps ar-icon-small-title"></span>
+ </a>
+ <% } else if (docType === 'bpmn') {%>
+ <a href="#" title="{{ i18n('BPMN Diagrams') }}">
+    <span class="ar-mm-text mm-text">{{ i18n('BPMN Diagrams') }}</span>
+    <span class="ar-icon-bpmn ar-icon-small-title"></span>
+ </a>
+ <% } else if (docType === 'epc') {%>
+ <a href="#" title="{{ i18n('Flowcharts') }}">
+    <span class="ar-mm-text mm-text">{{ i18n('Flowcharts') }}</span>
+    <span class="ar-icon-epc ar-icon-small-title"></span>
+ </a>
+ <% } else if (docType === 'uml') {%>
+ <a href="#" title="{{ i18n('UML Diagrams') }}">
+    <span class="ar-mm-text mm-text">{{ i18n('UML Diagrams') }}</span>
+    <span class="ar-icon-uml ar-icon-small-title"></span>
+ </a>
+ <% } else if (docType === 'wireframe') {%>
+ <a href="#" title="{{ i18n('Wireframes') }}">
+    <span class="ar-mm-text mm-text">{{ i18n('Wireframes') }}</span>
+    <span class="ar-icon-wireframe ar-icon-small-title"></span>
+ </a>
+ <% } else if (docType === 'umlsequence') {%>
+ <a href="#" title="{{ i18n('UML Sequence Diagrams') }}">
+    <span class="ar-mm-text mm-text">{{ i18n('UML Sequence Diagrams') }}</span>
+    <span class="ar-icon-sequence ar-icon-small-title"></span>
+ </a>
+ <% } else if (docType === 'umlusecase') {%>
+ <a href="#" title="{{ i18n('UML Use Case Diagrams') }}">
+     <span class="ar-mm-text mm-text">{{ i18n('UML Use Case Diagrams') }}</span>
+     <span class="ar-icon-usecase ar-icon-small-title"></span>
+ </a>
+ <% } %>

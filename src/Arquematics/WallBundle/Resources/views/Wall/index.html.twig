@@ -1,0 +1,955 @@
+{% extends '::backend.html.twig' %}
+
+{% block container %}
+    
+    {% include "WallBundle:Wall:Includes/PhotoSwipe.html.twig" %}
+    
+    <div class="px-content">
+        
+        {% if not showSendControls %}
+        <div class="page-header">
+            <div class="row">
+                <div class="col-md-4 text-xs-center text-md-left text-nowrap">
+                <h1>
+                    <i class="fa fa-hashtag"></i>
+                    {{ currenUser.profile.name }}&nbsp;{{ currenUser.profile.lastname }}
+                </h1>
+                </div>
+          
+            <hr class="page-wide-block visible-xs visible-sm">
+
+            <div class="col-xs-12 width-md-auto width-lg-auto width-xl-auto pull-md-right">
+                <a href="{{ path('wall', {'channel_slug': channel.slug }) }}" class="btn btn-back btn-block">
+                <span class="btn-label-icon left fa fa-chevron-left"></span>
+                {% trans %}control_panel.back{% endtrans %}
+                </a>
+            </div>
+
+            <!-- Spacer -->
+            <div class="m-b-2 visible-xs visible-sm clearfix"></div>
+
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="row m-t-1">
+        
+            <div id="movile-profilecol" class="col-md-3 col-lg-3 hide"></div>
+            
+            <div class="col-md-9 col-lg-9">
+        
+              
+
+                <div class="tab-content p-a-0">
+                    
+                    <div class="tab-pane fade active in" id="profile-board">
+                        
+                        
+                        <form id="wall_send_content" action="{{ path("wall", {"channel_slug": channel.slug }) }}" class="widget-tree-comments-item form-control-message {% if not showSendControls %}hide{% endif %}" method="POST" enctype="multipart/form-data">
+                        {% if authUser.profile.image %}
+                            <img src="{{ path("user_profile_avatar",  {'fileName':authUser.profile.image}) }}" alt="" class="widget-tree-comments-avatar border-round hidden-xs"/>
+                        {% else %}
+                            <img src="{{ asset('bundles/user/img/avatars/unknown.png') }}" alt="" class="widget-tree-comments-avatar border-round hidden-xs" />
+                        {% endif %}
+                            <div id="write-comment" class="expanding-input" >
+                                <div id="message-emoji" ></div>
+                                <div id="link-preview-container"></div>
+                                <div id="drop-preview-container"></div>
+                                <textarea id="wallMessage_pass"
+                                    name="wallbundle_wall[pass]" 
+                                    rows="1"
+                                    class="form-control hide"></textarea>
+                                <textarea id="wallMessage_message"
+                                    autocomplete="off"
+                                    name="wallbundle_wall[content]" 
+                                    rows="1"
+                                    maxlength="280"
+                                    data-emojiable=true
+                                    class="form-control widget-tree-comments-input hide"></textarea>
+                            
+                                
+                                <div class="expanding-content control-footer text-right hide">
+                                        
+                                    <button type="button" data-loading-text="{% trans %}wall.cmd_loading{% endtrans %}"  class="btn btn-primary btn-rounded cmd-update-button-arWall">
+                                        {% trans %}wall.cmd_update{% endtrans %}
+                                    </button>
+                            </div>
+                        </div>
+                
+                        <div class="hide">
+                            {{ form_widget(form._token) }}
+                        </div>
+                        </form>
+            
+                        <form id="tag-form" class="hide" action="{{ path("tag") }}"  method="POST" enctype="multipart/form-data">
+                        {{ form(formTag) }}
+                        </form> 
+            
+                        <form id="link_create" class="hide" action="{{ path("link_create") }}" method="POST" enctype="multipart/form-data">
+                        {{ form(formLink) }}
+                        </form> 
+                        
+                        <form id="arquematics-upload"  class="hide" method="post" action="{{ path("file_create") }}">
+                                    {{ form_widget(formFile.name) }}
+                                    {{ form_widget(formFile.src) }}
+                                    {{ form_widget(formFile.docType) }}
+                                    {{ form_widget(formFile.guid) }}
+                                    {{ form_widget(formFile.size) }}
+                                    {{ form_widget(formFile.hash) }}
+                                    {{ form_widget(formFile.hashSmall) }}
+                                    {{ form_widget(formFile.document) }}
+                                    {{ form_widget(formFile.pass) }}
+                                    {{ form_widget(formFile._token) }}
+                        </form>
+                        <form id="arquematics-upload-chunk" class="hide" method="post" action="">
+                                {#<?php echo $formFileChunk->renderHiddenFields() ?>#}
+                        </form>
+                        <form id="arquematics-upload-preview" class="hide" method="post" action="{{ path("preview_create") }}">
+                                {{ form_widget(formPreview.src) }}
+                                {{ form_widget(formPreview.docType) }}
+                                {{ form_widget(formPreview.guid) }}
+                                {{ form_widget(formPreview.style) }}
+                                {{ form_widget(formPreview.size) }}
+                                {{ form_widget(formPreview.pass) }}
+                                {{ form_widget(formPreview._token) }}
+                        </form>
+                        <form id="arquematics-upload-chunk-preview" class="hide" method="post" action="">
+                                {#<?php echo $formFileChunkPreview->renderHiddenFields() ?>#}
+                        </form>
+
+                        <hr class="m-y-0">
+                        <div id="content" class="bg-white">
+                            <div class="wall-loader loader hide">
+                                <img class="loader-img" src="{{ asset('bundles/wall/img/general-loader.gif') }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                            
+            <div id="profilecol" class="col-md-3 col-lg-3 hide"></div>
+    </div>
+</div>
+<div class="modal fade" id="sendMessages" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title" id="myModalLabel">
+                    {% trans %}control_panel.send_all_messages_title{% endtrans %}	
+                </h4>
+            </div>
+            <div class="modal-body">
+		{% trans %}control_panel.send_all_messages_text{% endtrans %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default cmd-send-cancel" data-dismiss="modal">{% trans %}cmd.cancel{% endtrans %}</button>
+                <button type="button" class="btn btn-primary cmd-send-accept">{% trans %}cmd.accept{% endtrans %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- The template to display loader data -->
+<script id="template-loader" type="text/x-jquery-tmpl">                          
+<div class="wall-loader loader hide">
+    <img class="loader-img" src="{{ asset('bundles/wall/img/general-loader.gif') }}">
+</div>
+</script>  
+<!-- The template to display profile data -->
+<script id="template-profile" type="text/x-jquery-tmpl">
+
+{% if not showSendControls %}
+      
+<div class="panel box hide">
+    <div class="box-row">
+        <div class="box-cell p-x-3 p-y-1">
+            <div class="pull-xs-left font-weight-semibold font-size-12">{% trans %}wall.tags_label{% endtrans %}</div>
+            <div class="pull-xs-right text-success font-size-12"><i class="fa fa-caret-down"></i></div>
+        </div>
+    </div>
+    
+    
+    <div class="box-row panel-body p-a-1 tag-panel" style="display:block;padding:10px">
+        {% verbatim %}
+        {{#tags}}
+        {% endverbatim %} 
+            {% verbatim %}
+            {{#selected}}
+                <a data-id="{{id}}" data-count="{{count}}" data-hash="{{hash}}" class="cmd-tag-profile user-tag tag-panel-item user-tag-selected" href="{{href}}">
+                    <span class="label label-primary active tag-active">
+                        <span class="tag-text">{{name}}&nbsp;({{count}})</span>
+                        <i class="cmd-filter-tag tag-remove-circle fa fa-times-circle" style="display: inline-block;"></i>
+                    </span>
+                </a>
+            {{/selected}}  
+            {% endverbatim %}
+        
+            {% verbatim %}
+            {{^selected}}
+                <a data-id="{{id}}" data-count="{{count}}" data-hash="{{hash}}" class="cmd-tag-profile user-tag tag-panel-item" href="{{href}}">
+                    <span class="label label-primary">
+                        <span class="tag-text">
+                            <span class="tag-text">{{name}}&nbsp;({{count}})</span>
+                            <i class="cmd-filter-tag tag-remove-circle fa fa-times-circle hide" style="display: inline-block;"></i>
+                        </span>
+                    </span>
+                </a>
+            {{/selected}}  
+            {% endverbatim %}    
+        
+        {% verbatim %}
+        {{/tags}}
+        {% endverbatim %}
+    </div>
+</div>
+{% endif %} 
+    
+{% if showSendControls %}  
+    
+<div class="panel box hide">
+    <div class="box-row">
+        <div class="box-cell p-x-3 p-y-1">
+            <div class="pull-xs-left font-weight-semibold font-size-12">{% trans %}wall.tags_label{% endtrans %}</div>
+            <div class="pull-xs-right text-success font-size-12"><i class="fa fa-caret-down"></i></div>
+        </div>
+    </div>
+    
+   <div class="panel-body tag-panel" style="border-top: 1px solid #e2e2e2;display:block;padding-top:5px;padding-left:0px;padding-right:0px;padding-bottom:12px; margin-left:20px;margin-right:10px;">
+            {% verbatim %}
+            {{#tagsRecent}}
+            {% endverbatim %} 
+            {% verbatim %}
+            {{#selected}}
+                <a data-id="{{id}}" data-count="{{count}}" data-hash="{{hash}}" class="cmd-tag-profile user-tag tag-panel-item user-tag-selected" href="{{href}}">
+                    <span class="label label-primary active tag-active">
+                        <span class="tag-text">{{name}}&nbsp;({{count}})</span>
+                        <i class="cmd-filter-tag tag-remove-circle fa fa-times-circle" style="display: inline-block;"></i>
+                    </span>
+                </a>
+            {{/selected}}  
+            {% endverbatim %}
+        
+            {% verbatim %}
+            {{^selected}}
+                <a data-id="{{id}}" data-count="{{count}}" data-hash="{{hash}}" class="cmd-tag-profile user-tag tag-panel-item" href="{{href}}">
+                    <span class="label label-primary">
+                        <span class="tag-text">{{name}}&nbsp;({{count}})</span>
+                        <i class="cmd-filter-tag tag-remove-circle fa fa-times-circle hide" style="display: inline-block;"></i>
+                    </span>
+                </a>
+            {{/selected}}  
+            {% endverbatim %}    
+        
+            {% verbatim %}
+            {{/tagsRecent}}
+            {% endverbatim %}  
+    </div>
+    {% verbatim %}
+    {{^isLastPage}}
+    {% endverbatim %} 
+            
+     <div class="box-row">
+        <div class="box-cell p-x-3 p-y-1">
+            <div class="pull-xs-left font-weight-semibold font-size-12">
+                 <button data-hash="{% verbatim %}{{selectTagHash}}{% endverbatim %}" data-page="1" class="btn btn-lg btn-success btn-outline btn-block cmd-more-tags">{% trans %}system.search_mode{% endtrans %}</button>
+            </div>
+            <div class="pull-xs-right text-success font-size-12">
+            
+            </div>
+        </div>
+    </div>
+    {% verbatim %}
+    {{/isLastPage}}
+    {% endverbatim %}
+</div>
+{% endif %}
+</script>   
+
+<!-- The template to display links available -->
+<script id="template-message" type="text/x-jquery-tmpl">
+<div id="message-{% verbatim %}{{ id }}{% endverbatim %}" data-message-id="{% verbatim %}{{ id }}{% endverbatim %}" class="message message-item widget-tree-comments-item hide">
+    <img src="{% verbatim %} {{ user.image }} {% endverbatim %}" class="widget-tree-comments-avatar message-avatar-item">
+    <div class="widget-tree-comments-header">
+        <a class="message-name" href="{% verbatim %}{{ user.url }}{% endverbatim %}" title="">{% verbatim %} {{ user.name }} {% endverbatim %}</a>
+        <span class="mytime message-time" title="{% verbatim %}{{createdAt}}{% endverbatim %}"></span>
+        {% verbatim %}
+        {{#deleteURL}}
+        {% endverbatim %}
+        <span data-delete-url="{% verbatim %}{{ deleteURL }}{% endverbatim %}" data-message-id="{% verbatim %}{{ id }}{% endverbatim %}" id="remove-message-{% verbatim %}{{ id }}{% endverbatim %}" class="cmd-message-delete fa fa-trash message-icon-remove"></span>
+        {% verbatim %}
+        {{/deleteURL}}
+        {% endverbatim %}
+    </div>
+    <div  class="widget-tree-comments-text message-content message-content-text">{% verbatim %}{{ content }}{% endverbatim %}</div>
+    {% verbatim %}
+    {{#wallLinks}}
+      {{#videos}}
+        <div data-url="{{ url }}"
+            data-thumb="{{ thumb }}"
+            data-provider="{{ provider }}"   
+            data-oembed_html="{{ oembed }}"
+            data-link-id="{{ id }}"
+            id="link-{{ id }}" class="wall-link-item">
+        {{#thumb}}
+        <div class="wall-link-dinamic hide">
+        
+        </div>
+        <div class="wall-link-video-static">
+            <div class="wall-link-image-container wall-link-image">
+               <div class="video-thumbnail cmd-wall-link-image">
+                <img src="{{ thumb }}" width="100%" height="auto" class=" link-image link-video-image"/>
+               </div>
+            </div>
+
+            <div class="wall-link-divider wall-link-text">
+                <p>
+                    <a href='{{ url }}' target='_blank'>{{ title }} - {{ provider }}</a>
+                </p>
+                <p>{{ description }}</p>
+            </div>
+        </div>    
+        {{/thumb}}  
+                   
+        {{^thumb}}
+        <div class="wall-link-divider wall-link-text col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <p>
+                <a href='{{ url }}' target='_blank'>{{ title }} - {{ provider }}</a>
+            </p>
+            <p>{{ description }}</p>
+        </div>   
+        {{/thumb}}               
+        </div>
+      {{/videos}}
+          
+      {{#photos}}
+        <div data-url="{{ url }}"
+            data-thumb="{{ thumb }}"
+            data-provider="{{ provider }}"   
+            data-oembed_html="{{ oembed }}"
+            data-link-id="{{ id }}"
+            id="link-{{ id }}" class="wall-link-item">
+        {{#thumb}}
+        <div class="wall-link-dinamic hide">
+        
+        </div>
+        <div class="wall-link-video-static">
+            <div class="wall-link-image-container wall-link-image">
+               <img src="{{ thumb }}" width="100%" height="auto" class="cmd-wall-link-image link-image link-video-image"/>
+            </div>
+
+            <div class="wall-link-divider wall-link-text">
+                <p>
+                    <a href='{{ url }}' target='_blank'>{{ title }} - {{ provider }}</a>
+                </p>
+                <p>{{ description }}</p>
+            </div>
+        </div>    
+        {{/thumb}}  
+                   
+        {{^thumb}}
+        <div class="wall-link-divider wall-link-text col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <p>
+                <a href='{{ url }}' target='_blank'>{{ title }} - {{ provider }}</a>
+            </p>
+            <p>{{ description }}</p>
+        </div>   
+        {{/thumb}}               
+        </div>
+      {{/photos}}
+          
+      {{#links}}
+        <div data-url="{{ url }}"
+            data-thumb="{{ thumb }}"
+            data-provider="{{ provider }}"   
+            data-oembed_html="{{ oembed }}"
+            data-link-id="{{ id }}"
+            id="link-{{ id }}" class="wall-link-item">
+        {{#thumb}}
+        <div class="wall-link-video-static">
+            <a href='{{ url }}' target='_blank' class="wall-link-image-container wall-link-image">
+               <img src="{{ thumb }}" width="100%" height="auto" class="link-image link-video-image"/>
+            </a>
+
+            <div class="wall-link-divider wall-link-text">
+                <p>
+                    <a href='{{ url }}' target='_blank'>{{ title }} - {{ provider }}</a>
+                </p>
+                <p>{{ description }}</p>
+            </div>
+        </div>    
+        {{/thumb}}  
+                   
+        {{^thumb}}
+        <div class="wall-link-divider wall-link-text col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <p>
+                <a href='{{ url }}' target='_blank'>{{ title }} - {{ provider }}</a>
+            </p>
+            <p>{{ description }}</p>
+        </div>   
+        {{/thumb}}               
+        </div>   
+      {{/links}}
+          
+      {{#richs}}
+        <div data-url="{{ url }}"
+            data-thumb="{{ thumb }}"
+            data-provider="{{ provider }}"   
+            data-oembed_html="{{ oembed }}"
+            data-link-id="{{ id }}"
+            id="link-{{ id }}" class="wall-link-item">
+        {{#thumb}}
+        <div class="wall-link-dinamic hide">
+        
+        </div>
+        <div class="wall-link-video-static">
+            <div class="wall-link-image-container wall-link-image">
+               <img src="{{ thumb }}" width="100%" height="auto" class="cmd-wall-link-image link-image link-video-image"/>
+            </div>
+
+            <div class="wall-link-divider wall-link-text">
+                <p>
+                    <a href='{{ url }}' target='_blank'>{{ title }} - {{ provider }}</a>
+                </p>
+                <p>{{ description }}</p>
+            </div>
+        </div>    
+        {{/thumb}}  
+                   
+        {{^thumb}}
+        <div class="wall-link-divider wall-link-text col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <p>
+                <a href='{{ url }}' target='_blank'>{{ title }} - {{ provider }}</a>
+            </p>
+            <p>{{ description }}</p>
+        </div>   
+        {{/thumb}}               
+        </div>
+      {{/richs}}
+       
+    {% endverbatim %}
+      
+    {% verbatim %}
+    {{/wallLinks}}
+    {% endverbatim %}
+    <div class="list-files" data-loaded="false">
+        {% verbatim %}
+        {{#files}}
+        <div class="document-file document-file-container document-file-no-image" id="document-file-{{ id }}">
+            <a class="ad-icon-link content-data  document-file-item document-file-visor" href="{{ url }}"
+                data-id="{{ id }}" 
+                {{#urlPreview}} 
+                data-load-url="{{ urlPreview }}"
+                {{/urlPreview}}
+                {{^urlPreview}}
+                data-load-url="{{ url }}"      
+                {{/urlPreview}}
+                data-url="{{ url }}"
+                data-inline="false"
+                data-name="{{ name }}"
+                data-preview="{{ preview }}"
+                data-src=""
+                data-content="{{ simetricKey }}"
+                data-content-enc="{{ simetricKey }}"
+                data-guid="{{ guid }}"
+                data-ext="{{ ext}}"
+                data-size="{{ size }}"
+                data-document-type="{{ doctype }}" 
+                >
+                <span class="ad-icon-mini file-mini file-text-content {{ ext }}"></span>
+                <span class="ad-icon-text file-text file-text-content">
+                   {{ name }} 
+                </span>
+                <span class="ad-icon-size file-text-size file-text-content">
+                    ({{ size }})
+                <span>
+            </a>
+        </div>
+        {{/files}} 
+        {% endverbatim %}
+    </div>
+    
+    <div id="interactive-zone-{% verbatim %}{{ id }}{% endverbatim %}" class="widget-tree-comments-footer interactive-zone">
+        {% verbatim %}
+        {{#countText}}
+            <a href="#message-{{ id }}" data-id="{{ id }}" class="cmd-show-comment hidden-sm hidden-md hidden-lg"><i class="fa fa-plus-square"></i>&nbsp;{{countText}}</a>
+            <div class="clearfix hidden-sm hidden-md hidden-lg"></div>
+        {{/countText}}
+        {{#voteByMe}}
+              {{#voteCount}}
+               <a data-vote-count-real="{{ voteCountReal }}" data-content="{{ voteNames }}" id="like-control-{{ id }}" class="tool-votes cmd-like-message hidden-xs" href="{{ voteURL }}" data-like="false" data-id="{{ id }}"><i class="fa fa-thumbs-o-up"></i>&nbsp;{{voteByMe}}</a>
+               <a data-vote-count-real="{{ voteCountReal }}" data-content="{{ voteNames }}" id="like-control-movile-{{ id }}" class="tool-votes cmd-like-message-movile hidden-sm hidden-md hidden-lg" href="{{ voteURL }}" data-like="false" data-id="{{ id }}"><i class="fa fa-thumbs-o-up"></i></a>               
+               <a data-id="{{ id }}" id="like-control-movile-text-{{ id }}" class="hidden-sm hidden-md hidden-lg cmd-like-message-movile-text" href="#like-control-movile-{{ id }}">{{voteByMe}}</a>
+              {{/voteCount}}
+              
+              {{^voteCount}}
+                <a data-vote-count-real="{{ voteCountReal }}" data-content="{{ voteNames }}" id="like-control-{{ id }}" class="tool-votes cmd-like-message hidden-xs" href="{{ voteURL }}" data-like="false" data-id="{{ id }}"><i class="fa fa-thumbs-o-up"></i>&nbsp;{{voteByMe}}</a>
+                <a data-vote-count-real="{{ voteCountReal }}" data-content="{{ voteNames }}" id="like-control-movile-{{ id }}" class="tool-votes cmd-like-message-movile hidden-sm hidden-md hidden-lg" href="{{ voteURL }}" data-like="false" data-id="{{ id }}"><i class="fa fa-thumbs-o-up"></i></a>
+                <a data-id="{{ id }}" class="hidden-sm hidden-md hidden-lg cmd-like-message-movile-text" id="like-control-movile-text-{{ id }}" href="#like-control-movile-{{ id }}">{{voteByMe}}</a>
+              {{/voteCount}}
+               <span class="hidden-xs">·</span>
+        {{/voteByMe}}
+            
+        {{^voteByMe}}
+            {{#voteCount}}
+               <a data-vote-count-real="{{ voteCountReal }}" data-content="{{ voteNames }}" id="like-control-{{ id }}" class="tool-votes cmd-like-message hidden-xs" href="{{ voteURL }}" data-like="true" data-id="{{ id }}"><i class="fa fa-thumbs-o-up"></i>&nbsp;{{voteCount}}</a>
+               <a data-vote-count-real="{{ voteCountReal }}" data-content="{{ voteNames }}" id="like-control-movile-{{ id }}" class="tool-votes cmd-like-message-movile hidden-sm hidden-md hidden-lg" href="{{ voteURL }}" data-like="true" data-id="{{ id }}"><i class="fa fa-thumbs-o-up"></i></a>
+               <a data-id="{{ id }}" class="hidden-sm hidden-md hidden-lg cmd-like-message-movile-text" id="like-control-movile-text-{{ id }}" href="#like-control-movile-{{ id }}">{{voteCount}}</a>
+            {{/voteCount}}
+            <span class="hidden-xs hidden-sm">·</span>
+        {{/voteByMe}}
+        
+        <span  class="hidden-sm hidden-md hidden-lg">·</span>      
+        <a href="#" data-id="{{ id }}" class="cmd-show-form-comment"><i class="fa fa-comment-o"></i>&nbsp;{% endverbatim %}{% trans %}wall.comment_label{% endtrans %}{% verbatim %}</a>
+        {{#countText}}
+            <span class="hidden-xs">·</span>
+            <a href="#message-{{ id }}" data-id="{{ id }}" class="cmd-show-comment hidden-xs"><i class="fa fa-plus-square"></i>&nbsp;{{countText}}</a>
+        {{/countText}} 
+        {% endverbatim %}
+    </div>
+    
+    
+    <div class="comments-list">
+    {% verbatim %}
+    {{#comments}}
+    {% endverbatim %}
+        <div id="comments-item-{% verbatim %}{{ id }}{% endverbatim %}" class="widget-tree-comments-item {% verbatim %}{{#hide}}{% endverbatim %}hide{% verbatim %}{{/hide}}{% endverbatim %}">
+            <img src="{% verbatim %}{{ user.image }}{% endverbatim %}" class="widget-tree-comments-avatar">
+            <div class="widget-tree-comments-header">
+                <a class="message-name" href="{% verbatim %} {{ user.url }} {% endverbatim %}">{% verbatim %} {{ user.name }} {% endverbatim %}</a><span class="mytime message-time" title="{% verbatim %}{{createdAt}}{% endverbatim %}"></span>
+                {% verbatim %}
+                {{#commentDeleteURL}}
+                {% endverbatim %}
+                <span data-delete-url="{% verbatim %}{{ commentDeleteURL }}{% endverbatim %}" data-comment-id="{% verbatim %}{{ id }}{% endverbatim %}" id="remove-comment-{% verbatim %}{{ id }}{% endverbatim %}" class="cmd-comment-delete fa fa-trash comment-icon-remove"></span>    
+                {% verbatim %}
+                {{/commentDeleteURL}}
+                {% endverbatim %}
+            </div>
+            <div class="widget-tree-comments-text message-comment-content">{% verbatim %}{{ content }}{% endverbatim %}</div>
+        </div>
+    {% verbatim %}
+    {{/comments}}
+    {% endverbatim %}
+    </div>
+    
+    
+    <form id="wall-send-comment-{% verbatim %}{{ id }}{% endverbatim %}" action="{% verbatim %}{{ commentURL }}{% endverbatim %}" class="formControl widget-tree-comments-item hide interactive-zone-comment">
+        {% if authUser.profile.image %}
+            <img src="{{ path("user_profile_avatar",  {'fileName':authUser.profile.image}) }}" class="widget-tree-comments-avatar border-round hidden-xs"/>
+        {% else %}
+            <img src="{{ asset('bundles/user/img/avatars/unknown.png') }}" alt="" class="widget-tree-comments-avatar border-round hidden-xs" />
+        {% endif %}
+        <textarea placeholder="{% trans %}wall.comment_content_label{% endtrans %}" id="wallbundle_wall_content" name="wallbundle_comment[content]" maxlength="200" rows="1" class="widget-tree-comments-input form-control autosize" autocomplete="off"></textarea>
+        <input class="form-control-pass form-control hide" id="wallbundle_comment_pass" name="wallbundle_comment[pass]" type="text">
+        {{ form_widget(formComment._token) }}   
+        <div class="pull-left control-footer">
+            <button type="button" data-loading-text="{% trans %}wall.cmd_loading{% endtrans %}" class="btn btn-primary cmd-comment">
+                {% trans %}wall.cmd_comment{% endtrans %}
+            </button>
+        </div>
+    </form>
+    
+</div>
+<hr data-message-id="{% verbatim %}{{ id }}{% endverbatim %}" class="m-y-0">
+</script> 
+
+<!-- The template to display comment available -->
+<script id="template-comment" type="text/x-jquery-tmpl">  
+    <div id="comments-item-{% verbatim %}{{ id }}{% endverbatim %}" class="widget-tree-comments-item">
+        <img src="{% verbatim %}{{ user.image }}{% endverbatim %}" class="widget-tree-comments-avatar">
+        <div class="widget-tree-comments-header">
+            <a class="message-name" href="{% verbatim %}{{ user.url }}{% endverbatim %}">{% verbatim %}{{ user.name }}{% endverbatim %}</a>&nbsp;<span title="{% verbatim %}{{createdAt}}{% endverbatim %}" class="mytime message-time"></span>{% verbatim %}{{#commentDeleteURL}}{% endverbatim %}<span data-delete-url="{% verbatim %}{{ commentDeleteURL }}{% endverbatim %}" data-comment-id="{% verbatim %}{{ id }}{% endverbatim %}" id="remove-comment-{% verbatim %}{{ id }}{% endverbatim %}" class="cmd-comment-delete fa fa-trash comment-icon-remove"></span>{% verbatim %}{{/commentDeleteURL}}{% endverbatim %}
+        </div>
+        <div class="widget-tree-comments-text message-content-text message-comment-content">{% verbatim %}{{ content }}{% endverbatim %}</div>
+    </div>
+</script>
+
+<!-- The template to display links available -->
+<script id="template-tag" type="text/x-jquery-tmpl">
+{% verbatim %}
+{{#selected}}
+<a data-id="{{id}}" data-count="{{count}}" data-hash="{{hash}}" class="cmd-tag-profile user-tag tag-panel-item user-tag-selected" href="{{href}}">
+    <span class="label label-primary active tag-active">
+        <span class="tag-text">{{name}}&nbsp;({{count}})</span>
+        <i class="cmd-filter-tag tag-remove-circle fa fa-times-circle" style="display: inline-block;"></i>
+    </span>
+</a>
+{{/selected}}
+{{^selected}}
+<a data-id="{{id}}" data-count="{{count}}" data-hash="{{hash}}" class="cmd-tag-profile user-tag tag-panel-item" href="{{href}}">
+    <span class="label label-primary">
+        <span class="tag-text">{{name}}&nbsp;({{count}})</span>
+        <i class="cmd-filter-tag tag-remove-circle fa fa-times-circle hide" style="display: inline-block;"></i>
+    </span>
+</a>
+{{/selected}}
+{% endverbatim %}
+</script>
+<!-- The template to display links available -->
+<script id="template-link" type="text/x-jquery-tmpl">
+<div data-url="{% verbatim %}{{ url }}{% endverbatim %}"
+     data-thumb="{% verbatim %}{{ thumb }}{% endverbatim %}"
+     data-provider="{% verbatim %}{{ provider }}{% endverbatim %}"   
+     data-oembed_html="{% verbatim %}{{ oembed }}{% endverbatim %}"
+     data-link-id="{% verbatim %}{{ id }}{% endverbatim %}"
+     id="link-{% verbatim %}{{ id }}{% endverbatim %}" class="wall-link-item">
+   
+    {% verbatim %}
+    {{#preview}}
+    <div class="widget-tree-comments-header col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <span data-link-id="{{ id }}" id="remove-link-{{ id }}" class="icon-remove-link cmd-remove-link fa fa-times-circle link-icon-remove pull-md-right"></span>  
+    </div>
+    {{/preview}}
+   {% endverbatim %}
+     
+   {% verbatim %}
+     {{#thumb}}
+        <div class="wall-link-static">
+            <div class="wall-link-image-container wall-link-image">
+                    <img src="{{ thumb }}" width="100%" height="auto" class="link-image link-video-image"/>
+            </div>
+
+            <div class="wall-link-divider wall-link-text">
+                <p>
+                    <a href='{{ url }}' target='_blank'>{{ title }} - {{ provider }}</a>
+                </p>
+                <p>{{ description }}</p>
+            </div>
+        </div>    
+     {{/thumb}}  
+   {% endverbatim %}
+                   
+   {% verbatim %}
+     {{^thumb}}
+        <div class="wall-link-divider wall-link-text">
+            <p>
+                <a href='{{ url }}' target='_blank'>{{ title }} - {{ provider }}</a>
+            </p>
+            <p>{{ description }}</p>
+        </div>   
+     {{/thumb}}  
+   {% endverbatim %}               
+</div>
+</script>
+
+<!-- The template to display videos available -->
+<script id="template-video" type="text/x-jquery-tmpl">
+<div data-url="{% verbatim %}{{ url }}{% endverbatim %}"
+     data-thumb="{% verbatim %}{{ thumb }}{% endverbatim %}"
+     data-provider="{% verbatim %}{{ provider }}{% endverbatim %}"   
+     data-oembed_html="{% verbatim %}{{ oembed }}{% endverbatim %}"
+     data-link-id="{% verbatim %}{{ id }}{% endverbatim %}"
+     id="link-{% verbatim %}{{ id }}{% endverbatim %}" class="wall-link-item wall-link-video-item"> 
+
+    {% verbatim %}
+    {{#preview}}
+    <div class="widget-tree-comments-header col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <span data-link-id="{{ id }}" id="remove-link-{{ id }}" class="icon-remove-link cmd-remove-link fa fa-times-circle link-icon-remove pull-md-right"></span>  
+    </div>
+    {{/preview}}
+    {% endverbatim %}
+     
+   <div class="wall-link-dinamic hide"></div>
+    
+   <div class="wall-link-video-static">
+        <div class="wall-link-image-container wall-link-divider wall-link-video-image">
+            <div class="video-thumbnail cmd-wall-link-image">
+                <img src="{% verbatim %}{{ thumb }}{% endverbatim %}" width="100%" height="auto" class="link-image link-video-image"/>
+            </div>
+        </div>
+
+        <div class="wall-link-divider wall-link-text">
+            <p>
+                <a class="link-url" href='{% verbatim %}{{ url }}{% endverbatim %}' target='_blank'>
+                  <span class="link-title">{% verbatim %}{{ title }}{% endverbatim %}</span> - <span class="link-provider">{% verbatim %}{{ provider }}{% endverbatim %}</span>
+                </a>
+            </p>
+            <p class="link-description">
+              {% verbatim %}{{ description }}{% endverbatim %}
+            </p>
+        </div>
+   </div>
+   
+ </div>
+</script>
+<script id="preview-file-drop-template" type="text/x-jquery-tmpl">
+<div class="dz-preview dz-file-preview">
+    <div class="dz-details">
+        <div class="dz-filename" data-dz-name></div>
+        <div class="dz-size" data-dz-size></div>
+        <div class="dz-thumbnail">
+            <img data-dz-thumbnail>
+            <span class="dz-nopreview">No preview</span>
+            <div class="dz-success-mark"></div>
+            <div class="dz-wait-mark dz-error-message"></div>
+            <div class="dz-error-mark"></div>
+            <div class="dz-error-message"><span data-dz-errormessage></span></div>
+        </div>
+     </div>
+     <div class="progress">
+        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" data-dz-uploadprogress></div>
+     </div>
+ </div>
+</script>
+{% endblock %}
+    
+{% block stylesheets %}
+{{ parent() }}
+{% stylesheets
+    'bundles/wall/js/bower_components/bootstrap-modal-carousel/dist/css/bootstrap-modal-carousel.css'
+    'bundles/wall/js/bower_components/emojionearea/dist/emojionearea.css'
+    'bundles/wall/js/vendor/PhotoSwipe/dist/default-skin/default-skin.css'
+    'bundles/wall/js/vendor/PhotoSwipe/dist/photoswipe.css'
+    'bundles/wall/css/animation_wait.css'
+    'bundles/wall/css/wall_icons.css'
+    'bundles/wall/css/wall.css'
+combine=true
+output='css/arquematics/wall-main.css'
+filter='?cssrewrite,uglifycss' %}
+    <link rel="stylesheet" type="text/css" href="{{ asset_url }}">
+{% endstylesheets %}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }} 
+    
+    <script src="{{ asset('bundles/wall/js/bower_components/jquery-timeago/jquery.timeago.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/bower_components/jquery-timeago/locales/jquery.timeago.'  ~ culture ~ '.js') }}" type="text/javascript"></script>
+
+    {#
+    modificados
+    'bundles/wall/js/bower_components/javascript-load-image/js/load-image.js' (puestos ; y así ... para que pase uglify_js) https://github.com/blueimp/JavaScript-Load-Image 
+    'bundles/wall/js/vendor/sjcl/sjcl.overwrite.js' para que pase error decodificación y devuelva ''
+    #}
+    <script src="{{ asset('bundles/wall/js/vendor/sjcl/sjcl.overwrite.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/bower_components/javascript-load-image/js/load-image.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/bower_components/blob-util/dist/blob-util.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/bower_components/jquery-ajax-queue/ajaxQueue.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/bower_components/bootstrap-modal-carousel/dist/js/bootstrap-modal-carousel.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/bower_components/mustache/mustache.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/bower_components/emojione/lib/js/emojione.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/bower_components/emojionearea/dist/emojionearea.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/vendor/PhotoSwipe/dist/photoswipe.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/vendor/PhotoSwipe/dist/photoswipe-ui-default.js') }}" type="text/javascript"></script>
+    {#
+    {% javascripts
+        'bundles/wall/js/vendor/sjcl/sjcl.overwrite.js'
+        'bundles/wall/js/bower_components/javascript-load-image/js/load-image.js'
+        'bundles/wall/js/bower_components/blob-util/dist/blob-util.js'
+        'bundles/wall/js/bower_components/jquery-ajax-queue/ajaxQueue.js'
+        'bundles/wall/js/bower_components/bootstrap-modal-carousel/dist/js/bootstrap-modal-carousel.js'
+        'bundles/wall/js/bower_components/mustache/mustache.js'
+        'bundles/wall/js/bower_components/emojione/lib/js/emojione.js'
+        'bundles/wall/js/bower_components/emojionearea/dist/emojionearea.js'
+        'bundles/wall/js/vendor/PhotoSwipe/dist/photoswipe.js'
+        'bundles/wall/js/vendor/PhotoSwipe/dist/photoswipe-ui-default.js'
+        combine=true
+        output='js/arquematics/wall-depen.js'
+        filter='?uglifyjs2' %}
+            <script src="{{ asset_url }}" type="text/javascript"></script>
+   {% endjavascripts %} 
+    #}
+   
+    <script src="{{ asset('bundles/wall/js/arquematics/core/arquematics.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/arquematics/core/arquematics.ecc.js') }}" type="text/javascript"></script> 
+    <script src="{{ asset('bundles/wall/js/arquematics/core/arquematics.loader.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/arquematics/core/arquematics.document.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/arquematics/core/arquematics.mime.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/arquematics/core/arquematics.codec.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/arquematics/core/arquematics.graphics.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/arquematics/utils/arquematics.store.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/arquematics/utils/arquematics.utils.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/arquematics/wall/arquematics.tab.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/arquematics/wall/arquematics.infinite.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/arquematics/wall/arquematics.wall.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/arquematics/wall/arquematics.tag.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/arquematics/wall/arquematics.link.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/arquematics/wall/widget/arquematics.textbox.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/arquematics/wall/widget/arquematics.social.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/arquematics/wall/dropzone/arquematics.dropzone.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/user/js/arquematics/arquematics.userMessages.js') }}" type="text/javascript"></script>
+   
+   {#
+   {% javascripts 
+    'bundles/wall/js/arquematics/core/arquematics.js'
+    'bundles/wall/js/arquematics/core/arquematics.ecc.js' 
+    'bundles/wall/js/arquematics/core/arquematics.loader.js'
+    'bundles/wall/js/arquematics/core/arquematics.document.js'
+    'bundles/wall/js/arquematics/core/arquematics.mime.js'
+    'bundles/wall/js/arquematics/core/arquematics.codec.js'
+    'bundles/wall/js/arquematics/core/arquematics.graphics.js'
+    'bundles/wall/js/arquematics/utils/arquematics.store.js'
+    'bundles/wall/js/arquematics/utils/arquematics.utils.js'
+    'bundles/wall/js/arquematics/wall/arquematics.tab.js'
+    'bundles/wall/js/arquematics/wall/arquematics.infinite.js'
+    'bundles/wall/js/arquematics/wall/arquematics.wall.js'
+    'bundles/wall/js/arquematics/wall/arquematics.tag.js'
+    'bundles/wall/js/arquematics/wall/arquematics.link.js'
+    'bundles/wall/js/arquematics/wall/widget/arquematics.textbox.js'
+    'bundles/wall/js/arquematics/wall/widget/arquematics.social.js'
+    'bundles/wall/js/arquematics/wall/dropzone/arquematics.dropzone.js'
+        combine=true
+        output='js/arquematics/wall-main.js'
+        filter='?uglifyjs2' %}
+        <script src="{{ asset_url }}" type="text/javascript"></script>
+    {% endjavascripts %}
+    #}
+    
+    <script type="text/javascript">
+    $(document).ready(function(){
+        
+        arquematics.crypt = arquematics.utils.read('{{ authUser.id }}-{{ sessionname }}-key'  ,'arquematics.ecc');
+        arquematics.crypt.setPublicEncKeys([
+        {% for user in friends %}
+            {% verbatim %} { {% endverbatim %} id: {{ user.id }}, public_key: '{{ user.publicKey }}' {% verbatim %} } {% endverbatim %}
+            {% if loop.index != loop.length %}
+                ,
+            {% endif %}
+        {% endfor %}
+        ]);
+        
+        {% if authUser.lock %}
+        arquematics.userMessages.init({
+                status: true,
+                url_messages: '{{ path("user_messages")  }}',
+                url_lock: '{{ path("user_messages_lock")  }}',
+                url_count: '{{ path("user_messages_count")  }}',
+                url_api_userinfo: '{{ path("api_userinfo")  }}'
+            });
+        {% else %}
+        arquematics.userMessages.init({
+                status: false,
+                url_messages: '{{ path("user_messages")  }}',
+                url_lock: '{{ path("user_messages_lock")  }}',
+                url_count: '{{ path("user_messages_count")  }}',
+                url_api_userinfo: '{{ path("api_userinfo")  }}'
+            });
+        {% endif %}
+        
+        
+        $("[contenteditable]").blur(function(){
+            var $element = $(this);
+            if ($element.html().length && !$element.text().trim().length) {
+                $element.empty();
+            }
+        });
+        
+        arquematics.tab.init({
+            element:'.control-update',
+            showTabs: {% if showSendControls %}true{% else %}false{% endif %} 
+        });
+        
+        {% if showSendControls %}
+            $(document).infinite({
+                url : '{{ path("wall", {"channel_slug": channel.slug }) }}',
+                initPage: 1,
+                trigger: 60,
+                showOnLoad: '.wall-loader'
+            });
+        {% else %}
+            $(document).infinite({
+                url : '{{ path("wall" ,  {'usename_slug':currenUser.slug,"channel_slug": channel.slug }) }}',
+                initPage: 1,
+                trigger: 60,
+                showOnLoad: '.wall-loader'
+            });
+        {% endif %}
+        
+        
+
+        arquematics.wall.init(
+                { url_delete_comment: '/wall/comment-delete/',
+                  url_delete_message: '/wall/message-delete/'
+                });
+        
+        arquematics.tab.subscribeTab(arquematics.wall);
+        
+        
+        
+        {% if showSendControls %}
+            arquematics.tag.init({
+                text_search: '{% trans %}system.search_tag{% endtrans %}',
+                showControls: true,
+                wall_url:'{{ path("wall", {"channel_slug": channel.slug }) }}',
+                wall_search_url:'{{ path("tag_search", {'channel_slug': channel.slug}) }}',
+                wall_more_url:'{{ path("tag_more", {'channel_slug': channel.slug}) }}'
+            });
+        {% else %}
+            arquematics.tag.init({
+                text_search: '{{ "system.search_tag_user" | trans({'%user%': currenUser.name |capitalize  })  }}',
+                showControls: false,
+                wall_url:'{{ path("wall" ,  {'usename_slug':currenUser.slug, "channel_slug": channel.slug }) }}',
+                wall_search_url:'{{ path("tag_search",  {'channel_slug': channel.slug, 'usename_slug':currenUser.slug}) }}',
+                wall_more_url:'{{ path("tag_more",  {'channel_slug': channel.slug, 'usename_slug':currenUser.slug}) }}'
+            });
+        {% endif %}
+
+        arquematics.wall.subscribeTool(arquematics.tag);
+        
+        $('#wallMessage_message').social({
+            twitter:{% if authUser.hasTwitter() %}true{% else %}false{% endif %},
+            facebook:false,
+            linkedin:{% if authUser.hasLinkedin() %}true{% else %}false{% endif %}
+        });
+        
+        arquematics.wall.subscribeTool($('#wallMessage_message').data('arquematics-social'));
+        
+        $('#wallMessage_message').textbox({
+            "enable_social":    true,
+            "placeholder": '{% trans %}wall.control_placeholder{% endtrans %}',
+            "tab_label": '',
+            "emo_labels": {
+                recent: '{{ "wall.emo_cat_recent"| trans }}',
+                smileys_people: '{{ "wall.emo_cat_smileys_people"| trans }}',
+                nature: '{{ "wall.emo_cat_animals_nature"| trans }}',
+                food_drink: '{{ "wall.emo_cat_food_drink"| trans }}',
+                activity: '{{ "wall.emo_cat_activity"| trans }}',
+                travel_places: '{{ "wall.emo_cat_travel_places"| trans }}',
+                objects: '{{ "wall.emo_cat_objects"| trans }}',
+                symbols: '{{ "wall.emo_cat_symbols"| trans }}',
+                flags: '{{ "wall.emo_cat_flags"| trans }}'
+            }
+        });
+        
+        arquematics.wall.subscribeTool($('#wallMessage_message').data('arquematics-textbox'));
+        
+        
+        
+        arquematics.link.init({
+            sessionLinks: [],
+            url_link:               '{{ path("api_link") }}',
+            cancel_url:             '{{ path("link_create") }}',
+            has_content:            false,
+            show_tool:              false        });
+        
+        arquematics.wall.subscribeTool(arquematics.link);
+        
+        arquematics.dropzone.init({
+           dictDefaultMessage:  '{% trans %}wall.dictDefaultMessage{% endtrans %}',
+           dictFallbackMessage: '{% trans %}wall.dictFallbackMessage{% endtrans %}',
+           dictFallbackText:    '{% trans %}wall.dictFallbackText{% endtrans %}',
+           dictFileTooBig:      '{% trans %}wall.dictFileTooBig{% endtrans %}',
+           dictInvalidFileType: '{% trans %}wall.dictInvalidFileType{% endtrans %}',
+           dictResponseError:   '{% trans %}wall.dictResponseError{% endtrans %}',
+           dictCancelUpload:    '{% trans %}wall.dictCancelUpload{% endtrans %}',
+           dictUploadCanceled:  '{% trans %}wall.dictUploadCanceled{% endtrans %}',
+           dictCancelUploadConfirmation: '{% trans %}wall.dictCancelUploadConfirmation{% endtrans %}',
+           dictRemoveFile: '{% trans %}wall.dictRemoveFile{% endtrans %}',
+           dictMaxFilesExceeded: '{% trans %}wall.dictMaxFilesExceeded{% endtrans %}',
+           uploadBase64URL: '/bundles/wall/js/arquematics/wall/dropzone/work.uploadBase64.js',
+           downloadBase64URL: '/bundles/wall/js/arquematics/wall/dropzone/work.downloadBase64.js',
+           extensions: ['{{ extensions_allowed |raw }}'],
+           culture: '{{ culture }}',
+           hasSessionFiles: 'false',
+           preview_file_drop_template: '#preview-file-drop-template',
+           defIconImage: '{{ asset('bundles/wall/img/icons') }}',
+           max_file_size: {{ max_file_size }},
+           BYTES_PER_CHUNK: {{ bytes_per_chunk }},
+           image_sizes: ['{{ image_width_sizes | raw }}']
+        });
+       
+        arquematics.wall.subscribeTool(arquematics.dropzone);
+       
+    });
+    </script>  
+{% endblock %}

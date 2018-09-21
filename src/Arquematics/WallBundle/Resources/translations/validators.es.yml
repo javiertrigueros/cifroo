@@ -1,0 +1,2 @@
+ArChannel.name_min_error: "El nombre del canal debe tener un mínimo de 3 caracteres."
+ArChannel.name_unique_error: "Ya existe un canal con el mismo nombre."

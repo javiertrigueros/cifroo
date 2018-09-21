@@ -1,0 +1,169 @@
+{% extends '::backend.html.twig' %}
+
+{% block container %}
+<div class="px-content">
+    <div class="page-header">
+        
+        <div class="row">
+                <div class="col-md-4 text-xs-center text-md-left text-nowrap">
+                    <h1>
+                        <i class=" page-header-icon fa fa-cog"></i>
+                        <span class="hidden-xs hidden-sm">{% trans %}control_panel.title{% endtrans %} : </span> {% trans %}control_panel.edit_user{% endtrans %}
+                    </h1>
+                </div>
+                    
+                <hr class="page-wide-block visible-xs visible-sm">
+
+                <div class="col-xs-12 width-md-auto width-lg-auto width-xl-auto pull-md-right">
+                    
+                    <a class="btn btn-back btn-block" href="{{ path('company_users') }}">
+                        <span class="btn-label-icon left fa fa-chevron-left"></span>
+                        {% trans %}control_panel.back{% endtrans %}
+                    </a>
+                    
+                </div>
+                    
+                <!-- Spacer -->
+                <div class="m-b-2 visible-xs visible-sm clearfix"></div>
+                
+            </div>
+    </div>
+                    
+    <div class="panel">
+        <div class="panel-heading">
+            <div class="panel-title">
+                    
+            </div>
+        </div>
+        
+        <form action="{{ path('company_user_edit', {"user_id": user.id}) }}" method="post" class="form-horizontal form-user">
+        
+        <div class="panel-body">
+            {% include '::feedback_messages.html.twig' %}
+            
+            <div class="row">
+                <div class="col-sm-12 col-xs-12">
+
+                               
+                                    <div class="form-group form-message-dark">
+                                        {{ form_label(form.name, 'user_form.name', {'label_attr': {'class': 'col-sm-2 control-label' }}) }}
+                                        <div class="col-sm-10">
+                                            {{ form_widget(form.name, { 'attr': {'autocomplete':'off', 'data-msg': 'users.required'|trans, 'class': 'form-control' }}) }}
+                                        </div>
+                                    </div>
+                                   
+
+                                    <div class="form-group form-message-dark">
+                                        {{ form_label(form.lastname, 'user_form.lastname', {'label_attr': {'class': 'col-sm-2 control-label' }}) }}
+                                        <div class="col-sm-10">
+                                            {{ form_widget(form.lastname, {'attr': {'autocomplete':'off', 'data-msg': 'users.required'|trans,'class': 'form-control' }}) }}
+                                        </div>
+                                    </div>
+
+                                    <fieldset disabled="disabled">
+                                    <div class="form-group form-message-dark {% if form.email.vars.valid==false %}has-error{% endif %}">
+                                        {{ form_label(form.email, 'user_form.email', {'label_attr': {'class': 'col-sm-2 control-label' }}) }}
+                                        <div class="col-sm-10">
+                                            <input id="backendbundle_usertype_email" name="backendbundle_usertype[email]" disabled="disabled" autocomplete="off" value="{{ user.email }}" class="form-control select2-search__field" type="email">
+                                            {% if form.email.vars.valid==false %}
+                                                {{ form_errors(form.email) }}
+                                            {% else %}
+                                              <p class="help-block">
+                                                {% trans %}users.mail_help_block{% endtrans %}
+                                              </p>  
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    </fieldset>
+
+                                    
+                                    <div class="form-group">
+                                        {{ form_label(form.user_roles, 'user_form.roles', {'label_attr': {'class': 'col-sm-2 control-label' }}) }}
+                                        <div class="col-sm-10">
+                                            {{ form_widget(form.user_roles, {'attr': {'class': 'form-control', 'data-placeholder':'user.select_roles'|trans }}) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="hide">
+                                        {{ form_rest(form) }}
+                                    </div>
+                </div>
+            </div>
+            
+        </div>
+                                    
+                                    
+        <div class="panel-footer text-right">
+                <a href="{{ path('company_users') }}" class="btn btn-default">
+                    {% trans %}control_panel.cancel{% endtrans %}
+                </a>
+                <button class="btn btn-primary" type="submit">
+                    {% trans %}control_panel.save{% endtrans %}
+                </button>
+        </div>
+                                    
+        </form>
+    </div>
+                    
+</div>
+
+
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+   
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+   
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("select").select2();
+            
+            
+            $('.form-user').pxValidate({
+            submitHandler: function(form) {
+                form.submit();
+            },
+            debug: true,
+            focusInvalid: false,
+            rules: {
+                'backendbundle_usertype[name]': {
+                    required: true
+                },
+                'backendbundle_usertype[lastname]': {
+                    required: true
+                },
+                'backendbundle_usertype[headquarter]':
+                {
+                  required: true          
+                },
+                'backendbundle_usertype[email]': 
+                {
+                    required: true,
+                    email: true
+                }
+            },
+            messages: {
+                'backendbundle_usertype[name]': {
+                    minlength: "{% trans %}system.minlength{% endtrans %}",
+                    required: "{% trans %}system.required{% endtrans %}"
+                },
+                'backendbundle_usertype[lastname]': {
+                    minlength: "{% trans %}system.minlength{% endtrans %}",
+                    required: "{% trans %}system.required{% endtrans %}"
+                },
+                'backendbundle_usertype[email]': {
+                    required: "{% trans %}system.required{% endtrans %}",
+                    email: "{% trans %}users.email{% endtrans %}"
+                }
+            }
+        });
+            
+        });
+    </script>
+
+{% endblock %}

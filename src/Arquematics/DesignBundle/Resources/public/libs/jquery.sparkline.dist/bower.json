@@ -1,0 +1,34 @@
+{
+  "name": "jquery.sparkline.dist",
+  "version": "2.1.2",
+  "homepage": "https://github.com/conormag/jquery.sparkline",
+  "description": "Distribution for gwatts/jquery.sparkline",
+  "main": [
+    "dist/jquery.sparkline.js"
+  ],
+  "moduleType": [
+    "amd",
+    "globals"
+  ],
+  "keywords": [
+    "canvas",
+    "charts",
+    "graphs",
+    "sparklines",
+    "ui",
+    "vml",
+    "graphics",
+    "graphing"
+  ],
+  "authors": [
+    "Conor Maguire"
+  ],
+  "license": "BSD-3",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "backbone.mousetrap",
+  "homepage": "https://github.com/elasticsales/backbone.mousetrap",
+  "_release": "11ecdbfbe1",
+  "_resolution": {
+    "type": "commit",
+    "commit": "11ecdbfbe1099249daa6e1e86db7aee090ea5801"
+  },
+  "_source": "git://github.com/elasticsales/backbone.mousetrap.git",
+  "_target": "11ecdbfbe1099249daa6e1e86db7aee090ea5801",
+  "_originalSource": "git://github.com/elasticsales/backbone.mousetrap.git"
+}

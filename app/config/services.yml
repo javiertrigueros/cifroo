@@ -1,0 +1,61 @@
+# Learn more about services, parameters and containers at
+# https://symfony.com/doc/current/service_container.html
+services:
+    app.fos_user.oauth_provider:
+        # Change the class according to the location of the FOSUBUserProvider class
+        class: Arquematics\UserBundle\Service\FOSUBUserProvider
+        arguments: [ '@fos_user.user_manager',{linkedin: linkedin_id, facebook: facebook_id, twitter: twitter_id}, '@service_container']
+    #my.oauth_aware.user_provider.service:
+    #    class: HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider
+    #    arguments:
+    #        - '@fos_user.user_manager'
+    #        - ['pass properties as array']
+    pdo:
+        class: PDO
+        arguments:
+         - 'mysql:host=%database_host%;port=%database_port%;dbname=%database_name%'
+         - '%database_user%'
+         - '%database_password%'
+        calls:
+         - [ setAttribute, [3, 2] ] # \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION
+
+    #mirar https://symfony.com/doc/current/doctrine/pdo_session_storage.html
+    Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
+        public:    false
+        arguments:
+            - "mysql:host=%database_host%;port=%database_port%;dbname=%database_name%"
+            - { db_username: %database_user%, db_password: %database_password% }
+    #session.handler.pdo:
+    #    class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
+    #    arguments: ["@pdo", {lock_mode: 0}]
+
+            
+    # default configuration for services in *this* file
+    _defaults:
+        # automatically injects dependencies in your services
+        autowire: true
+        # automatically registers your services as commands, event subscribers, etc.
+        autoconfigure: true
+        # this means you cannot fetch services directly from the container via $container->get()
+        # if you need to do this, you can override this setting on individual services
+        public: false
+
+    # makes classes in src/AppBundle available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    #AppBundle\:
+    #    resource: '../../src/AppBundle/*'
+        # you can exclude directories or files
+        # but if a service is unused, it's removed anyway
+    #    exclude: '../../src/AppBundle/{Entity,Repository,Tests}'
+
+    # controllers are imported separately to make sure they're public
+    # and have a tag that allows actions to type-hint services
+    #AppBundle\Controller\:
+    #    resource: '../../src/AppBundle/Controller'
+    #    public: true
+    #    tags: ['controller.service_arguments']
+
+    # add more services, or override services that need manual wiring
+    # AppBundle\Service\ExampleService:
+    #     arguments:
+    #         $someArgument: 'some_value'

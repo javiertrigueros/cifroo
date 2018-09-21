@@ -1,0 +1,166 @@
+{% extends '::frontend.html.twig' %}
+
+{% block title %}{% trans %}menu.forgot_passwd{% endtrans %}{% endblock %}
+
+{% block body_params %}class="px-responsive-bg-container"{% endblock %}
+
+{% block container %}
+
+  <div class="page-signin-modal modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="box m-a-0">
+          <div class="box-row">
+
+            <div class="box-cell col-md-5 bg-primary p-a-4">
+              
+              <ul class="list-group m-t-3 m-b-0 visible-md visible-lg visible-xl">
+                <li class="font-size-15 list-group-item p-x-0 p-b-0 b-a-0"><i class="list-group-icon fa fa-cubes text-white"></i>{% trans %}login.slogan_text1{% endtrans %}</li>
+                <li class="font-size-15 list-group-item p-x-0 p-b-0 b-a-0"><i class="list-group-icon fa fa-comment text-white"></i>{% trans %}login.slogan_text2{% endtrans %}</li>
+                <li class="font-size-15 list-group-item p-x-0 p-b-0 b-a-0"><i class="list-group-icon ion-unlocked text-white"></i>&nbsp;&nbsp;&nbsp;&nbsp;{% trans %}login.slogan_text3{% endtrans %}</li>
+              </ul>
+              
+            </div>
+
+            <div class="box-cell col-md-7">
+
+              <!-- Sign In form -->
+               <div id="page-login-form"  class="p-a-4" >
+                
+                <div class="logo-container">
+                    <!-- logo -->
+                    <img class="logo-login" src="{{ asset('/bundles/design/img/logo.png') }}" />
+                    <!-- end logo --> 
+                </div>
+                     
+                <h4 class="m-t-0 m-b-4 text-xs-center font-weight-semibold">
+                    {% trans %}menu.forgot_passwd{% endtrans %}
+                </h4>
+                
+                {% include '::feedback_messages.html.twig' %}
+                
+                <a href="{{ path('user_login') }}" class="btn btn-block btn-lg btn-primary m-t-3">
+                    {% trans %}cmd.accept{% endtrans %}
+                </a>
+              </div>
+
+            
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+    </div>
+    </div>
+         
+    <div class="px-responsive-bg">
+        <div class="px-responsive-bg-overlay" style="background: rgb(0, 0, 0) none repeat scroll 0% 0%; opacity: 0.2;"></div>
+        <img alt="" src="{{ asset('bundles/design/demo/bgs/3.jpg') }}" style="width: 100%; height: auto; top: -70px; left: 0px;">
+    </div>
+    
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    
+    <style>
+        
+    .logo-container
+    {
+       width: 100%;
+       margin-bottom: 20px;
+    }
+    
+    .logo-login
+    {
+      width: 200px;
+      height: auto;
+      display : block;
+      margin : auto; 
+    }
+    
+    .page-signin-modal {
+      position: relative;
+      top: auto;
+      right: auto;
+      bottom: auto;
+      left: auto;
+      z-index: 1;
+      display: block;
+    }
+
+    .page-signin-form-group { position: relative; }
+
+    .page-signin-icon {
+      position: absolute;
+      line-height: 21px;
+      width: 36px;
+      border-color: rgba(0, 0, 0, .14);
+      border-right-width: 1px;
+      border-right-style: solid;
+      left: 1px;
+      top: 9px;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    html[dir="rtl"] .page-signin-icon {
+      border-right: 0;
+      border-left-width: 1px;
+      border-left-style: solid;
+      left: auto;
+      right: 1px;
+    }
+
+    html:not([dir="rtl"]) .page-signin-icon + .page-signin-form-control { padding-left: 50px; }
+    html[dir="rtl"] .page-signin-icon + .page-signin-form-control { padding-right: 50px; }
+
+    #page-signin-forgot-form {
+      display: none;
+    }
+
+    /* Margins */
+
+    .page-signin-modal > .modal-dialog { margin: 30px 10px; }
+    
+    
+    .input-effect .form-control
+    {
+        height: 50px;
+    }
+    
+    .input-effect .page-signin-icon
+    {
+      line-height: 40px;  
+      font-size: 20px;
+      color: #7a7a7a;
+    }
+    
+    .input-effect label
+    {
+       top: 5px; 
+       font-size: 20px;
+       line-height: 40px; 
+    }
+    
+    .input-effect input
+    {
+       font-size: 20px; 
+    }
+    
+    .btn-primary
+    {
+       font-size: 20px; 
+    }
+
+    @media (min-width: 544px) {
+      .page-signin-modal > .modal-dialog { margin: 60px auto; }
+    }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{% endblock %}

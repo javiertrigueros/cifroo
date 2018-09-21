@@ -1,0 +1,11 @@
+<% if (!isEdit) {%> 
+<a href="#" title="{{ i18n('Edit Text Document') }}">
+  <span class="ar-mm-text mm-text">{{ i18n('Edit Text Document') }}</span>
+  <i class="ar-icon-document ar-icon-small-title"></i>
+</a>
+<% } else {%>
+<a href="#" title="{{ i18n('New Text Document') }}">
+  <span class="ar-mm-text mm-text">{{ i18n('New Text Document') }}</span>
+  <i class="ar-icon-document ar-icon-small-title"></i>
+</a>
+ <% } %>

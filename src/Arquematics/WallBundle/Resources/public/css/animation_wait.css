@@ -1,0 +1,304 @@
+@media (min-width: 300px)
+{
+    .ar-modal-login-content
+    {
+       width: 98%;
+       background-color: #FFF;  
+    }
+}
+
+@media (min-width: 700px)
+{
+  .ar-modal-login-content
+  {
+    width: 60%;
+    background-color: #FFF;
+  }  
+}
+
+.modal-load-opacity
+{
+    background: #CCC !important;
+    filter:alpha(opacity=60); /* IE */
+    -moz-opacity:0.5; /* Mozilla */
+    opacity: 0.5; /* CSS3 */
+}
+
+.modal-load {
+    display:    none ;
+    position:   fixed !important;
+    z-index:    80000 !important;
+    top:        0 !important;
+    left:       0 !important;
+    height:     100% !important;
+    width:      100% !important;
+    background-color: #000;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
+
+body.loading {
+    overflow: hidden;   
+}
+
+body.loading .modal-load {
+    display: block;
+}
+
+.ar-modal-login
+{
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  height: 100%;
+}
+
+.ar-container
+{
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     height: 80vh;
+}
+
+.item-swip
+{
+     border-radius: 3px;
+     width: 200px;
+     height: 100px; 
+}
+
+.cssload-piano {
+	margin: auto;
+	width: 70px;
+	height: 18px;
+	font-size: 18px;
+}
+.cssload-piano > div {
+	height: 100%;
+	width: 100%;
+	display: block;
+	margin-bottom: 0.6em;
+	animation: stretchdelay 0.84s infinite ease-in-out;
+		-o-animation: stretchdelay 0.84s infinite ease-in-out;
+		-ms-animation: stretchdelay 0.84s infinite ease-in-out;
+		-webkit-animation: stretchdelay 0.84s infinite ease-in-out;
+		-moz-animation: stretchdelay 0.84s infinite ease-in-out;
+}
+.cssload-piano .cssload-rect2 {
+	animation-delay: -0.7s;
+		-o-animation-delay: -0.7s;
+		-ms-animation-delay: -0.7s;
+		-webkit-animation-delay: -0.7s;
+		-moz-animation-delay: -0.7s;
+}
+.cssload-piano .cssload-rect3 {
+	animation-delay: -0.56s;
+		-o-animation-delay: -0.56s;
+		-ms-animation-delay: -0.56s;
+		-webkit-animation-delay: -0.56s;
+		-moz-animation-delay: -0.56s;
+}
+
+
+.spinner {
+  margin: 100px auto 0;
+  width: 70px;
+  text-align: center;
+}
+
+.spinner > div {
+  width: 18px;
+  height: 18px;
+  background-color: #333;
+
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes sk-bouncedelay {
+  0%, 80%, 100% { 
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  } 40% { 
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+  }
+}
+
+
+@keyframes stretchdelay {
+	0%, 40%, 100% {
+		transform: scaleX(0.8);
+		background-color: rgb(46,88,101);
+		box-shadow: 0 0 0 rgba(10,10,10,0.1);
+	}
+	20% {
+		transform: scaleX(1);
+		background-color: rgb(0,177,146);
+		box-shadow: 0 9px 11px rgba(10,10,10,0.4);
+	}
+}
+
+@-o-keyframes stretchdelay {
+	0%, 40%, 100% {
+		-o-transform: scaleX(0.8);
+		background-color: rgb(46,88,101);
+		box-shadow: 0 0 0 rgba(10,10,10,0.1);
+	}
+	20% {
+		-o-transform: scaleX(1);
+		background-color: rgb(0,177,146);
+		box-shadow: 0 9px 11px rgba(10,10,10,0.4);
+	}
+}
+
+@-ms-keyframes stretchdelay {
+	0%, 40%, 100% {
+		-ms-transform: scaleX(0.8);
+		background-color: rgb(46,88,101);
+		box-shadow: 0 0 0 rgba(10,10,10,0.1);
+	}
+	20% {
+		-ms-transform: scaleX(1);
+		background-color: rgb(0,177,146);
+		box-shadow: 0 9px 11px rgba(10,10,10,0.4);
+	}
+}
+
+@-webkit-keyframes stretchdelay {
+	0%, 40%, 100% {
+		-webkit-transform: scaleX(0.8);
+		background-color: rgb(46,88,101);
+		box-shadow: 0 0 0 rgba(10,10,10,0.1);
+	}
+	20% {
+		-webkit-transform: scaleX(1);
+		background-color: rgb(0,177,146);
+		box-shadow: 0 9px 11px rgba(10,10,10,0.4);
+	}
+}
+
+@-moz-keyframes stretchdelay {
+	0%, 40%, 100% {
+		-moz-transform: scaleX(0.8);
+		background-color: rgb(46,88,101);
+		box-shadow: 0 0 0 rgba(10,10,10,0.1);
+	}
+	20% {
+		-moz-transform: scaleX(1);
+		background-color: rgb(0,177,146);
+		box-shadow: 0 9px 11px rgba(10,10,10,0.4);
+	}
+}
+
+.carousel.carousel-fit {
+  position: relative;
+  /* When sliding, use the maximum height we have */
+  /* Center horizontally the content of the slides */
+  /* To be centered, the images of the slides need to be inline */
+  /* Maximize the captions in the wrapper */
+}
+.carousel.carousel-fit.slide {
+  /* Hide the content outside the carousel when sliding */
+  overflow: hidden;
+}
+.carousel.carousel-fit .carousel-inner > .next,
+.carousel.carousel-fit .carousel-inner > .prev {
+  bottom: 0;
+}
+.carousel.carousel-fit .carousel-inner > .item {
+  text-align: center;
+}
+.carousel.carousel-fit .carousel-inner > .item > img {
+  display: inline-block;
+}
+.carousel.carousel-fit .carousel-inner > .item > .carousel-caption {
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.modal.modal-fullscreen .modal-header
+{
+    border-bottom: none !important;  
+}
+.modal.modal-fullscreen .modal-footer
+{
+    border-top: none !important;  
+}
+
+.modal.modal-fullscreen .modal-content,
+.modal.modal-fullscreen  .modal-footer
+{
+  background-color: #000 !important;  
+}
+
+
+.modal.modal-fullscreen {
+  /* Maximize the main wrappers on the screen */
+  /* Make the parent wrapper of the modal box a full-width block */
+  /* Remove borders and effects on the content */
+  /**
+	 * /!\ By using this feature, you force the header and footer to be placed
+	 * in an absolute position. You must handle by yourself the margin of the
+	 * content.
+	 */
+  background-color: #000 !important;
+}
+.modal.modal-fullscreen .modal-dialog,
+.modal.modal-fullscreen .modal-content {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.modal.modal-fullscreen .modal-dialog {
+  margin: 0;
+  width: 100%;
+}
+.modal.modal-fullscreen .modal-content {
+  border: none;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-box-shadow: inherit;
+  -moz-box-shadow: inherit;
+  -o-box-shadow: inherit;
+  box-shadow: inherit;
+}
+.modal.modal-fullscreen.force-fullscreen {
+  /* Remove the padding inside the body */
+}
+.modal.modal-fullscreen.force-fullscreen .modal-body {
+  padding: 0;
+}
+.modal.modal-fullscreen.force-fullscreen .modal-header,
+.modal.modal-fullscreen.force-fullscreen .modal-footer {
+  left: 0;
+  position: absolute;
+  right: 0;
+}
+.modal.modal-fullscreen.force-fullscreen .modal-header {
+  top: 0;
+}
+.modal.modal-fullscreen.force-fullscreen .modal-footer {
+  bottom: 0;
+}

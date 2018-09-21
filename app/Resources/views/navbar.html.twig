@@ -1,0 +1,82 @@
+  <nav class="navbar px-navbar">
+    <!-- Header -->
+    <div class="navbar-header">
+      <a class="navbar-brand px-demo-brand" href="{{ path('homepage') }}">
+      <span id="home-navbar" class="px-demo-logo">
+            <img class="px-demo-logo-1 profile-company-image-icon" src="{{ path('company_avatar_view') }}" />
+      </span>
+      </a>
+    </div>
+
+    <!-- Navbar togglers -->
+    <button id="menu-button-toggle" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#px-demo-navbar-collapse" aria-expanded="false"><i class="navbar-toggle-icon"></i></button>
+
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="px-demo-navbar-collapse">
+      {#
+      <ul class="nav navbar-nav">
+        <li>
+            <a href="{{ url('homepage') }}">
+                {% trans %}navbar.home{% endtrans %}
+            </a>
+        </li>
+      </ul>
+      #}
+
+      
+          
+      <ul id="menu-left-navbar" class="nav navbar-nav navbar-left">
+      </ul>
+      <ul id="menu-right-navbar" class="nav navbar-nav navbar-right">
+        <li id="search-box" class="hide search-box-container hidden-xs hidden-sm">
+            <form class="navbar-form" role="search">
+            <div class="input-group has-feedback has-clear" style="display:table;">
+              <input type="text" id="search-input" name="search-input" autocomplete="off" class="form-control fuzzy-search" data-search-file="{% trans %}system.search_file{% endtrans %}" placeholder="">
+              
+              <i class="cmd-search-cancel form-control-clear fa fa-times-circle form-control-feedback hidden"></i>
+            </div>
+            </form>
+        </li>
+       
+        
+        {# Notifications #}
+        {{ render(controller("BackendBundle:Default:recentNotifications")) }}
+        {# End notifications #}
+        
+       
+        <li >
+          <a href="{{ path('user_profile_edit') }}" class="dropdown-toggle"  role="button" aria-haspopup="true" aria-expanded="false">
+            {% if app.user.profile.image %}
+                <img class="profile-image-icon px-navbar-image" alt="image" src="{{ path("user_profile_avatar",  {'fileName':app.user.profile.image}) }}" />
+            {% else %}
+                <img class="profile-image-icon px-navbar-image" alt="image" src="{{ asset('bundles/user/img/avatars/unknown.png') }}" />
+            {% endif %}
+                    
+            <span class="hidden-md" style="color: #2a94db;">
+                <strong>{{ app.user.profile.name }} {{ app.user.profile.lastname }}</strong>
+            </span>
+          </a>
+          {#
+          <ul class="dropdown-menu">
+            <li>
+                <a href="{{ path('user_profile_edit') }}">
+                    {% trans %}navbar.profile{% endtrans %}
+                </a>
+            </li>
+            
+            <li class="divider"></li>
+            <li>
+                <a href="{{ path('user_logout') }}">
+                    <i class="dropdown-icon fa fa-power-off" style="color:#d14836"></i>&nbsp;&nbsp;
+                    {% trans %}navbar.close{% endtrans %}
+                </a>
+            </li>
+          </ul>
+            #}
+        </li>
+
+      </ul>
+        
+    </div><!-- /.navbar-collapse -->
+  </nav>

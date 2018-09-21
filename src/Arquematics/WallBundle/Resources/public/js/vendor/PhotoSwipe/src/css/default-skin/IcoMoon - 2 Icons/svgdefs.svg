@@ -1,0 +1,12 @@
+<svg display="none" width="0" height="0" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<symbol id="icon-pencil2" viewBox="0 0 1024 1024">
+	<title>pencil2</title>
+	<path class="path1" d="M384 640l128-64 448-448-64-64-448 448-64 128zM289.3 867.098c-31.632-66.728-65.666-100.762-132.396-132.394l99.096-272.792 128-77.912 384-384h-192l-384 384-192 640 640-192 384-384v-192l-384 384-77.912 128z"></path>
+</symbol>
+<symbol id="icon-upload3" viewBox="0 0 1024 1024">
+	<title>upload3</title>
+	<path class="path1" d="M480 704h-480v256h960v-256h-480zM896 832h-128v-64h128v64zM224 320l256-256 256 256h-160v320h-192v-320z"></path>
+</symbol>
+</defs>
+</svg>

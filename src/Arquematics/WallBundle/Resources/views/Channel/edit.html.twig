@@ -1,0 +1,104 @@
+{% extends '::backend.html.twig' %}
+
+{% block container %}
+<div class="px-content">
+    <div class="page-header">
+            <div class="row">
+                <div class="col-md-4 text-xs-center text-md-left text-nowrap">
+                    <h1>
+                        <i class=" page-header-icon fa fa-cog"></i>
+                        <span class="hidden-xs hidden-sm">{% trans %}control_panel.title{% endtrans %} : </span> {% trans %}channel.label_edit{% endtrans %}
+                    </h1>
+                </div>
+                    
+                <hr class="page-wide-block visible-xs visible-sm">
+
+                <div class="col-xs-12 width-md-auto width-lg-auto width-xl-auto pull-md-right">
+                    <a href="{{ path('channels') }}" class="btn btn-back btn-block">
+                        <span class="btn-label-icon left fa fa-chevron-left"></span>
+                        {% trans %}control_panel.back{% endtrans %}
+                    </a>
+                </div>
+                    
+                <!-- Spacer -->
+                <div class="m-b-2 visible-xs visible-sm clearfix"></div>
+                
+            </div>
+    </div>
+                    
+    <div class="panel">
+        <div class="panel-heading">
+                <div class="panel-title">
+                   
+                </div>
+            </div>
+            <form action="{{ path('channels_edit', {"channel_id": project.id}) }}" method="post" id="form" class="form-horizontal">
+                
+            <div class="panel-body">
+                {% include '::feedback_messages.html.twig' %}
+                
+                <div class="row">
+                    <div class="col-sm-12 col-xs-12">
+
+                        <div class="form-group {% if form.name.vars.errors|length %}form-message-dark has-error has-validation-error{% endif %}">
+                            {{ form_label(form.name, '', {'label': 'channel.label_name', 'label_attr': {'class': 'col-sm-2 control-label' }}) }}
+                            <div class="col-sm-10">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form_widget(form.name, {'attr': {'autocomplete':'off', 'class': 'form-control' }}) }}
+                                    {{ form_errors(form.name, {'attr': {'class': 'form-message validation-error' }}) }}
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                                
+                         <div class="form-group">
+                                        {{ form_label(form.open , '', {'label_attr': {'class': 'col-sm-2 control-label label-open' }}) }}
+                                        <label for="backendbundle_project_open" class="switcher switcher-primary switcher-rounded" style="display:block;float:left;margin-left: 8px;margin-top:14px">
+                           
+                                            {{ form_widget(form.open, {'attr': {'class': 'form-control active-status' }}) }}
+                                            <div class="switcher-indicator">
+                                                <div class="switcher-yes">{% trans %}cmd.yes{% endtrans %}</div>
+                                                <div class="switcher-no">{% trans %}cmd.no{% endtrans %}</div>
+                                            </div>
+                                        </label>
+                        </div>
+
+                    {{ form_rest(form) }}
+                    </div>
+                </div>
+                                    
+            </div>
+                                    
+            
+            <div class="panel-footer text-right">
+                    <a href="{{ path('channels') }}" class="btn btn-default">
+                        {% trans %}control_panel.cancel{% endtrans %}
+                    </a>
+                    <button id="submitForm" class="btn btn-primary" type="submit">
+                        {% trans %}control_panel.save{% endtrans %}
+                    </button>
+            </div>
+                    
+             </form>
+    </div>
+</div>         
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+    $(document).ready(function(){
+           $(".switcher-indicator" ).click(function( event ) {
+                event.preventDefault();
+            
+                $group = $(event.target).parents('.form-group');
+                $group.find('.label-open').trigger( "click" );
+            });
+    });
+     </script>
+{% endblock %}

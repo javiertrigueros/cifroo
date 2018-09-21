@@ -1,0 +1,12 @@
+services:
+    twig.extension.intl:
+        class: Twig_Extensions_Extension_Intl
+        tags:
+            - { name: twig.extension }
+            
+    imode_notifications:
+      class: Arquematics\BackendBundle\Service\NotificationService
+      arguments: ["@twig", "@mailer","@service_container", %notifications_email%]
+      
+    image_base64:
+      class: Arquematics\BackendBundle\Service\ImageBase64

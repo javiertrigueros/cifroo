@@ -1,0 +1,33 @@
+{
+  "name": "jquery-ajax-queue",
+  "version": "0.0.1",
+  "homepage": "https://github.com/flydreamers/ajaxQueue",
+  "authors": [
+    "Nicolás Gleichgerrcht <ngleich@flydreamers.com>"
+  ],
+  "description": "An jquery queue for serialising a queue of ajax request",
+  "main": "ajax-queue.js",
+  "keywords": [
+    "ajax",
+    "queue",
+    "jquery"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "0.0.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.0.1",
+    "commit": "50ffe758abe1a365ad228851ee7028677bfb07b4"
+  },
+  "_source": "https://github.com/flydreamers/ajaxQueue.git",
+  "_target": "^0.0.1",
+  "_originalSource": "jquery-ajax-queue",
+  "_direct": true
+}

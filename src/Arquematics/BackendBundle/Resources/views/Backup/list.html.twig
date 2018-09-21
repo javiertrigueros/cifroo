@@ -1,0 +1,269 @@
+{% extends '::backend.html.twig' %}
+
+{% block container %}
+<div class="modal-load modal-load-fix">
+    <div class="ar-container">
+           <div class="item-swip cssload-piano">
+            <div class="cssload-rect1"></div>
+            <div class="cssload-rect2"></div>
+            <div class="cssload-rect3"></div>
+          </div>
+     </div>
+</div>
+    <div class="px-content">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-md-4 text-xs-center text-md-left text-nowrap">
+                    <h1>
+                        <i class=" page-header-icon fa fa-cog"></i>
+                        <span class="hidden-xs hidden-sm">{% trans %}control_panel.title{% endtrans %} : </span> {% trans %}control_panel.menu_backup{% endtrans %}
+                    </h1>
+                </div>
+          
+                <hr class="page-wide-block visible-xs visible-sm">
+
+                
+                {% if canMakeRestorePoint %}
+                
+                <div class="col-xs-12 width-md-auto width-lg-auto width-xl-auto pull-md-right">
+                    <a href="{{ path('system_backup') }}" class="btn btn-primary btn-block cmd-add-item">
+                        <span class="btn-label-icon left ion-plus-round"></span>
+                        {% trans %}backup.add{% endtrans %}
+                    </a>
+                </div>
+                    
+                {% endif %}
+
+                <!-- Spacer -->
+                <div class="m-b-2 visible-xs visible-sm clearfix"></div>
+                
+            </div>
+        </div>
+                    
+         <div class="panel">
+                
+            <div class="panel-body">
+                {% include '::feedback_messages.html.twig' %}
+                {% if directories|length > 0 %}
+                <div class="table-primary">
+                     <table id="directory_table" class="table table-striped table-bordered table-hover" style="margin-top:15px;">
+                        <thead class="thead-background-blue">
+                            <tr>
+                                <th class="no-sort">{% trans %}system.date{% endtrans %}</th>
+                                <th class="no-sort">{% trans %}system.actions{% endtrans %}</th>
+                            </tr> 
+                        </thead>
+                        
+                        <tbody>
+                            {% for directory in directories %}
+                                {% if directory.isUser %}
+                                <tr>
+                                    <td> {{ directory.friend_name }} </td>
+                                   
+                                    <td>
+                                        <a  href="{{ path('system_backup_download', {"backup_date": directory.name}) }}"   class="btn btn-info btn-xs cmd-download">
+                                            {% trans %}cmd.download{% endtrans %}
+                                        </a> 
+                                        
+                                        <a href="{{ path('system_backup_restore', {"backup_date": directory.name}) }}"  data-view_date="{{ directory.friend_name }}" class="btn btn-success btn-xs cmd-restore">
+                                            {% trans %}cmd.restore{% endtrans %}
+                                        </a> 
+
+                                        <a href="{{ path('system_backup_delete', {"backup_date": directory.name}) }}" class="btn btn-danger btn-xs delete-element cmd-delete">
+                                            {% trans %}cmd.delete{% endtrans %}
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    
+                   <div class='bottom col-xs-12 width-md-auto width-lg-auto width-xl-auto pull-md-right' style='margin-top:17px;'>
+                        <a href="{{ path('system_backup_delete_all') }}" class="btn btn-danger btn-block cmd-delete-all">
+                        {% trans %}cmd.deleteAll{% endtrans %}
+                        </a>
+                    </div> 
+                       
+                </div>
+                        
+                {% else %}
+                    <div class="note note-warning">
+                        <h4 class="note-title">
+                            {% trans %}backup.no_backups{% endtrans %}
+                        </h4>
+                        <p>{% trans %}backup.no_backups_ext{% endtrans %}</p>
+                    </div>
+                {% endif %}
+                        
+                
+              
+            </div>
+                
+                   
+                                    
+         </div>
+                                    
+    </div>
+    
+<div class="modal inmodal fade" id="confirm-delete" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{% trans %}cmd.close{% endtrans %}</span></button>
+                    <h4 class="modal-title">{% trans %}backup.delete_head{% endtrans %}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{% trans %}backup.delete_text{% endtrans %}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">{% trans %}cmd.cancel{% endtrans %}</button>
+                    <a class="btn btn-danger btn-ok cmd-delete-ok">{% trans %}cmd.delete{% endtrans %}</a>
+                </div>
+            </div>
+    </div>
+</div>
+                
+<div class="modal inmodal fade" id="confirm-restore" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{% trans %}cmd.close{% endtrans %}</span></button>
+                    <h4 class="modal-title">{% trans %}backup.text_restore_head{% endtrans %} <span class="modal-body-date"></span>?</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{% trans %}backup.text_restore{% endtrans %} <span class="modal-body-date"></span>.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">{% trans %}cmd.cancel{% endtrans %}</button>
+                    <a class="btn btn-danger btn-ok cmd-restore-ok" data-back_url="{{ path('system_backup') }}">{% trans %}cmd.restore{% endtrans %}</a>
+                </div>
+            </div>
+    </div>
+</div>
+                
+<div class="modal inmodal fade" id="confirm-delete-all" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{% trans %}cmd.close{% endtrans %}</span></button>
+                    <h4 class="modal-title">{% trans %}backup.delete_all_head{% endtrans %}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{% trans %}backup.delete_all_text{% endtrans %}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">{% trans %}cmd.cancel{% endtrans %}</button>
+                    <a class="btn btn-danger btn-ok cmd-delete-ok" data-back_url="{{ path('system_backup_delete_all') }}">{% trans %}cmd.deleteAll{% endtrans %}</a>
+                </div>
+            </div>
+    </div>
+</div>
+                
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <link href="{{ asset('bundles/wall/css/animation_wait.css') }}" rel="stylesheet">
+    
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            
+          function loadData (url)
+          {
+                var d = $.Deferred();
+                $.ajax({
+                    method: "POST",
+                    url: url,
+                    cache: false,
+                    dataType : "json",
+                    contentType: "application/json; charset=utf-8"
+                })
+                .done(function(jsonData) {
+                    d.resolve(jsonData);   
+                })
+                .fail(function() {
+                    d.reject(); 
+                });
+        
+                return d;
+          }
+          
+           $(".cmd-delete-all" ).click(function( event ) {
+            event.preventDefault();
+            
+            $('#confirm-delete').data('cmd_url',$(event.target).attr('href'));
+            $('#confirm-delete-all').modal('show');
+          });
+            
+          $(".cmd-delete" ).click(function( event ) {
+            event.preventDefault();
+            
+            $(".cmd-delete-ok" ).removeClass('disabled');
+            
+            $('#confirm-delete').data('cmd_url',$(event.target).attr('href'));
+            $('#confirm-delete').modal('show');
+          });
+          
+          $(".cmd-restore" ).click(function( event ) {
+            event.preventDefault();
+            
+            $(".cmd-restore-ok" ).removeClass('disabled');
+            
+            $('.modal-body-date').text($(event.target).data('view_date'));
+            
+            $('#confirm-restore').data('cmd_url',$(event.target).attr('href'));
+            $('#confirm-restore').modal('show');
+          });
+          
+          $(".cmd-restore-ok" ).click(function( event ) {
+            event.preventDefault();
+
+            $(event.target).addClass('disabled');
+            $('body').addClass('loading');
+            
+            var url = $('#confirm-restore').data('cmd_url');
+
+            $.when(loadData(url))
+            .done(function (jsonData){
+               window.location = $('.cmd-restore-ok').data('back_url');
+            });   
+            
+          });
+          
+          $(".cmd-delete-ok" ).click(function( event ) {
+            event.preventDefault();
+
+            $(event.target).addClass('disabled');
+            $('body').addClass('loading');
+            window.location = $('#confirm-delete').data('cmd_url');
+          });
+          
+          $(".cmd-add-item" ).click(function( event ) {
+             event.preventDefault();
+             
+            var $buttom = $(event.target)
+                     
+            $buttom.addClass('disabled');
+            
+            $('body').addClass('loading');
+             
+            $.when(loadData($(event.target).attr('href')))
+            .done(function (jsonData){
+                
+               window.location = $buttom.attr('href');
+               
+            });      
+             
+          });
+
+        });
+    </script>
+{% endblock %}

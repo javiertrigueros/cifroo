@@ -1,0 +1,32 @@
+<div data-url="{{ wallLink.url }}"
+     data-thumb="{{ wallLink.thumb }}"
+     data-provider="{{ wallLink.provider }}"   
+     data-oembed_html="{{ wallLink.oembed }}"
+     data-link-id="{{ wallLink.id }}"
+     id="link-{{ wallLink.id }}" class="wall-link-item">
+   
+
+    <span data-link-id="{{ wallLink.id }}" id="remove-link-{{ wallLink.id }}" class="icon-remove-link cmd-remove-link fa fa-times-circle"></span>  
+    
+    {% if wallLink.thumb %}
+        <div class="wall-link-static">
+            <div class="wall-link-image-container wall-link-image">
+                    <img src="{{ wallLink.thumb }}" width="100%" height="auto" class="cmd-wall-link-image link-image link-video-image"/>
+            </div>
+
+            <div class="wall-link-divider wall-link-text col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                <p>
+                    <a href='{{ wallLink.url }}' target='_blank'>{{ wallLink.title }} - {{ wallLink.provider }}</a>
+                </p>
+                <p>{{ wallLink.description }}</p>
+            </div>
+        </div> 
+    {% else %}
+        <div class="wall-link-divider wall-link-text">
+            <p>
+                <a href='{{ wallLink.url }}' target='_blank'>{{ wallLink.title }} - {{ wallLink.provider }}</a>
+            </p>
+            <p>{{ wallLink.description }}</p>
+        </div>  
+    {% endif %}              
+</div>

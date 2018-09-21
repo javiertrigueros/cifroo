@@ -1,0 +1,292 @@
+{% extends '::frontend.html.twig' %}
+
+{% block title %}{% trans %}menu.sign_in{% endtrans %}{% endblock %}
+
+{% block body_params %}class="px-responsive-bg-container"{% endblock %}
+
+{% block container %}
+
+    <div class="modal-load modal-load-fix">
+        <div class="ar-container">
+           <div class="item-swip cssload-piano">
+            <div class="cssload-rect1"></div>
+            <div class="cssload-rect2"></div>
+            <div class="cssload-rect3"></div>
+          </div>
+        </div>
+    </div>
+    
+    <div class="page-signin-modal modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="box m-a-0">
+          <div class="box-row">
+
+            <div class="box-cell col-md-5 bg-primary p-a-4">
+              
+              <ul class="list-group m-t-3 m-b-0 visible-md visible-lg visible-xl">
+                <li class="font-size-15 list-group-item p-x-0 p-b-0 b-a-0"><i class="list-group-icon fa fa-cubes text-white"></i>{% trans %}login.slogan_text1{% endtrans %}</li>
+                <li class="font-size-15 list-group-item p-x-0 p-b-0 b-a-0"><i class="list-group-icon fa fa-comment text-white"></i>{% trans %}login.slogan_text2{% endtrans %}</li>
+                <li class="font-size-15 list-group-item p-x-0 p-b-0 b-a-0"><i class="list-group-icon ion-unlocked text-white"></i>&nbsp;&nbsp;&nbsp;&nbsp;{% trans %}login.slogan_text3{% endtrans %}</li>
+              </ul>
+              
+            </div>
+
+            <div class="box-cell col-md-7">
+
+              <!-- Sign In form -->
+
+              <form id="page-login-form" role="form" action="{{ path('user_login_check') }}" class="p-a-4" method="post" >
+                
+                <div class="logo-container">
+                    <!-- logo -->
+                    <img class="logo-login" src="{{ asset('bundles/design/img/logo.png') }}" />
+                    <!-- end logo --> 
+                </div>
+                     
+                
+                
+                {% if loginerror %}
+                    <div class="alert alert-danger alert-dark">
+                        <strong>{{ loginerror.message | trans({},'messages') }}</strong>
+                    </div>
+                {% endif %}
+               
+                <fieldset class="page-signin-form-group form-group col-input input-effect">
+                    <div class="page-signin-icon text-muted"><i class="icon-login icon-user"></i></div>
+                    <input type="email" class="user-email login-form page-signin-form-control form-control effect-16" placeholder="" id="username" name="_username" value="{{ last_username }}" required="">
+                    <label class="active-label">{% trans %}menu.email{% endtrans %}</label>
+                    <span class="focus-border"></span>
+                </fieldset>
+                
+                <fieldset class="page-signin-form-group form-group col-input input-effect">
+                  <div class="page-signin-icon text-muted" style="cursor:pointer;"><i class="icon-login icon-eye-close eye" data-status="false"></i></div>
+                  <input  type="password" readonly="readonly" class="login-form page-signin-form-control form-control effect-16" placeholder="" id="password" name="_password" required="">
+                  <label class="active-label">{% trans %}menu.passwd{% endtrans %}</label>
+                  <span class="focus-border"></span>
+                </fieldset>
+
+                <div class="clearfix">
+                    <div style="display:block;padding-top:150px;">
+                       <label class="custom-control custom-checkbox pull-xs-left">
+                        <input type="checkbox" class="custom-control-input" id="remember_me" name="_remember_me" checked />
+                        <span class="custom-control-indicator"></span>
+                            {% trans %}menu.remember_me{% endtrans %}
+                        </label>
+                        <a href="#" class=" text-muted pull-xs-right" id="page-signin-forgot-link">
+                            {% trans %}menu.forgot_passwd_extra{% endtrans %} <span style="font-weight:500; color:#2a94db !important;">{{ 'menu.passwd'| trans | lower }}</span>
+                        </a> 
+                    </div>
+                </div>
+
+                <button type="submit" class="btn cmd-login btn-block btn-lg btn-primary m-t-3">
+                    {% trans %}menu.sign_in{% endtrans %}
+                </button>
+              </form>
+
+             
+
+              <!-- / Sign In form -->
+
+              <!-- Reset form -->
+
+              <form role="form" action="{{ path('user_resetpassword') }}" method="post" class="p-a-4" id="page-signin-forgot-form">
+                <h4 class="m-t-0 m-b-4 text-xs-center font-weight-semibold">
+                    {% trans %}menu.forgot_passwd{% endtrans %}
+                </h4>
+                
+                <div class="alert alert-info alert-dark">
+                    <strong>{% trans %}menu.forgot_passwd1{% endtrans %}</strong>
+                </div>
+
+                
+                <fieldset class="page-signin-form-group form-group col-input col-input-start input-effect">
+                    <div class="page-signin-icon text-muted"><i class="icon-user icon-login"></i></div>
+                    <input type="email" class="login-form page-signin-form-control form-control effect-16" placeholder="" id="username-email" name="username" required="">
+                    <label class="active-label">{% trans %}menu.email{% endtrans %}</label>
+                    <span class="focus-border"></span>
+                </fieldset>
+                
+                <button type="submit" class="btn btn-block btn-lg btn-primary m-t-3">
+                    {% trans %}menu.send_passwd_reset{% endtrans %}
+                </button>
+                <div class="m-t-2 text-muted">
+                  <a href="#" id="page-signin-forgot-back">{% trans %}menu.back{% endtrans %}</a>
+                </div>
+              </form>
+
+              <!-- / Reset form -->
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+    </div>
+    </div>
+         
+    <div class="px-responsive-bg">
+        <div class="px-responsive-bg-overlay" style="background: rgb(0, 0, 0) none repeat scroll 0% 0%; opacity: 0.2;"></div>
+        <img alt="" src="{{ asset('bundles/design/demo/bgs/3.jpg') }}" style="width: 100%; height: auto; top: -70px; left: 0px;">
+    </div>
+    
+    
+    <div id="modal-private-key" class="modal inmodal fade"  tabindex="-1" role="dialog"  aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">{% trans %}cmd.close{% endtrans %}</span></button>
+                    <h4 class="modal-title">
+                        {% trans %}login.private_key_title{% endtrans %}
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        <textarea id="private_key_textbox"
+                                    autocomplete="off"
+                                    name="private_key_textbox" 
+                                    rows="5"
+                                    class="form-control"></textarea>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">
+                        {% trans %}cmd.cancel{% endtrans %}
+                    </button>
+                    <a class="btn btn-danger btn-ok cmd-accept-private-key">
+                        {% trans %}cmd.accept{% endtrans %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('bundles/wall/css/animation_wait.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/design/css/fontello/css/fontello-embedded.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/design/css/login.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+
+<script src="{{ asset('bundles/user/js/bower_components/hideshowpassword/hideShowPassword.min.js') }}" type="text/javascript"></script>
+
+<script src="{{ asset('bundles/wall/js/vendor/jsencrypt/bin/jsencrypt.js') }}" type="text/javascript"></script>
+<script src="{{ asset('bundles/wall/js/bower_components/blob-util/dist/blob-util.js') }}" type="text/javascript"></script>
+<script src="{{ asset('bundles/wall/js/vendor/sjcl/sjcl.js') }}" type="text/javascript"></script>
+<script src="{{ asset('bundles/wall/js/arquematics/arquematics.core.js') }}" type="text/javascript"></script>
+<script src="{{ asset('bundles/user/js/arquematics/arquematics.login.js') }}" type="text/javascript"></script>
+<script type="text/javascript">
+    
+    $(document).ready(function()
+    {
+        
+        $('.eye').on( "click", function(e) {
+            e.preventDefault();
+            var status = !($('.eye').data('status'));
+            $('.eye').data('status', status);
+            
+            if (status)
+            {
+                $('.eye').removeClass('icon-eye-close');
+                $('.eye').addClass('icon-eye-open');
+            }
+            else
+            {
+                $('.eye').removeClass('icon-eye-open');
+                $('.eye').addClass('icon-eye-close'); 
+            }
+            
+            $('#password').hideShowPassword($('.eye').data('status'));
+        });
+        
+        $('#password').hideShowPassword($('.eye').data('status'));
+        
+        
+        $('#page-signin-forgot-link').on( "click", function(e) {
+            e.preventDefault();
+            
+            $('#page-login-form').hide();
+            $('#page-signin-forgot-form').show();
+        });
+        
+        $('#page-signin-forgot-back').on( "click", function(e) {
+            e.preventDefault();
+            
+            $('#page-login-form').show();
+            $('#page-signin-forgot-form').hide();
+        });
+        
+        function showLabels(){
+          $('#username').addClass("has-content");
+          $('#password').addClass("has-content");
+        }
+        
+        $(".input-effect input").on( "change", function(e) {
+            if($(this).val() !== "")
+            {
+                if ($(this).hasClass('user-email'))
+                {
+                    $('#password').removeAttr('readonly');
+                }
+                
+		$(this).addClass("has-content");
+            }else{
+		$(this).removeClass("has-content");
+            }
+        });
+        
+        $(".input-effect input").focusout(function(){
+            if($(this).val() !== ""){
+		$(this).addClass("has-content");
+            }else{
+		$(this).removeClass("has-content");
+            }
+	});
+        
+        $('#password').on("focus", function (e)  
+        {
+            $(this).removeAttr('readonly');
+        });
+        
+        
+        $('.active-label').on("click", function (e)
+        {
+            e.preventDefault();
+            
+            var $input = $(e.target).parent('.input-effect').find('input');
+            
+            $input.removeClass("has-content");
+            
+            $input.removeAttr('readonly');
+            
+            $input.addClass("has-content");
+           
+            $input.focus();
+        });
+
+        ($.trim($('#username').val()) !== '')?showLabels():$('#username').removeClass("has-content");
+    
+        ($.trim($('#password').val()) !== '')?showLabels():$('#password').removeClass("has-content");
+    
+        ($.trim($('#username-email').val()) !== '')?$('#username-email').addClass("has-content"):$('#username-email').removeClass("has-content");
+
+        //inicializa el scrip de login
+        arquematics.login.init({
+            api_send_public_key: '{{ path('api_send_public_key') }}',
+            api_send_private_mail: '{{ path('api_send_private_mail') }}',
+            api_request_private_mail: '{{ path('api_request_private_mail') }}',
+            api_userinfo: '{{ path('api_userinfo') }}',
+            api_logout: '{{ path('user_logout') }}',
+            sessionname: '{{ sessionname }}' });
+       
+    });
+</script>
+
+{% endblock %}

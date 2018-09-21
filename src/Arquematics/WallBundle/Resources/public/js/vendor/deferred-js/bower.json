@@ -1,0 +1,19 @@
+{
+    "name": "deferred-js",
+    "version": "1.0.4",
+    "main": "js/deferred.min.js",
+    "ignore": [
+        "node_module",
+        ".gitattributes",
+        ".gitignore",
+        "Makefile",
+        "example.html",
+        "bower.json",
+        "package.json",
+        "README.md"
+    ],
+    "homepage": "https://github.com/warpdesign/deferred-js",
+    "authors": [
+      "Nicolas Ramz <nicolas.ramz@gmail.com> (http://nicolasramz.fr)"
+    ]
+}

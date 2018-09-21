@@ -1,0 +1,56 @@
+login_check:
+    path: /login_check
+    
+homepage:
+    path:     /
+    defaults: { _controller: WallBundle:Wall:index }
+#backup
+system_backup_delete_all:
+  path:     /backup/deleteALL
+  defaults: { _controller: BackendBundle:Backup:deleteAll }
+
+system_backup_download:
+    path:     /backup/download/{backup_date}
+    defaults: { _controller: BackendBundle:Backup:download }
+
+system_backup_restore:
+    path:     /backup/restore/{backup_date}
+    defaults: { _controller: BackendBundle:Backup:restore }
+    
+system_backup_delete:
+    path:     /backup/delete/{backup_date}
+    defaults: { _controller: BackendBundle:Backup:delete }
+
+system_backup:
+    path:     /backup
+    defaults: { _controller: BackendBundle:Backup:list }
+#notificaciones
+activity:
+    path:     /activity
+    defaults: { _controller: BackendBundle:Default:activity }
+
+ajax_notifications_to_viewed:
+    path:     /notifications-to-viewed
+    defaults: { _controller: BackendBundle:Ajax:notificationsToViewed }
+    
+user_notifications:
+    path:     /listNotifications
+    defaults: { _controller: BackendBundle:Default:listNoViewNotifications }
+
+notification_all_delete:
+    path:     /activity/notifications/delete
+    defaults: { _controller: BackendBundle:Default:deleteAllNotifications }
+
+notification_delete:
+    path:     /activity/notification/delete/{id}
+    defaults: { _controller: BackendBundle:Default:deleteNotification }
+#avatar
+company_avatar_view:
+    path:     /company/avatar/view
+    defaults: { _controller: BackendBundle:Company:avatarView }
+    
+company_avatar:
+    path:     /company/avatar
+    defaults: { _controller: BackendBundle:Company:avatar }
+    
+

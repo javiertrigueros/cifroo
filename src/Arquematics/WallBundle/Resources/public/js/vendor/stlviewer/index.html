@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en-US">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>STL Viewer</title>
+	
+	<link href="/bundles/wall/js/vendor/stlviewer/css/stlviewer.css" rel="stylesheet">
+
+	<script src="/bundles/wall/js/vendor/stlviewer/js/thingiview/Three.js"></script>
+        <script src="/bundles/wall/js/vendor/stlviewer/js/thingiview/plane.js"></script>
+        <script src="/bundles/wall/js/vendor/stlviewer/js/thingiview/thingiview.js"></script>
+	<script>
+
+        (function($) {
+          window.load3DDoc = function(data) {
+              
+              var dataContent = data     
+              , loadView = function(data, contentDocument)
+              {
+                  var thingiurlbase = "/bundles/wall/js/vendor/stlviewer/js/thingiview"
+                  , thingiview = new Thingiview("stlviewer", contentDocument, thingiurlbase);
+              
+                  thingiview.setObjectColor('#2266F0');
+                  thingiview.setBackgroundColor('#CCC');
+                  thingiview.initScene();
+                  thingiview.setCameraView('iso');
+              
+                  if (data.match(/^solid/))
+                  {
+                    thingiview.loadSTLString(data);
+                  }
+                  else
+                  {
+                    thingiview.loadSTLBinary(data);      
+                  }
+              };
+              
+              loadView(data, window);
+              
+              $( window ).resize(function() {
+                loadView(dataContent, window );
+              });
+              
+          };
+        })(window.parent.jQuery);   
+        
+	</script>
+</head>
+<body>
+	<div id="stlviewer"></div>
+	<div id="message"></div>
+</body>
+</html>

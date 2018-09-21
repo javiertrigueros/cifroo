@@ -1,0 +1,6 @@
+UserRole.name_min_error: "El proceso de negocio debe tener un mínimo de {{ limit }} caracteres"
+UserRole.name_unique_error: "Ya existe un rol con el mismo nombre, contacta con soporte"
+User.email_unique: "Otro usuario tiene este mismo correo electrónico."
+User.email_not_blank: "El email no puede estar vacío"
+
+Configuration.unique_key: "Ya existe una clave con este valor"

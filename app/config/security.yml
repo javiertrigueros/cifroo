@@ -1,0 +1,57 @@
+# To get started with security, check out the documentation:
+# https://symfony.com/doc/current/security.html
+security:
+    encoders:
+        FOS\UserBundle\Model\UserInterface: bcrypt
+        #Arquematics\UserBundle\Entity\User:
+        #    algorithm: bcrypt
+        #    cost: 12
+            
+    access_control:
+    - { path: ^/connect/check-facebook, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/connect/check-twitter, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/connect/check-linkedin, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/connect, roles: ROLE_USER }    
+    - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/resetpassword, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/, roles: ROLE_USER }
+    
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_USER]
+        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    providers:
+        fos_userbundle:
+            id: fos_user.user_provider.username_email
+        #users:
+        #    entity: { class: Arquematics\UserBundle\Entity\User, property: email }
+
+    firewalls:
+        # disables authentication for assets and the profiler, adapt it according to your needs
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+            
+        main:
+            pattern: ^/*
+            logout:   true
+            anonymous: true
+            oauth:
+                resource_owners:
+                    facebook:      "/connect/check-facebook"
+                    twitter:       "/connect/check-twitter"
+                    linkedin:      "/connect/check-linkedin"
+                login_path:        /login
+                failure_path:      /login
+                default_target_path: /profile?tab=social
+                oauth_user_provider:
+                    service: app.fos_user.oauth_provider
+
+            form_login:
+              login_path: /login
+              check_path: /login_check
+            logout:
+              path: /logout
+              target: /login
+            

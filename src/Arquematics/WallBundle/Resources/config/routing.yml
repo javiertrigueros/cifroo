@@ -1,0 +1,189 @@
+channels:
+    path:     /channels
+    defaults: { _controller: WallBundle:Channel:list }
+    
+
+channels_create:
+    path:     /channels/create
+    defaults: { _controller: WallBundle:Channel:create }
+
+channels_edit:
+    path:     /channels/{channel_id}
+    defaults: { _controller: WallBundle:Channel:edit }
+    methods:  [GET, POST]
+
+channels_delete:
+    path:     /channels/{channel_id}
+    defaults: { _controller: WallBundle:Channel:delete }
+    methods:  [DELETE]
+    
+api_link:
+    path: /v1/extractMedia
+    defaults: { _controller: WallBundle:API:extractMedia }
+
+api_file_preview:
+    path: /v1/filePreview/{inputformat}/{outputformat}
+    defaults: { _controller: WallBundle:API:filePreview }
+    methods:  [GET]
+    requirements:
+        inputformat:    '\S+'
+        outputformat:   '\S+'
+
+api_file_download:
+    path: /v1/fileDownload/{guid}
+    defaults: { _controller: WallBundle:API:fileDownload, guid: false }
+    methods:  [GET]
+    requirements:
+        fileId:    '\S+'
+        
+api_userinfo:
+    path: /v1/userinfo
+    defaults: { _controller: WallBundle:API:userinfo }
+    methods:  [GET]
+    
+api_request_private_mail:
+    path: /v1/requestPrivateMail
+    defaults: { _controller: WallBundle:API:requestPrivateKeyMail }
+    methods:  [POST]
+    
+api_send_private_mail:
+    path: /v1/sendPrivateMail
+    defaults: { _controller: WallBundle:API:sendPublicAndPrivateKey }
+    methods:  [POST]
+    
+api_send_public_key:
+    path: /v1/sendPublicKey
+    defaults: { _controller: WallBundle:API:sendPublicKey }
+    methods:  [POST]
+    
+#hwi_oauth_redirect:
+#    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+#    prefix:   /connect
+    
+#hwi_oauth_connect:
+#    resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
+#    prefix:   /connect
+
+#hwi_oauth_login:
+#    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+#    prefix:   /loginTwitter
+    
+#twitter_login:
+#    path: /login/twitter-facebook
+explorer:
+    path:  /explorer/{type}
+    defaults: { _controller: WallBundle:Document:list, type: null }
+    methods:  [GET]
+    
+explorer_view:
+    path:  /explorer/{type}/{id}
+    defaults: { _controller: WallBundle:Document:view, type: null, id: null }
+    methods:  [GET]
+
+explorer_edit:
+    path:  /explorer/{type}/{id}
+    defaults: { _controller: WallBundle:Document:edit, type: null, id: null }
+    methods:  [PUT]
+
+
+wall:
+    path:     /wall/{channel_slug}/{usename_slug}
+    defaults: { _controller: WallBundle:Wall:index, channel_slug: null, usename_slug: null }
+    methods:  [GET, POST]
+
+wall_delete:
+    path:     /wall/{channel_slug}/{id}
+    defaults: { _controller: WallBundle:Wall:delete }
+    methods:  [DELETE]
+    
+user_messages:
+    path:     /messages
+    defaults: { _controller: WallBundle:Wall:messages }
+    methods:  [GET]
+    
+user_messages_lock:
+    path:     /messagesLock
+    defaults: { _controller: WallBundle:Wall:messagesLock }
+    methods:  [POST]
+    
+user_messages_count:
+    path:     /messagesCount
+    defaults: { _controller: WallBundle:Wall:messagesCount }
+    methods:  [GET]
+    
+user_messages_update:
+    path:     /messages/{messageId}
+    defaults: { _controller: WallBundle:Wall:messagesUpdate }
+    methods:  [POST]
+
+vote:
+    path:     /vote/{message_id}
+    defaults: { _controller: WallBundle:Vote:create }
+
+vote_delete:
+    path:     /vote/{message_id}/{id}
+    defaults: { _controller: WallBundle:Vote:delete }
+
+comment:
+    path:     /comment/{channel_slug}/{message_id}
+    defaults: { _controller: WallBundle:Comment:create }
+    methods:  [POST]
+
+comment_delete:
+    path:     /comment/{message_id}/{id}
+    defaults: { _controller: WallBundle:Comment:delete }
+    methods:  [DELETE]
+
+tag:
+    path:   /hashtag/{hash}
+    defaults: { _controller: WallBundle:Tag:index , hash: false}
+    
+tag_more:
+    path:   /more/{channel_slug}/{usename_slug}
+    defaults: { _controller: WallBundle:Tag:more, usename_slug: false }
+    methods:  [GET]
+
+tag_search:
+    path:   /search/{channel_slug}/{usename_slug}
+    defaults: { _controller: WallBundle:Tag:search, usename_slug: false }
+    
+link_create:
+    path:   /link
+    defaults: { _controller: WallBundle:Link:create }
+    
+link_delete:
+    path:   /link/{id}
+    defaults: { _controller: WallBundle:Link:delete }
+    
+file_create:
+    path:   /doc
+    defaults: { _controller: WallBundle:Upload:create }
+    methods:  [POST]
+    
+file_view:
+    path:   /doc/{guid}
+    defaults: { _controller: WallBundle:Upload:view, guid: false }
+    methods:  [GET, PUT]
+    
+file_delete:
+    path:   /doc/{guid}
+    defaults: { _controller: WallBundle:Upload:delete, guid: false }
+    methods:  [DELETE]
+    
+preview_create:
+    path:   /doc/{guid}
+    defaults: { _controller: WallBundle:Preview:create, guid: false }
+    methods:  [POST]
+    
+preview_view:
+    path:   /doc/{guid}/{style}
+    defaults: { _controller: WallBundle:Preview:view}
+    methods:  [GET]
+    requirements:
+        guid:    '\S+'
+        style:   '\S+'
+
+    
+select_social:
+    path:   /selectSocial/{id}
+    defaults: { _controller: WallBundle:API:selectSocialPage }

@@ -1,0 +1,159 @@
+<nav class="ui-row navbar navbar-static-top">
+    <ul class="nav navbar-nav navbar-left">
+        <li>
+            <% if (share) { %>
+            <a id="takeBack" href="{{ userURL }}" class="cmd-back">
+                <span class="tg_head_logo">&nbsp;</span>
+                <span class="tg_head_logo_text ng-binding">
+                    {{ i18n('Go to Wall') }}
+                </span>
+            </a>
+            <% } else { %>
+            <a id="takeBack" href="#" class="cmd-back">
+                <span class="tg_head_logo">&nbsp;</span>
+                <span class="tg_head_logo_text ng-binding">
+                    {{ i18n('Go back') }}
+                </span>
+            </a>
+            <% } %>
+        </li>
+    </ul>
+    <ul class="pull-left">
+        <!--
+        <li class="cmd-print extra-button btn">
+            <a  title="{{ i18n('Print') }}" href="#">
+                <i class="icon-print"></i>
+            </a>
+        </li>
+        -->
+        <li class="cmd-edit extra-button btn modeMenu hide">
+            <a title="{{ i18n('Edit') }}" href="#" data-mode="edit">
+                <i class="icon-columns" data-mode="edit"></i>
+            </a>
+        </li>
+        <li class="cmd-view-fullscreen extra-button btn modeMenu">
+             <a title="{{ i18n('View') }}" href="#" data-mode="normal">
+                <i class="icon-eye" data-mode="normal"></i>
+             </a>
+        </li>
+        <!--  
+        <li class="cmd-edit-fullscreen extra-button btn modeMenu hide">
+             <a title="{{ i18n('Full screen edit') }}" href="#" data-mode="fullscreen">
+                <i class="icon-eye-off" data-mode="fullscreen"></i>
+             </a>
+        </li>
+        -->
+    </ul>
+    <ul class="pull-right">
+        <li class="btn-group saveBtnGroup">
+            <span class="saveBtn btn btn-success">
+                <i class="icon-save"></i>
+                <% if (share) { %>
+                    <span class="save-btn-text">{{ i18n('Save & Exit') }}</span>
+                <% } else { %>
+                    <span class="save-btn-text">{{ i18n('Save') }}</span>
+                <% } %> 
+            </span>
+        </li>
+    </ul>
+</nav>
+
+<div class="ui-row ui-body ui-view-body ui-scroll-y">
+    <div class="main">
+        <div id="show-view" class="article hide" data-id="{{ id }}">
+            <header>
+                <h1 class="page-header">
+                    <p id="content-title">{{ title }}</p>
+                    <small>{{ createdDate() }}</small>
+                    <a href="#" class="btn btn-link favorite pull-right">
+                        <% if (isFavorite === 0) {%>
+                           <span class="icon-star-empty"></span> 
+                        <% } else { %>
+                           <span class="icon-star"></span>
+                        <% } %>
+                    </a>
+                </h1>
+            </header>
+            <% if (taskAll !== 0) { %>
+            <div class="progress">
+                <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{ taskCompleted }}" aria-valuemin="0" aria-valuemax="{{ taskAll }}" style="width: {{ getProgress(taskCompleted, taskAll) }}">
+                    <span class="progress-percent">
+                        {{ getProgress() }}
+                    </span>
+                </div>
+            </div>
+            <% } %>
+            <div id="view-content-container">
+                
+            </div>
+            
+        </div>
+        <div id="form-view">
+            <form id="noteForm" class="form-horizontal pretty-form" action="#" method="post">
+                <div class="form-group">
+                    <input id="inputTitle" class="form-control" name="title" type="text" value="{{title}}" placeholder="{{ i18n('Title') }}" />
+                </div>
+                <div id="wmd-button-bar">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li>
+                            <% if (share) { %>
+                                <a id="takeBack" href="{{ userURL }}" class="cmd-back">
+                                    <span class="tg_head_logo">&nbsp;</span>
+                                    <span class="tg_head_logo_text ng-binding">
+                                        {{ i18n('Go to Wall') }}
+                                    </span>
+                                </a>
+                            <% } else { %>
+                                <a id="takeBack" href="#" class="cmd-back">
+                                    <span class="tg_head_logo">&nbsp;</span>
+                                    <span class="tg_head_logo_text ng-binding">
+                                        {{ i18n('Go back') }}
+                                    </span>
+                                </a>
+                            <% } %>  
+                        </li>
+                    </ul>
+                    <ul class="pull-left">
+                        <!--
+                        <li class="cmd-print extra-button btn">
+                            <a  title="{{ i18n('Print') }}" href="#">
+                                <i class="icon-print"></i>
+                            </a>
+                        </li>
+                        -->
+                        <li class="cmd-edit extra-button btn modeMenu hide">
+                            <a title="{{ i18n('Edit') }}" href="#" data-mode="edit">
+                                <i class="icon-columns" data-mode="edit"></i>
+                            </a>
+                        </li>
+                        <li class="cmd-view-fullscreen extra-button btn modeMenu">
+                            <a title="{{ i18n('View') }}" href="#" data-mode="normal">
+                                <i class="icon-eye" data-mode="normal"></i>
+                            </a>
+                        </li>
+                        <!--  
+                        <li class="cmd-edit-fullscreen extra-button btn modeMenu hide">
+                            <a title="{{ i18n('Full screen edit') }}" href="#" data-mode="fullscreen">
+                                <i class="icon-eye-off" data-mode="fullscreen"></i>
+                            </a>
+                        </li>
+                        -->
+                    </ul>
+                    
+                </div>
+                <div class="form-group wmd-group">
+                    <div class="markdown-col">
+                        <div class="wmd-input" id="wmd-input">{{content}}</div>
+                    </div>
+                    <div class="preview-col">
+                        <div id="wmd-preview" class="wmd-preview content-preview">
+                           
+                        </div>
+                    </div>
+                    <!-- For clipper -->
+                    <textarea id="clipContent" class="hidden" name="clipContent"></textarea>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

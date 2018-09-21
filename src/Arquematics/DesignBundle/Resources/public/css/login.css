@@ -1,0 +1,229 @@
+.has-error .focus-border
+{
+	background-color: red !important;
+}
+.icon-login
+{
+    font-size: 24px !important;  
+}
+    
+.icon-login.icon-user
+{
+    margin-top: -2px !important; 
+}
+    
+.logo-container
+{
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.px-demo-logo, .px-demo-logo-1
+{
+   width: auto !important; 
+}
+    
+.logo-login
+{
+    width: 140px;
+    height: auto;
+    display : block;
+    margin : auto; 
+}
+    
+    .page-signin-modal {
+      position: relative;
+      top: auto;
+      right: auto;
+      bottom: auto;
+      left: auto;
+      z-index: 1;
+      display: block;
+    }
+
+    .page-signin-form-group { position: relative; }
+
+    .page-signin-icon {
+      position: absolute;
+      line-height: 21px;
+      width: 36px;
+      border-color: rgba(0, 0, 0, .14);
+      border-right-width: 1px;
+      border-right-style: solid;
+      left: 1px;
+      top: 6px;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    html[dir="rtl"] .page-signin-icon {
+      border-right: 0;
+      border-left-width: 1px;
+      border-left-style: solid;
+      left: auto;
+      right: 1px;
+    }
+
+    html:not([dir="rtl"]) .page-signin-icon + .page-signin-form-control { padding-left: 50px; }
+    html[dir="rtl"] .page-signin-icon + .page-signin-form-control { padding-right: 50px; }
+
+    #page-signin-forgot-form {
+      display: none;
+    }
+
+    /* Margins */
+
+    .page-signin-modal > .modal-dialog { margin: 30px 10px; }
+
+    
+    /*= input focus effects css
+=========================== */
+:focus{outline: none;}
+
+.col-input
+{
+    width: 100%;
+    float: left;
+    position: relative;
+    margin-bottom: 25px;
+} 
+
+.col-input-start
+{
+   margin-top: 10px;  
+}
+
+input[type="text"]{font: 15px/24px "Lato", Arial, sans-serif; color: #333; width: 100%; box-sizing: border-box; letter-spacing: 1px;}
+
+/*https://codepen.io/Takumari85/pen/RaYwpJ*/
+.effect-16, 
+.effect-17, 
+.effect-18
+{
+    border: 0;
+    padding: 4px 0;
+    border-bottom: 1px solid #ccc;
+    background-color: transparent;
+}
+
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+    background-color: transparent !important;
+}
+
+
+@-webkit-keyframes autofill {
+    to {
+        color: #666;
+        background: transparent;
+    }
+}
+
+input:-webkit-autofill {
+    -webkit-animation-name: autofill;
+    -webkit-animation-fill-mode: both;
+}
+
+
+.effect-16 ~ .focus-border{position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background-color: #3399FF; transition: 0.4s;}
+.effect-16:focus ~ .focus-border,
+.has-content.effect-16 ~ .focus-border{width: 100%; transition: 0.4s;}
+.effect-16 ~ label
+{
+    position: absolute;
+    left: 48px;
+    width: 100%;
+    top: 6px;
+    color: #687077;
+    transition: 0.3s;
+    z-index: 2;
+    letter-spacing: 0.5px;
+    cursor: text;
+}
+.effect-16:focus ~ label, .has-content.effect-16 ~ label{
+    top: -20px; font-size: 12px;
+    color: #3399FF;
+    left: 0px;
+    transition: 0.3s;
+}
+
+.input-effect .form-control
+{
+   height: 40px;
+}
+    
+.input-effect .page-signin-icon
+{
+      line-height: 30px;  
+      font-size: 18px;
+      color: #7a7a7a;
+}
+    
+    .input-effect label
+    {
+       font-size: 18px;
+       line-height: 30px; 
+    }
+    
+    .input-effect input
+    {
+       font-size: 18px; 
+       color: #333;
+    }
+    
+    .btn-primary
+    {
+       font-size: 20px; 
+    }
+
+    @media (min-width: 544px) {
+      .page-signin-modal > .modal-dialog { margin: 60px auto; }
+    }
+    
+    /*xl*/
+    @media (max-width: 1999.99px) { 
+        .title-slogan
+        {
+            font-size: 0.9vw;
+            text-align: center;
+        }
+    }
+    
+    /*?? extra */
+    @media (max-width: 1200.99px) { 
+        .title-slogan
+        {
+            font-size: 1.5vw;
+            text-align: center;
+        }
+        
+    }
+    
+    /*lg*/
+    @media (max-width: 991.99px) { 
+        .title-slogan
+        {
+            font-size: 2vw;
+            text-align: center;
+        }
+        
+    }
+    /*sm*/
+    @media (max-width: 767.99px) { 
+       .title-slogan
+        {
+            font-size: 4vw;
+            text-align: center;
+        }
+    }
+    
+    /*xs*/
+    @media (max-width: 575.99px) {
+        .title-slogan
+        {
+            font-size: 5vw;
+            text-align: center;
+        }
+    }
+    
+    
+    

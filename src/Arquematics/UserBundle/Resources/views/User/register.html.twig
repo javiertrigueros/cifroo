@@ -1,0 +1,219 @@
+{% extends '::frontend.html.twig' %}
+{# este formulario en mi opinion sobra #}
+{% block title %}
+    {% if isConfirmed %}
+        {% trans %}menu.send_passwd_reset{% endtrans %}
+    {% else %}
+        {% trans %}menu.passwd_set{% endtrans %}
+    {% endif %}
+{% endblock %}
+
+{% block body_params %}class="px-responsive-bg-container"{% endblock %}
+
+{% block container %}
+
+    <div class="modal-load modal-load-fix">
+        <div class="ar-container">
+           <div class="item-swip cssload-piano">
+            <div class="cssload-rect1"></div>
+            <div class="cssload-rect2"></div>
+            <div class="cssload-rect3"></div>
+          </div>
+        </div>
+    </div>
+
+    <div class="page-signin-modal modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="box m-a-0">
+          <div class="box-row">
+
+            <div class="box-cell col-md-5 bg-primary p-a-4">
+              
+              <ul class="list-group m-t-3 m-b-0 visible-md visible-lg visible-xl">
+                <li class="font-size-15 list-group-item p-x-0 p-b-0 b-a-0"><i class="list-group-icon fa fa-cubes text-white"></i>{% trans %}login.slogan_text1{% endtrans %}</li>
+                <li class="font-size-15 list-group-item p-x-0 p-b-0 b-a-0"><i class="list-group-icon fa fa-comment text-white"></i>{% trans %}login.slogan_text2{% endtrans %}</li>
+                <li class="font-size-15 list-group-item p-x-0 p-b-0 b-a-0"><i class="list-group-icon ion-unlocked text-white"></i>&nbsp;&nbsp;&nbsp;&nbsp;{% trans %}login.slogan_text3{% endtrans %}</li>
+              </ul>
+              
+            </div>
+
+            <div class="box-cell col-md-7">
+
+              <!-- Sign In form -->
+
+              <form id="page-login-form" role="form" action="{{ path('user_register', { "code": code}) }}" class="p-a-4" method="post" >
+                
+                <div class="logo-container">
+                    <!-- logo -->
+                    <img class="logo-login" src="{{ asset('bundles/design/img/logo.png') }}" />
+                    <!-- end logo --> 
+                </div>
+                     
+               
+                {% if isConfirmed %}
+                    
+                    <h4 class="m-t-0 m-b-4 text-xs-center font-weight-semibold">
+                        {% trans %}menu.send_passwd_reset{% endtrans %}
+                    </h4>
+                    
+                    <div class="alert alert-info alert-dark">
+                        <strong>{% trans %}menu.passwd_help{% endtrans %}</strong>
+                    </div>
+                    
+                    {% include '::feedback_messages.html.twig' %}
+                
+                    <fieldset class="page-signin-form-group form-group col-input col-input-start input-effect">
+                        <div class="page-signin-icon text-muted" style="cursor:pointer;"><i class="icon-login icon-eye-close eye"></i></div>
+                        <input id="password" name="password" readonly="readonly" type="password" class="login-form page-signin-form-control form-control effect-16" placeholder="" required="">
+                        <label class="active-label">{% trans %}menu.passwd{% endtrans %}</label>
+                        <span class="focus-border"></span>
+                    </fieldset>
+                        
+                    <fieldset class="page-signin-form-group form-group col-input col-input-end input-effect">
+                        <div class="page-signin-icon text-muted" style="cursor:pointer;"><i class="icon-login icon-eye-close eye"></i></div>
+                        <input id="password2" name="password2" readonly="readonly" type="password" class="login-form page-signin-form-control form-control effect-16" placeholder="" required="">
+                        <label class="active-label">{% trans %}menu.passwd_repeat{% endtrans %}</label>
+                        <span class="focus-border"></span>
+                    </fieldset>
+                    
+                    <button type="submit" class="btn btn-block btn-lg btn-primary m-t-3">
+                        {% trans %}menu.passwd_cmd_reset{% endtrans %}
+                    </button>
+                
+                {% else %}
+                    <h4 class="m-t-0 m-b-4 text-xs-center font-weight-semibold">
+                        {% trans %}menu.passwd_set{% endtrans %}
+                    </h4>
+                    <div class="alert alert-info alert-dark">
+                        <strong>{% trans %}menu.passwd_help{% endtrans %}</strong>
+                    </div>
+                    {% include '::feedback_messages.html.twig' %}
+                    
+                    <fieldset class="page-signin-form-group form-group col-input col-input-start input-effect">
+                        <div class="page-signin-icon text-muted" style="cursor:pointer;"><i class="icon-login icon-eye-close eye"></i></div>
+                        <input id="password" name="password" readonly="readonly" type="password" class="login-form page-signin-form-control form-control effect-16" placeholder="" required="">
+                        <label class="active-label">{% trans %}menu.passwd{% endtrans %}</label>
+                        <span class="focus-border"></span>
+                    </fieldset>
+                        
+                    <fieldset class="page-signin-form-group form-group col-input col-input-end input-effect">
+                        <div class="page-signin-icon text-muted" style="cursor:pointer;"><i class="icon-login icon-eye-close eye"></i></div>
+                        <input id="password2" name="password2" readonly="readonly" type="password" class="login-form page-signin-form-control form-control effect-16" placeholder="" required="">
+                        <label class="active-label">{% trans %}menu.passwd_repeat{% endtrans %}</label>
+                        <span class="focus-border"></span>
+                    </fieldset>
+                        
+                    
+                    
+                    <button type="submit" class="btn btn-block btn-lg btn-primary m-t-3">
+                        {% trans %}menu.passwd_cmd_set{% endtrans %}
+                    </button>
+                
+                {% endif %}
+
+                
+              </form>
+
+             
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+    </div>
+    </div>
+         
+    <div class="px-responsive-bg">
+        <div class="px-responsive-bg-overlay" style="background: rgb(0, 0, 0) none repeat scroll 0% 0%; opacity: 0.2;"></div>
+        <img alt="" src="{{ asset('bundles/design/demo/bgs/3.jpg') }}" style="width: 100%; height: auto; top: -70px; left: 0px;">
+    </div>
+    
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('bundles/wall/css/animation_wait.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/design/css/fontello/css/fontello-embedded.css') }}" rel="stylesheet">
+    <link href="{{ asset('bundles/design/css/login.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('bundles/user/js/bower_components/hideshowpassword/hideShowPassword.min.js') }}" type="text/javascript"></script>
+<script type="text/javascript">
+    $(document).ready(function()
+    {
+        $('.eye').on( "click", function(e) {
+            e.preventDefault();
+            var status = !($('.eye').data('status'));
+            $('.eye').data('status', status);
+            
+            if (status)
+            {
+                $('.eye').removeClass('icon-eye-close');
+                $('.eye').addClass('icon-eye-open');
+            }
+            else
+            {
+                $('.eye').removeClass('icon-eye-open');
+                $('.eye').addClass('icon-eye-close'); 
+            }
+            
+            $('#password').hideShowPassword($('.eye').data('status'));
+            $('#password2').hideShowPassword($('.eye').data('status'));
+        });
+        
+        $('#password').hideShowPassword($('.eye').data('status'));
+        $('#password2').hideShowPassword($('.eye').data('status'));
+        
+        $(".input-effect input").each(function( index ) {
+            if($(this).val() != ""){
+		$(this).addClass("has-content");
+            }else{
+		$(this).removeClass("has-content");
+            }
+        });
+        
+        $(".input-effect input").on( "change", function(e) {
+            if($(this).val() != "")
+            {
+		$(this).addClass("has-content");
+                $('#password').removeAttr('readonly');
+            }else{
+		$(this).removeClass("has-content");
+            }
+        });
+        
+        $(".input-effect input").focusout(function(){
+            if($(this).val() != ""){
+		$(this).addClass("has-content");
+            }else{
+		$(this).removeClass("has-content");
+            }
+	});
+        
+        $('#password, #password2').on("focus", function (e)  
+        {
+            $(this).removeAttr('readonly');
+        });
+        
+        $('.active-label').on("click", function (e)
+        {
+            e.preventDefault();
+            
+            var $input = $(e.target).parent('.input-effect').find('input');
+            
+            $input.removeClass("has-content");
+            
+            $input.addClass("has-content");
+           
+            $input.focus();
+        });
+        
+        
+    });
+</script>
+
+{% endblock %}

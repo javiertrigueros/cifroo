@@ -1,0 +1,141 @@
+{% extends '::backend.html.twig' %}
+
+{% block container %}
+<div class="px-content">
+    
+    <div class="page-header m-b-0 p-b-0 b-b-0">
+        <h1>
+            <i class=" page-header-icon fa fa-user"></i>
+            {% trans %}profile.view{% endtrans %}
+        </h1>
+        
+        <hr class="page-wide-block visible-xs visible-sm">
+
+        <div class="col-xs-12 width-md-auto width-lg-auto width-xl-auto pull-md-right">
+            <a href="{{ path('wall', {'channel_slug': channel.slug, 'usename_slug': user.slug }) }}" class="btn btn-back btn-block">
+                <span class="btn-label-icon left fa fa-chevron-left"></span>
+                {% trans %}control_panel.back{% endtrans %}
+            </a>
+        </div>
+
+        <!-- Spacer -->
+        <div class="m-b-2  clearfix"></div>
+
+
+        
+        <ul class="nav nav-tabs" id="account-tabs" role="tablist">
+            
+            <li class="dropdown hidden-sm hidden-md hidden-lg pull-xs-right">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <span class="tab-resize-icon"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li>
+                        <a href="#account-profile" data-toggle="tab" aria-expanded="true">
+                            {% trans %}profile.data{% endtrans %}
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="#ui-image" data-toggle="tab" aria-expanded="true">
+                            {% trans %}profile.avatar_view{% endtrans %}
+                        </a>
+                    </li>
+          
+                </ul>
+            </li>
+        </ul>
+    </div>
+    
+    
+    
+    <div class="tab-content p-y-2">
+
+      <form id="account-profile" class="tab-pane fade active in ui-control-form" action="{{ path('user_profile_edit') }}" enctype="multipart/form-data" method="post">
+      <!-- Profile tab -->
+               
+        <div class="row">
+          <div class="col-md-8 col-lg-9">
+          
+            <div class="p-x-1">
+                
+                <div class="panel panel-success panel-dark widget-profile">
+          <div class="panel-heading">
+              {% if user.profile.image %}
+                   <img class="widget-profile-avatar" data-profile_default_image="{{ asset('bundles/user/img/avatars/unknown.png') }}" style="max-width: 100%;" alt="image" src="{{ path("user_profile_avatar",  {'fileName':profile.image}) }}" />
+              {% else %}
+                    <img class="widget-profile-avatar" data-profile_default_image="{{ asset('bundles/user/img/avatars/unknown.png') }}" style="max-width: 100%;" alt="image" src="{{ asset('bundles/user/img/avatars/unknown.png') }}" />
+              {% endif %}
+           
+            <h3 class="widget-profile-header">
+              {{ profile.name }} {{ profile.lastname }}
+              <span class="widget-profile-secondary-text"> {{ user.email }}</span>
+            </h3>
+            <i class="widget-profile-bg-icon ion-ios-clock-outline"></i>
+          </div>
+          <div class="list-group">
+              {% if profile.cargo %} <a href="#" class="list-group-item"><i class="fa fa-suitcase list-group-icon"></i><strong>{% trans %}profile.cargo{% endtrans %}:</strong> {{ profile.cargo }}</a>{% endif %}
+              {% if profile.departament %} <a href="#" class="list-group-item"><i class="fa fa-users list-group-icon"></i><strong>{% trans %}profile.departament{% endtrans %}:</strong>  {{ profile.departament }} </a>{% endif %}
+              {% if profile.phones %} <a href="#" class="list-group-item"><i class="fa fa-phone-square list-group-icon"></i><strong>{% trans %}profile.phones{% endtrans %}:</strong>  {{ profile.phones |phone_number_format('NATIONAL') }} </a>{% endif %}
+            <a href="#" class="list-group-item">&nbsp;</a>
+          </div>
+        </div>
+                
+             
+            </div>
+            
+          </div>
+
+        
+          <!-- Avatar -->
+          <div class="col-md-4 col-lg-3 hidden-xs">
+            <div class="panel bg-transparent">
+              <div class="panel-body text-xs-center">
+                {% if profile.image %}
+                    <img class="profile-image profile-image-icon" data-profile_default_image="{{ asset('bundles/user/img/avatars/unknown.png') }}" style="max-width: 100%;" alt="image" src="{{ path("user_profile_avatar",  {'fileName':profile.image}) }}" />
+                {% else %}
+                    <img class="profile-image profile-image-icon" data-profile_default_image="{{ asset('bundles/user/img/avatars/unknown.png') }}" style="max-width: 100%;" alt="image" src="{{ asset('bundles/user/img/avatars/unknown.png') }}" />
+                {% endif %}
+              </div>
+              <hr class="m-y-0">
+              
+            </div>
+          </div>        
+        </div>
+        
+      </form>     
+      <!-- / Profile tab -->
+
+              
+      <div id="ui-image" class="tab-pane fade ui-control-form-image">
+           <div class="row">
+               <div class="col-md-8 col-lg-9">
+                    <div class="panel bg-transparent">
+                        <div class="panel-body text-xs-center">
+                        {% if profile.image %}
+                            <img class="profile-image profile-image-icon" data-profile_default_image="{{ asset('bundles/user/img/avatars/unknown.png') }}" style="max-width: 100%;" alt="image" src="{{ path("user_profile_avatar",  {'fileName':profile.image}) }}" />
+                        {% else %}
+                            <img class="profile-image profile-image-icon" data-profile_default_image="{{ asset('bundles/user/img/avatars/unknown.png') }}" style="max-width: 100%;" alt="image" src="{{ asset('bundles/user/img/avatars/unknown.png') }}" />
+                        {% endif %}
+                        </div>
+                        <hr class="m-y-0">
+                    </div>
+               </div>
+           </div>
+      </div>
+      
+    </div>
+          
+                        
+</div>
+ 
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

@@ -1,0 +1,20 @@
+
+           {% for notification in notifications %}
+                
+                {% if notification.type == constant('Arquematics\\BackendBundle\\Entity\\Notification::FRIEND') %}
+                   <a id="notification-{{ notification.id }}" href ="{{ notification.url }}" class="notification-item">
+                        <div data-href="{{ notification.url }}" class="widget-notifications-item">
+                            <div class="widget-notifications-description">{{ notification.shortMessage|raw }}</div>
+                            
+                            <div class="widget-notifications-icon fa fa-user bg-danger" title="{% trans %}menu.notifications_files{% endtrans %}"></div>
+                            <div class="widget-notifications-description">
+                                <a data-notification_id="{{ notification.id }}" href="{{ path('user_friend_accept', {slug:  notification.friend.slug }) }}" class="btn btn-success cmd-notification-accept btn-xs">{% trans %}cmd.accept{% endtrans %}</a>
+                                <a data-notification_id="{{ notification.id }}" href="{{ path('user_friend_block', {slug:  notification.friend.slug }) }}" class="btn btn-danger cmd-notification-block btn-xs">{% trans %}cmd.lock{% endtrans %}</a>
+                            </div>
+                        </div>
+                    </a> 
+                {% endif %}
+
+           {% endfor %}
+                
+          

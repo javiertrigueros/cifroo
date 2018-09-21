@@ -1,0 +1,344 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: services.yml }
+    - { resource: security.yml }
+
+#ubuntu apt-get install xvfb wkhtmltopdf
+knp_snappy:
+    process_timeout: 30 # In seconds
+    pdf:
+        enabled:    true
+        #binary:     /usr/bin/xvfb-run /usr/bin/wkhtmltopdf
+        binary: /usr/bin/xvfb-run -a /usr/bin/wkhtmltopdf
+    image:
+        enabled:    true
+        binary:     /usr/bin/xvfb-run /usr/bin/wkhtmltoimage
+        
+backend:
+    max_restore_points: 25
+
+user:
+    max_users_limit: %max_users_limit%
+    
+ 
+wall:
+    max_channels: 5
+    max_wall_tags: 20
+    max_wall_comments: 3
+    max_file_size: %max_file_size%
+    cloud_convert_api: %cloud_convert_api%
+    #bytes_per_chunk: 262144
+    #  521 * 1024, 0.50MB en cada chunk
+    bytes_per_chunk: 524288
+    #  1024 * 1024, 1MB en cada chunk
+    #bytes_per_chunk: 1048576
+    #  1545 * 1024, 1.5MB en cada chunk
+    #bytes_per_chunk: 1582080
+    #  2 * 1024 * 1024, 2MB en cada chunk
+    #bytes_per_chunk: 2097152
+    #  3 * 1024 * 1024, 3MB en cada chunk
+    #bytes_per_chunk: 3145728
+    #  6 * 1024 * 1024, 6MB en cada chunk
+    #bytes_per_chunk: 6291456
+    #  100 * 1024 * 1024, 100MB en cada chunk
+    #bytes_per_chunk: 104857600
+    image_width_sizes:
+     - mini
+     - small
+     - normal
+     - big
+    extensions_allowed:
+     - txt
+     - pdf
+     #- epub
+     - stl
+     - doc
+     - docx
+     - xls
+     - xlsx
+     - ppt
+     - pptx
+     - pps
+     - odp
+     - ods
+     - odt
+     - gif
+     - png
+     - jpeg
+     - jpg
+     - jpe
+     - jfif
+     - jp2
+     - jpx
+     - xcf
+     - pic
+     - bmp
+     - svg
+     - tiff
+     - tif
+     - psd
+     - dwg
+     - dxf
+     - rar
+     - zip
+    
+social_post:
+    publish_on: [facebook, linkedin, twitter]         # List which Social networks you will be publishing to and configure your access to them as shown below
+    providers:
+        facebook:
+            app_id: app_id
+            app_secret: app_secret
+            default_access_token: "YOUR-FACEBOOK-NON-EXPIRING-PAGE-ACCESS-TOKEN"
+            page_id: "YOUR-FACEBOOK-PAGE-ID"
+            enable_beta_mode: true
+            default_graph_version: "v2.8"             # Optional, also supports "mcrypt" and "urandom". Default uses the latest graph version.
+            persistent_data_handler: "memory"         # Optional, also supports "session". Default is "memory".
+            pseudo_random_string_generator: "openssl" # Optional, also supports "mcrypt" and "urandom". Default is "openssl".
+            http_client_handler: "curl"               # Optional, also supports "stream" and "guzzle". Default is "curl".
+        linkedin:
+            client_id: client_id
+            client_secret: client_secret
+            access_token: "YOUR-LINKEDIN-60-DAYS-LONG-USER-ACCESS-TOKEN"
+            company_page_id: "YOUR-LINKEDIN-COMPANY-PAGE-ID"
+        twitter:
+            consumer_key: consumer_key
+            consumer_secret: consumer_secret
+            access_token: "YOUR-TWITTER-ACCESS-TOKEN"
+            access_token_secret: "YOUR-TWITTER-ACCESS-TOKEN-SECRET"
+
+fos_user:
+    db_driver: orm 
+    firewall_name: main
+    user_class: Arquematics\UserBundle\Entity\User
+    from_email:
+        address: "%mailer_user%"
+        sender_name: "%mailer_user%"
+        
+        
+hwi_oauth:
+    firewall_names: [main]
+    # mirar NTP https://github.com/hwi/HWIOAuthBundle/issues/1169
+    # mirar vendor/kriswallsmith/buzz/lib/Buzz/Client/Curl.php
+    # curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+    http_client:
+        timeout: 15
+        verify_peer: false
+    fosub:
+        username_iterations: 30
+        # Define in which columns of the fos_user table will be stored
+        # the access token of every resource_owner
+        properties:
+            facebook: facebook_id
+            twitter: twitter_id
+            linkedin: linkedin_id
+            
+    resource_owners:
+        facebook:
+            type:          facebook
+            client_id:     "%facebook_client_id%"
+            client_secret: "%facebook_client_secret%"
+            #scope:               "email,user_friends"   
+            infos_url:           "https://graph.facebook.com/me?fields=id,name,email,picture.type(square),friends"
+            options:
+                display: page
+            #paths:
+            #    friends:  friends 
+            #    profilepicture: picture.data.url
+                
+        twitter:
+           type:            twitter
+           client_id:       "%twitter_client_id%"
+           client_secret:   "%twitter_client_secret%"
+           #options: {include_email: true}
+        
+        linkedin:
+           type:            linkedin
+           client_id:       "%linkedin_client_id%"
+           client_secret:   "%linkedin_client_secret%"
+           scope:           'r_basicprofile r_emailaddress rw_company_admin w_share'
+        
+        
+ 
+
+stof_doctrine_extensions:
+    default_locale: en
+    translation_fallback: true
+    orm:
+        default:
+            tree: true
+            timestampable: true
+            sluggable: true
+            
+framework:
+    assets:
+        version: 'v5'
+        version_format: '%%s?version=%%s'
+        base_path: ~
+        #base_urls: ['http://cdn.example.com']
+
+    session:
+        handler_id: Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
+    #esi:             ~
+    translator:      { fallbacks: ["%locale%"] }
+    secret:          "%secret%"
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: ~
+    form:            ~
+    csrf_protection: ~
+    validation:      { enabled: true, enable_annotations: true }
+    templating:
+        engines: ['twig']
+    default_locale:  "%locale%"
+    trusted_proxies: ~
+    session:  ~ 
+    #tarea incluir las sesiones en chef
+    #session:
+    #    handler_id: session.handler.pdo
+    fragments:       ~
+    http_method_override: true
+
+# javier 3.0
+# http://symfony.com/doc/current/bundles/DoctrineMigrationsBundle/index.html
+#doctrine_migrations:
+#    dir_name: "%kernel.root_dir%/DoctrineMigrations"
+#    namespace: Application\Migrations
+#    table_name: migration_versions
+#    name: Application Migrations
+
+# Twig Configuration
+twig:
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
+    #javier error symfony3
+    form_themes:
+        - 'BackendBundle:Default:form_errors.html.twig'
+
+# javier 3.0
+# Assetic Configuration
+assetic:
+    debug:          "%kernel.debug%"
+    use_controller: false
+    bundles:
+        - WallBundle
+        - BackendBundle
+        - DesignBundle
+        - UserBundle
+    #java: /usr/bin/java
+    #https://github.com/chawkijihane/addressbook/blob/d64669a46c6554fa3ec27f18477c31babcde148d/src/FrontBundle/Resources/views/layout.html.twig
+    #https://symfony.com/doc/3.3/frontend/assetic/uglifyjs.html
+    node: %node_bin_path%
+    node_paths: %node_lib_paths%
+    ruby: %ruby_path%
+    sass: %sass_path%
+    workers:
+        cache_busting:
+            enabled: true
+    filters:
+        cssrewrite: ~
+        sass: ~
+        scss: ~
+        uglifyjs2:
+            bin: %uglify_js_path%
+        uglifycss:
+            bin: %uglify_css_path%
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        types:
+            phone_number: Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType
+        driver:   "%database_driver%"
+        host:     "%database_host%"
+        port:     "%database_port%"
+        dbname:   "%database_name%"
+        user:     "%database_user%"
+        password: "%database_password%"
+        server_version: "5.6"
+        options:
+            # PDO::MYSQL_ATTR_INIT_COMMAND
+            1002: "SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))"
+        #charset: utf8mb4
+        #default_table_options:
+        #    charset: utf8mb4
+        #    collate: utf8mb4_unicode_ci
+        # if using pdo_sqlite as your database driver:
+        #   1. add the path in parameters.yml
+        #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
+        #   2. Uncomment database_path in parameters.yml.dist
+        #   3. Uncomment next line:
+        #     path:     "%database_path%"
+
+    orm:
+        auto_generate_proxy_classes: "%kernel.debug%"
+        auto_mapping: true
+
+bm_backup_manager:
+    database:
+        development:
+            type: mysql
+            host: "%database_host%"
+            port: "%database_port%"
+            user: "%database_user%"
+            pass: "%database_password%"
+            database: "%database_name%"
+        production:
+            type: mysql
+            host: "%database_host%"
+            port: "%database_port%"
+            user: "%database_user%"
+            pass: "%database_password%"
+            database: "%database_name%"
+    storage:
+        local:
+            type: Local
+            root: "%backup_path%"
+        s3:
+            type: AwsS3
+            key:
+            secret:
+            region: us-east-1
+            version: latest
+            bucket:
+            root:
+        rackspace:
+            type: Rackspace
+            username:
+            password:
+            container:
+        dropbox:
+            type: Dropbox
+            token:
+            key:
+            secret:
+            app:
+            root:
+        ftp:
+            type: Ftp
+            host:
+            username:
+            password:
+            root:
+            port: 21
+            passive: true
+            ssl: true
+            timeout: 30
+        sftp:
+            type: Sftp
+            host:
+            username:
+            password:
+            root:
+            port: 21
+            timeout: 10
+            privateKey:
+
+# Swiftmailer Configuration
+swiftmailer:
+    auth_mode:  login
+    encryption: tls
+    transport: "%mailer_transport%"
+    host:      "%mailer_host%"
+    username:  "%mailer_user%"
+    password:  "%mailer_password%"
+    port:      "%mailer_port%"	

@@ -1,0 +1,23 @@
+{
+  "name": "arquematics",
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-bootstrap": "^2.3.1",
+    "angular-route": "^1.6.0",
+    "datetimeRangePicker": "^1.3.0",
+    "ng-pickadate": "^0.3.1",
+    "pickadate": "^3.5.6"
+  }
+}

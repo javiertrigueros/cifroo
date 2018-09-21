@@ -1,0 +1,27 @@
+<% if (currentId === id) { %>
+<a id="note-{{ id }}" data-id="{{id}}" href="#{{ link() }}" class="active">
+    <% if (isFavorite === 0) {%>
+        <i class="px-nav-icon favorite pull-right fa fa-star-o"></i>
+    <% } else { %>
+        <i class="px-nav-icon favorite pull-right fa fa-star"></i>
+    <% } %>
+    <% if (hasToolTip(title)) {%>
+    <span class="px-nav-label" data-toggle="tooltip" data-placement="left" title="{{ getTitle(title) }}">{{ getText(title, 20) }}...</span>
+    <% } else { %>
+    <span class="px-nav-label">{{ getTitle(title) }}</span>
+    <% } %>
+</a>
+<% } else { %>
+<a id="note-{{ id }}" data-id="{{id}}" href="#{{ link() }}">
+    <% if (isFavorite === 0) {%>
+        <i class="px-nav-icon favorite pull-right fa fa-star-o"></i>
+    <% } else { %>
+        <i class="px-nav-icon favorite pull-right fa fa-star"></i>
+    <% } %>
+    <% if (hasToolTip(title)) {%>
+    <span class="px-nav-label" data-toggle="tooltip" data-placement="left" title="{{ getTitle(title) }}">{{ getText(title, 20) }}...</span>
+    <% } else { %>
+    <span class="px-nav-label">{{ getTitle(title) }}</span>
+    <% } %>
+</a>
+<% } %>

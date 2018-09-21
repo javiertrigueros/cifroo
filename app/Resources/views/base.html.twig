@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html {% block html_params %}{% endblock %}>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <title>{% block title %}{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        {% block head_javascripts %}{% endblock %}
+        <link rel="icon" href="{{ asset('bundles/design/img/favicon/favicon-32x32.png') }}" sizes="32x32" />
+        <link rel="icon" href="{{ asset('bundles/design/img/favicon/favicon-192x192.png') }}" sizes="192x192" />
+        <link rel="apple-touch-icon-precomposed" href="{{ asset('bundles/design/img/favicon/favicon-180x180.png') }}" />
+        <meta name="msapplication-TileImage" content="{{ asset('bundles/design/img/favicon/favicon-270x270.png') }}" />
+    </head>
+    <body {% block body_params %}{% endblock %}>
+    {% block body %}
+            {% block container %}{% endblock %}
+    {% endblock %}
+    {% block javascripts %}{% endblock %}
+    </body>
+</html>
