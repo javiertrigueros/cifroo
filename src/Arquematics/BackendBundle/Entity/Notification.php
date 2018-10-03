@@ -4,15 +4,24 @@ namespace Arquematics\BackendBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use JsonSerializable;
+
 /**
  * Notification
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Arquematics\BackendBundle\Entity\NotificationRepository")
  */
-class Notification
+class Notification implements JsonSerializable
 {
     const FRIEND                    = 0;
+    
+    const ACCEPT = 4; 
+    const REQUEST_WAIT = 5;
+    const REQUEST = 6;
+    const IGNORE = 7;
+    const IGNORE_ALL = 8;
+    const NONE = 9;
     
        
     /**
@@ -413,5 +422,18 @@ class Notification
     public function getShortMessage()
     {
         return $this->shortMessage;
+    }
+    
+    public function jsonSerialize()
+    {
+        return [
+            'id'            =>  $this->getId(),
+            'url'           =>  $this->getUrl(),
+            'type'          =>  $this->getType(),
+            'message'       =>  $this->getMessage(),
+            'shortMessage'  =>  $this->getShortMessage(),
+            'user'          =>  $this->getUser()->jsonSerialize(),
+            'friend'        =>  $this->getFriend()->jsonSerialize()
+        ];
     }
 }

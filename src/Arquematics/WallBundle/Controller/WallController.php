@@ -40,10 +40,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class WallController extends ArController
 {
-    private function processTag($tagSerialize, $user, $hash = false, $noslug = false)
+    private function processTag($tagSerialize, $authUser, $user, $hash = false, $noslug = false)
     {
-        $wallTagEnc = $this->em->getRepository('WallBundle:WallTagEnc')->findByTagIdUser($tagSerialize['id'], $this->authUser);
-        //$wallTagEnc = $this->em->getRepository('WallBundle:WallTagEnc')->find(4);
+        $wallTagEnc = $this->em->getRepository('WallBundle:WallTagEnc')->findByTagIdUser($tagSerialize['id'], $authUser);
         $tagSerialize['pass'] = $wallTagEnc->getContent();
         $tagSerialize['name'] = $wallTagEnc->getName();
         
@@ -89,7 +88,7 @@ class WallController extends ArController
         {
             foreach ($iterator as $tagSerialize) 
             {
-                  $tagsData[] = $this->processTag($tagSerialize, $this->currenUser, $hash, $noslug) ;   
+                  $tagsData[] = $this->processTag($tagSerialize, $this->authUser, $this->currenUser, $hash, $noslug) ;   
             }
         }
         
@@ -238,6 +237,7 @@ class WallController extends ArController
           
           
           $messageData['wallLinks']['all'][$i]['pass'] =  $wallLinkEnc->getContent(); 
+          $i++;
           
           if ($link->getOembedtype() == 'video')
           {
@@ -268,14 +268,42 @@ class WallController extends ArController
         return $messageData;
     }
     
-    private function processMessage($message, $user = false)
+    private function addUpdateTags(& $data, $authUser)
+    {
+        $tagsData = [];
+        // nuevos datos a actualizar en los controles
+        $updateTags = $this->em->getRepository('WallBundle:WallTag')
+                       ->findByMessage($this->currentChannel , $authUser, $this->wallMessage);
+                
+        if ($updateTags && count($updateTags) > 0)
+        {
+            foreach ($updateTags as $tagSerialize) 
+            {
+               $tagsData[] = $this->processTag($tagSerialize, $authUser, $authUser) ; 
+            }
+
+            $data['updateTags'] =  $tagsData;
+        }
+        else
+        {
+            $data['updateTags'] = $tagsData;
+        }
+        return $data;
+    }
+
+
+
+
+
+
+    private function processMessage($message, $authUser,  $user = false)
     {
         $translator = $this->get('translator');
          
         $messageData = $message->jsonSerialize();
         
         //password encriptado para decodificar
-        $wallMessageEnc = $this->em->getRepository('WallBundle:WallMessageEnc')->findByMenssageUser($message, $this->authUser);
+        $wallMessageEnc = $this->em->getRepository('WallBundle:WallMessageEnc')->findByMenssageUser($message, $authUser);
         $messageData['pass'] = $wallMessageEnc->getContent();
         
         //imagen    
@@ -292,7 +320,7 @@ class WallController extends ArController
         }
         
         
-        if ($message->canDelete($this->authUser))
+        if ($message->canDelete($authUser))
         {
             $messageData['deleteURL'] = $this->generateUrl('wall_delete', array('channel_slug' => $this->currentChannel->getSlug(), 'id' => $message->getId()));
         }
@@ -300,10 +328,11 @@ class WallController extends ArController
         $messageData['commentURL'] = $this->generateUrl('comment', array('channel_slug' => $this->currentChannel->getSlug(),'message_id' => $message->getId()));
         $messageData['voteURL'] = $this->generateUrl('vote', array('message_id' => $message->getId()));
         
+        $messageData['like'] = true;
         
         $messageData['voteCountReal'] = count($messageData['votes']);
         
-        if ($message->hasVote($this->authUser))
+        if ($message->hasVote($authUser))
         {
           $messageData['voteCount'] = count($messageData['votes']) -1;
           
@@ -320,8 +349,9 @@ class WallController extends ArController
             $messageData['voteByMe'] =  $translator->trans('wall.like_you_plural_two', array('%count%' => $messageData['voteCount']));   
           }
           
-          $messageData['voteURL'] = $this->generateUrl('vote_delete', array('message_id' => $message->getId(), 'id' => $this->authUser->getId()) );
-          $messageData['voteNames'] =  $message->getVotesUserNames($this->authUser);
+          $messageData['like'] = false;
+
+          $messageData['voteNames'] =  $message->getVotesUserNames($authUser);
         }
         else if (count($messageData['votes']) == 0)
         {
@@ -330,12 +360,12 @@ class WallController extends ArController
         else if (count($messageData['votes']) == 1)
         {
            $messageData['voteCount'] = $translator->trans('wall.like_plural_one');     
-           $messageData['voteNames'] =  $message->getVotesUserNames($this->authUser);
+           $messageData['voteNames'] =  $message->getVotesUserNames($authUser);
         }
         else
         {
            $messageData['voteCount'] = $translator->trans('wall.like_plural_two', array('%count%' => count($messageData['votes'])));  
-           $messageData['voteNames'] =  $message->getVotesUserNames($this->authUser);
+           $messageData['voteNames'] =  $message->getVotesUserNames($authUser);
         }
         
         $i = 0;
@@ -345,7 +375,7 @@ class WallController extends ArController
             $hideCount = count($message->getComments()) - $this->container->getParameter('arquematics.max_wall_comments');
             foreach ($message->getComments() as $comment) 
             {
-                $wallCommentEnc = $this->em->getRepository('WallBundle:WallCommentEnc')->findByCommentUser($comment, $this->authUser);
+                $wallCommentEnc = $this->em->getRepository('WallBundle:WallCommentEnc')->findByCommentUser($comment, $authUser);
                 $messageData['comments'][$i]['pass'] = $wallCommentEnc->getContent();
                 
                 $messageData['comments'][$i]['user']['image'] = ($messageData['comments'][$i]['user']['image'])? $this->generateUrl('user_profile_avatar', array('fileName' => $messageData['comments'][$i]['user']['image'])) 
@@ -354,11 +384,9 @@ class WallController extends ArController
                 
                 $messageData['comments'][$i]['user']['url'] = $this->generateUrl('wall', array('channel_slug' => $this->currentChannel->getSlug(),'usename_slug' => $comment->getCreatedBy()->getSlug()));
                   //exit();      
-                if ($comment->canDelete($this->authUser))
+                if ($comment->canDelete($authUser))
                 {
                     $messageData['comments'][$i]['commentDeleteURL'] = $this->generateUrl('comment_delete', array('message_id' => $message->getId(), 'id' => $comment->getId()));
-                
-                    //$messageData['comments'][$i]['deleteURL'] = '#';
                 }
                 
                             
@@ -385,7 +413,7 @@ class WallController extends ArController
             $i = 0;
             foreach ($message->getArFiles() as $file) 
             {
-                $wallMessageEnc = $this->em->getRepository('WallBundle:ArFileEnc')->findByArFileUser($file, $this->authUser);
+                $wallMessageEnc = $this->em->getRepository('WallBundle:ArFileEnc')->findByArFileUser($file, $authUser);
                 $messageData['files'][$i]['pass'] = $wallMessageEnc->getContent();
         
                 $messageData['files'][$i]['url'] = $this->generateUrl('file_view', array('guid' => $file->getGuid()));
@@ -404,7 +432,7 @@ class WallController extends ArController
         $richs = 0;
         foreach ($message->getWallLinks() as $link) 
         { 
-          $wallLinkEnc = $this->em->getRepository('WallBundle:WallLinkEnc')->findByLinkUser($link, $this->authUser);
+          $wallLinkEnc = $this->em->getRepository('WallBundle:WallLinkEnc')->findByLinkUser($link, $authUser);
           if ($link->getOembedtype() == 'video')
           {
             $messageData['wallLinks']['videos'][$videos]['pass'] = $wallLinkEnc->getContent(); 
@@ -870,29 +898,30 @@ class WallController extends ArController
 
                 $response = new JsonResponse();
                 
-                $data = $this->processMessage($this->wallMessage);
+                $data = $this->processMessage($this->wallMessage, $this->authUser);
                 
-                $tagsData = [];
-                // nuevos datos a actualizar en los controles
-                $updateTags = $this->em->getRepository('WallBundle:WallTag')
-                       ->findByMessage($this->currentChannel , $this->authUser, $this->wallMessage);
+                $this->addUpdateTags($data, $this->authUser);
+                      
                 
-                if ($updateTags && count($updateTags) > 0)
+                $messagesEnc = $this->em->getRepository('WallBundle:WallMessageEnc')
+                                ->findByMenssage($this->wallMessage); 
+                
+                $dataPush = [];
+                if ($messagesEnc && count($messagesEnc) > 0)
                 {
-                    foreach ($updateTags as $tagSerialize) 
+                    foreach ($messagesEnc as $messageEnc)
                     {
-                        $tagsData[] = $this->processTag($tagSerialize, $this->currenUser) ; 
+                           $dataPush[$messageEnc->getUser()->getId()] = $this->processMessage($this->wallMessage, $messageEnc->getUser());
+                           
+                           $this->addUpdateTags($dataPush[$messageEnc->getUser()->getId()], $messageEnc->getUser());
                     }
-
-                   $data['updateTags'] =  $tagsData;
-                }
-                else
-                {
-                  $data['updateTags'] = $tagsData;
                 }
                 
+                
+                $pusher = $this->container->get('gos_web_socket.wamp.pusher');
+                $pusher->push($dataPush, 'message_user', array('channel_slug' => $this->currentChannel->getSlug(), 'user_id' => $this->authUser->getId())); 
+
                 $response->setData($data);
-            
                 return $response;
             }
             // ha habido un error procesando el formulario
@@ -903,7 +932,6 @@ class WallController extends ArController
                 return $response;
             }
         }
-        //else if ($request->getMethod() == 'GET') 
         else if (($request->getMethod() == 'GET') 
                     && $request->isXmlHttpRequest())
         {
@@ -926,8 +954,7 @@ class WallController extends ArController
                                         $this->currentChannel, 
                                         $this->authUser, $user, $hash, (int)$pag); 
                
-            //echo count($messages);
-            //exit();
+
             if ($messages && (count($messages) > 0))
             {
                 $totalItems = count($messages);
@@ -935,7 +962,7 @@ class WallController extends ArController
                 
                 foreach ($messages->getIterator() as $message) 
                 {
-                    $data['messages'][] =  $this->processMessage($message, $user);
+                    $data['messages'][] =  $this->processMessage($message, $this->authUser,  $user);
                 }
                 
                 $data['isLastPage']  = ($pagesCount == $pag); 
@@ -974,6 +1001,9 @@ class WallController extends ArController
                     'culture'               => $this->culture,
                     'currenUser'            => $this->currenUser,
                     'friends'               => array_merge($this->em->getRepository('UserBundle:User')->findByFriend($this->authUser), array($this->authUser)),
+                    'websocketMethod'       => $this->container->getParameter('websocket_method'),
+                    'websocketHost'         => $this->container->getParameter('websocket_host'),
+                    'websocketPort'         => $this->container->getParameter('websocket_port'),
                     'sessionname'           => $this->container->getParameter('sessionname'),
                     'authUser'              => $this->authUser));
         }
@@ -1021,7 +1051,7 @@ class WallController extends ArController
                 {
                     foreach ($updateTags as $tagSerialize) 
                     {
-                        $tagsData[] = $this->processTag($tagSerialize, $this->authUser) ; 
+                        $tagsData[] = $this->processTag($tagSerialize, $this->authUser, $this->authUser) ; 
                     }
 
                     $data['updateTags'] =  $tagsData;
@@ -1061,13 +1091,19 @@ class WallController extends ArController
                   $this->em->flush();
                 }
                 
-                
-                $response = new JsonResponse();
-                $response->setData(array(
+                $data = array(
+                            'userRequest' => $this->authUser->getId(),
                             'counTags' => count($tags),
                             'message' => $wallMessageId,
                             'updateTags' => ($tagsData && count($tagsData) > 0)?$tagsData:[]
-                        ));
+                        );
+                
+                $pusher = $this->container->get('gos_web_socket.wamp.pusher');
+                $pusher->push($data, 'message_user', array('channel_slug' => $this->currentChannel->getSlug(), 'user_id' => $this->authUser->getId())); 
+
+                
+                $response = new JsonResponse();
+                $response->setData($data);
             
                 return $response;
             }

@@ -26,9 +26,6 @@ $('.form-control-clear').click(function() {
 var arquematics = (function (Mustache, $, emojione, arquematics) {
 
 
-//
-//emojione.spriteSize = 32;
-
 arquematics.tag =  {
 	options: {
             showControls: true,
@@ -52,6 +49,9 @@ arquematics.tag =  {
             content:                    '#content',
             content_col:                '#profilecol',
             content_col_movile:         '#movile-profilecol',
+            
+            content_send_control: '#wall_send_content', 
+            content_spacer_wall:  '#spacer-wall',
            
             
             content_item_base:          '#tag-control-',
@@ -123,7 +123,6 @@ arquematics.tag =  {
            
            this._initControlHandlers();
            
-           //this._initDOM($(this.options.content), location.search);
 	},
        
         
@@ -207,6 +206,19 @@ arquematics.tag =  {
                that.generateContentDOM(data);
                
                that.lastTag = data.profile.selectTagHash;
+               
+               if (that.lastTag)
+               {
+                 $(options.content_send_control).hide(); 
+                 $(options.content_spacer_wall)
+                         .removeClass('hide')
+                          .show(); 
+               }
+               else
+               {
+                 $(options.content_send_control).show(); 
+                 $(options.content_spacer_wall).hide();
+               }
                
                if (!that.hasInitPanel)
                {
@@ -293,10 +305,7 @@ arquematics.tag =  {
        update: function(message) 
         {   
           var options = this.options
-            , that = this
-            , $nodeTagLink
-            , sessionTagsSave = this.sendManager.sessionTagsSave;
-          
+            , that = this;
           
           if (message instanceof arquematics.wall.message)
           {
@@ -327,7 +336,9 @@ arquematics.tag =  {
                             else
                             {
                                 $nodeControl.data('count', countTags);
-                                $nodeControl.find('span.tag-text').text( dataJson.updateTags[i].name + ' (' + countTags + ')');
+                                // TODO: hacer bien delete con websockets para traer el dato de
+                                // dataJson.updateTags[i].name en lugar de $nodeControl.data('name')
+                                $nodeControl.find('span.tag-text').text( $nodeControl.data('name') + ' (' + countTags + ')');
                             }
                         }
                     } 
@@ -350,7 +361,8 @@ arquematics.tag =  {
                 }
                 
                 var $node = $('[data-message-id="' + dataJson.id + '"]').find(options.content_item_message_content);
-                that.addContentLinks($node, false);
+                
+                that.addContentLinks($node, that.lastTag);
                 that.addNodeHandlers($node);
               }
              

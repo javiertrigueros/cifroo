@@ -2,7 +2,7 @@
     <a href="{{ path('activity') }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
         <i class="px-navbar-icon fa fa-envelope"></i>
         <span class="px-navbar-icon-label">{% trans %}menu.notifications{% endtrans %}</span>
-        <span class="px-navbar-label label label-success hi notifications-bell-count {% if countNotifications == 0  %}hide{% endif %}">{{ countNotifications }}</span>
+        <span data-count="{{ countNotifications }}" class="px-navbar-label label label-success hi notifications-bell-count {% if countNotifications == 0  %}hide{% endif %}">{{ countNotifications }}</span>
     </a>
     <div class="dropdown-menu p-a-0 notifications-bell-menu" style="width: 350px">
         <div id="navbar-notifications" style="position: relative;">

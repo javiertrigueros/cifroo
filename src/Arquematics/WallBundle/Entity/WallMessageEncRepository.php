@@ -30,4 +30,17 @@ class WallMessageEncRepository extends EntityRepository
           
         return $query->getOneOrNullResult();
     }
+    
+    public function findByMenssage($wallMessage)
+    {
+        $query = $this->getEntityManager()
+                ->createQuery("
+                    SELECT me
+                    FROM WallBundle:WallMessageEnc me
+                    WHERE (me.wallMessage = :wallMessage)
+                ")
+                ->setParameter('wallMessage', $wallMessage)
+        ;
+        return $query->getResult();
+    }
 }

@@ -1,6 +1,7 @@
 # Learn more about services, parameters and containers at
 # https://symfony.com/doc/current/service_container.html
 services:
+    
     app.fos_user.oauth_provider:
         # Change the class according to the location of the FOSUBUserProvider class
         class: Arquematics\UserBundle\Service\FOSUBUserProvider
@@ -25,9 +26,9 @@ services:
         arguments:
             - "mysql:host=%database_host%;port=%database_port%;dbname=%database_name%"
             - { db_username: %database_user%, db_password: %database_password% }
-    #session.handler.pdo:
-    #    class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
-    #    arguments: ["@pdo", {lock_mode: 0}]
+    session.handler.pdo:
+        class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
+        arguments: ["@pdo", {lock_mode: 0}]
 
             
     # default configuration for services in *this* file

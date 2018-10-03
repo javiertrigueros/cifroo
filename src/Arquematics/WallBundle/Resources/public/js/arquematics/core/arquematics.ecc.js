@@ -183,8 +183,6 @@ encryptMultipleKeys: function(content, encKeys)
   return obj;
 },
 
-
-
 /**
  * Decodifica un objeto clipher con la clave privada
  * 
@@ -306,37 +304,56 @@ setPublicEncKeys: function(value)
 {
    this.encryptKeys = value; 
 },
+/**
+ * @returns {array}
+ */
+getUserFriends: function()
+{
+  var retFriends = [];
+  for (var i = 0, len = this.encryptKeys.length; i < len; i++) 
+  {
+    retFriends.push(this.encryptKeys[i].id);
+  }
+  return retFriends;
+},
+/**
+ * devuelve la id del usuario actual
+ * @returns {id}
+ */
+getUserId: function()
+{
+  return this.encryptKeys[this.encryptKeys.length - 1].id; 
+},
 
 getData: function ()
 {
     return this.curve + '|' + this.keys.pub + '|' + this.keys.sec + '|' + this.keys.ver + '|' + this.keys.sig;
 },
 
-setData: function (dataStr)
-{
-    var keyStrArr = dataStr.split("|");
+    setData: function (dataStr)
+    {
+        var keyStrArr = dataStr.split("|");
     
-    if (this.isArray(keyStrArr) && (keyStrArr.length >= 4))
-    {
-        this.curve = parseInt(keyStrArr[0]);
+        if (this.isArray(keyStrArr) && (keyStrArr.length >= 4))
+        {
+            this.curve = parseInt(keyStrArr[0]);
         
-        this.keys = {
-           pub: keyStrArr[1],
-           sec: keyStrArr[2],
-           ver: keyStrArr[3],
-           sig: keyStrArr[4]
-        };     
-    }
-    else
+            this.keys = {
+                pub: keyStrArr[1],
+                sec: keyStrArr[2],
+                ver: keyStrArr[3],
+                sig: keyStrArr[4]
+            };     
+        }
+        else
+        {
+            throw new Error("Error setData: " + objName);      
+        }
+    },
+    isArray: function (value)
     {
-      throw new Error("Error setData: " + objName);      
+        return Object.prototype.toString.call(value) === '[object Array]';
     }
-   
-},
-isArray: function (value)
-{
-  return Object.prototype.toString.call(value) === '[object Array]';
-}
 };
 
 arquematics.simpleCrypt = {

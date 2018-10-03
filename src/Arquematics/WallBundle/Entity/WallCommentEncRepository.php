@@ -30,4 +30,18 @@ class WallCommentEncRepository extends EntityRepository
           
         return $query->getOneOrNullResult();
     }
+    
+    public function findByComment( $wallComment)
+    {
+          $query = $this->getEntityManager()
+                ->createQuery("
+                    SELECT me
+                    FROM WallBundle:WallCommentEnc me
+                    WHERE (me.comment = :wallcomment)
+                ")
+                ->setParameter('wallcomment', $wallComment)
+        ;
+          
+        return $query->getResult();
+    }
 }

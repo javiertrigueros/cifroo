@@ -118,6 +118,16 @@ arquematics.wall = {
             this._jQueryExtensions();
             this._initControlHandlers();
 	},
+        
+        getSlug: function()
+        {
+           return this.options.channel;  
+        },
+        
+        getUserRequest: function()
+        {
+           return this.options.userRequest;  
+        },
          
         update: function(enableTabFuntions)
         {
@@ -273,56 +283,6 @@ arquematics.wall = {
                         datatype: "json",
                         cache: false})
                 .done(function(dataJson) {
-                    
-                    if (that.isMovile)
-                    {
-                        $node = $('#like-control-movile-' + dataJson.id);
-                        var $nodeText = $('#like-control-movile-text-' + dataJson.id);
-                        if (dataJson.voteByMe)
-                        {
-                            $nodeText.html(dataJson.voteByMe); 
-                        }
-                        else 
-                        {
-                            $nodeText.html(dataJson.voteCount);
-                        }
-                    }
-                    else
-                    {
-                       $node = $('#like-control-' + dataJson.id); 
-                       if (dataJson.voteByMe)
-                       {
-                            $node.html('<i class="fa fa-thumbs-o-up"></i>&nbsp' + dataJson.voteByMe); 
-                       }
-                       else 
-                       {
-                            $node.html('<i class="fa fa-thumbs-o-up"></i>&nbsp' + dataJson.voteCount);
-                       }
-                    }
-                    
-                    $node.data('like', !$node.data('like'));
-                    //oculta todos los tooltips
-                    $('.cmd-like-message').popover('hide');
-
-                    $node.attr('href',dataJson.voteURL);
-      
-                    if (dataJson.voteCountReal > 0)
-                    {
-                      $node.removeAttr('data-content');
-                      $node.removeAttr('data-vote-count-real');
-                      $node.data('content', dataJson.voteNames);
-                      $node.data('vote-count-real', dataJson.voteCountReal);
-                      that.addPopoverHandlers($node);
-                    }
-                    else
-                    {
-                        $node.removeClass('tool-votes');
-                        $node.popover('destroy');
-                        $node.off("mouseover");
-                        $node.off("mouseout");
-                        $node.removeAttr('data-content');
-                        $node.data('vote-count-real', dataJson.voteCountReal);
-                    }
                     
                 })
                 .fail(function() {
@@ -490,6 +450,7 @@ arquematics.wall = {
                     cache: false,
                     success: function(dataJson)
                     {
+                        /*
                             var $contenNode =  $('div[data-message-id="' + dataJson.message + '"]')
                             ,   message = new arquematics.wall.message(dataJson);
                             
@@ -500,7 +461,7 @@ arquematics.wall = {
                             
                             $contenNode.fadeOut(300,function(){
                                 $('[data-message-id="' + dataJson.message + '"]').remove();
-                            });
+                            });*/
                     },
                     statusCode: {
                             404: function() 
@@ -564,7 +525,7 @@ arquematics.wall = {
                 , $form = $button.parents('.formControl')     
                 , $inputControl = $form.find('.widget-tree-comments-input')
                 , $inputControlPass = $form.find('.form-control-pass')
-                , $containerNode = $button.parents('.message').find('.comments-list')
+                //, $containerNode = $button.parents('.message').find('.comments-list')
                 , comment = $.trim($inputControl.val());
                  
                 if(comment.length > 0)
@@ -581,7 +542,7 @@ arquematics.wall = {
                             data:  formData })
                         .done(function(dataJson) {
                     
-                            var $contentNode = that.parseComment(dataJson);
+                            //var $contentNode = that.parseComment(dataJson);
                     
                             $button.button('reset');
                             $inputControl.val('');
@@ -589,9 +550,10 @@ arquematics.wall = {
                       
                             $inputControl.css('height', 'auto').css('height', 50);
                     
+                            /*
                             $containerNode.append($contentNode);
                    
-                            that.addNodeHandlers($contentNode);
+                            that.addNodeHandlers($contentNode);*/
                         })
                         .fail(function() {
                             $button.button('reset');
@@ -643,12 +605,12 @@ arquematics.wall = {
                     cache: false
                 })
                 .done(function(dataJson) {
-
-                    $('#comments-item-' + dataJson.id).fadeOut(300,function(){
+                       /* 
+                        $('#comments-item-' + dataJson.id).fadeOut(300,function(){
                         $('#comments-item-' + dataJson.id).remove();
                         //oculta los popups moviles
                         $('.cmd-like-message-movile').popover('hide');
-                    });
+                    });*/
                 })
                 .fail(function() {
                    
@@ -680,7 +642,7 @@ arquematics.wall = {
             
            */
           
-          
+          /*
             $(options.input_control_select_group).select2({
                 placeholder: 'Select value'
             })
@@ -691,7 +653,7 @@ arquematics.wall = {
                 var defaultValue = selectedOption[0] && selectedOption[0].value;
                 $(e.target).toggleClass("text-changed", e.target.value !== defaultValue);
             });
-            ;
+            ;*/
 
             $(options.cmd_update_button).on("click", function (e) 
             {
@@ -794,7 +756,7 @@ arquematics.wall = {
             
             return d;
         },
-        
+        /*
         encryptForm2: function ($form, $encField, $passField)
         {
             console.log('encryptForm');
@@ -843,6 +805,108 @@ arquematics.wall = {
             );
             
             return d;
+        },
+        */
+       
+        renderVote: function(dataJson)
+        {
+           if (this.isMovile)
+           {
+                        var $node = $('#like-control-movile-' + dataJson.id);
+                        var $nodeText = $('#like-control-movile-text-' + dataJson.id);
+                        if (dataJson.voteByMe)
+                        {
+                            $nodeText.html(dataJson.voteByMe); 
+                        }
+                        else 
+                        {
+                            $nodeText.html(dataJson.voteCount);
+                        }
+            }
+                    else
+                    {
+                       $node = $('#like-control-' + dataJson.id); 
+                       if (dataJson.voteByMe)
+                       {
+                            $node.html('<i class="fa fa-thumbs-o-up"></i>&nbsp' + dataJson.voteByMe); 
+                       }
+                       else 
+                       {
+                            $node.html('<i class="fa fa-thumbs-o-up"></i>&nbsp' + dataJson.voteCount);
+                       }
+                    }
+            
+                    $node.data('like', dataJson.like);
+                    //oculta todos los tooltips
+                    $('.cmd-like-message').popover('hide');
+
+                    $node.attr('href',dataJson.voteURL);
+      
+                    if (dataJson.voteCountReal > 0)
+                    {
+                      $node.removeAttr('data-content');
+                      $node.removeAttr('data-vote-count-real');
+                      $node.data('content', dataJson.voteNames);
+                      $node.data('vote-count-real', dataJson.voteCountReal);
+                      this.addPopoverHandlers($node);
+                    }
+                    else
+                    {
+                        $node.removeClass('tool-votes');
+                        $node.popover('destroy');
+                        $node.off("mouseover");
+                        $node.off("mouseout");
+                        $node.removeAttr('data-content');
+                        $node.data('vote-count-real', dataJson.voteCountReal);
+                    } 
+        },
+        
+        deleteComment: function(dataJSON)
+        {
+            $('#comments-item-' + dataJSON.id).fadeOut(300,function(){
+                $('#comments-item-' + dataJSON.id).remove();
+                //oculta los popups moviles
+                $('.cmd-like-message-movile').popover('hide');
+            });
+        },
+        
+        renderComment: function(dataJSON)
+        {
+            var $contentNode = this.parseComment(dataJSON)
+            , $containerNode =  $('#message-' + dataJSON.messageId).find('.comments-list');
+            
+            $containerNode.append($contentNode); 
+            this.addNodeHandlers($contentNode);
+        },
+        
+        renderAndNotify: function(dataJSON)
+        {
+            var options = this.options;
+            var $contentNode = arquematics.wall.parseData(dataJSON);
+                        
+            $(options.content).prepend($contentNode);
+                        
+            arquematics.wall.addNodeHandlers($contentNode);
+                                
+            $contentNode.find('.message').animate({'backgroundColor':'#ffff'},200);
+            //se ha agregado contenido a wall
+            //y lo notifica
+            arquematics.wall.notify(new arquematics.wall.message(dataJSON));
+        },
+        
+        deleteAndNotify: function(dataJson)
+        {
+            var $contenNode =  $('div[data-message-id="' + dataJson.message + '"]')
+            ,   message = new arquematics.wall.message(dataJson);
+                            
+
+            message.setState(arquematics.wall.messageStatus.del);
+                            
+            arquematics.wall.notify(message);
+                            
+            $contenNode.fadeOut(300,function(){
+               $('[data-message-id="' + dataJson.message + '"]').remove();
+            });
         },
         
         getElement: function ()
@@ -948,6 +1012,7 @@ arquematics.wall = {
                             cache: false,
                             success: function(dataJSON)
                             {
+                                /*
                                 var $contentNode = arquematics.wall.parseData(dataJSON);
                         
                                 $(options.content).prepend($contentNode);
@@ -958,7 +1023,7 @@ arquematics.wall = {
                                 //se ha agregado contenido a wall
                                 //y lo notifica
                                 arquematics.wall.notify(new arquematics.wall.message(dataJSON));
-                        
+                                */
                                 arquematics.wall.reset();
                         
                                 arquematics.wall.unlock();

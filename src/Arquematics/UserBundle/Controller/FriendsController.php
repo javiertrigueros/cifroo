@@ -32,7 +32,7 @@ class FriendsController extends ArController
             
             foreach ($users as $user)
             {
-                $data[] = $this->processFriendUser($user);
+                $data[] = $this->processFriendUser($user, $this->authUser);
             }
             
             $response = new JsonResponse();
@@ -43,6 +43,10 @@ class FriendsController extends ArController
         else if ($request->getMethod() == 'GET') 
         {
           return $this->render('UserBundle:User:list.html.twig', array(
+            'websocketMethod'       => $this->container->getParameter('websocket_method'),
+            'websocketHost' => $this->container->getParameter('websocket_host'),
+            'websocketPort' => $this->container->getParameter('websocket_port'),
+            'friends'    => array_merge($this->em->getRepository('UserBundle:User')->findByFriend($this->authUser), array($this->authUser)),
             'sessionname' => $this->container->getParameter('sessionname'),
             'authUser'    => $this->authUser,
             "menuSection" => "lists"
@@ -55,10 +59,11 @@ class FriendsController extends ArController
         
     }
     
-    private function processFriendUser($user)
+    private function processFriendUser($user, $authUser)
     {
         $data = $user->jsonSerialize();
         
+        $data['authUserId'] = $authUser->getId();
         
         $data['image'] = ($data['image'])? $this->generateUrl('user_profile_avatar', array('fileName' => $data['image'])) 
                                 :  $this->get('assets.packages')
@@ -66,7 +71,7 @@ class FriendsController extends ArController
         
         $friendOf =  $this->em->getRepository('UserBundle:UserFriend')
                                 ->findByUserAndFriend(
-                                        $this->authUser,
+                                        $authUser,
                                         $user);
 
         if ($friendOf != null)
@@ -78,7 +83,7 @@ class FriendsController extends ArController
             }
             else if ($friendOf->getStatus() == UserFriend::REQUEST)
             {
-                if ($this->authUser->getId() === $friendOf->getUser()->getId())
+                if ($authUser->getId() === $friendOf->getUser()->getId())
                 {
                     $data['request'] = true;
                     $data['url'] = $this->generateUrl('user_friend_request', array('slug' => $user->getSlug())); 
@@ -91,8 +96,18 @@ class FriendsController extends ArController
             }
             else if ($friendOf->getStatus() == UserFriend::IGNORE)
             {
-                $data['ignore'] = true;
-                $data['url'] = $this->generateUrl('user_friend_accept', array('slug' => $user->getSlug()));  
+                
+                if ($authUser->getId() === $friendOf->getUser()->getId())
+                {
+                   $data['ignoreAll'] = true;
+                   $data['url'] = '#';
+                }
+                else
+                {
+                   $data['ignore'] = true;
+                   $data['url'] = $this->generateUrl('user_friend_accept', array('slug' => $user->getSlug()));
+                }
+                
             }
             
             $data['status'] = $friendOf->getStatus();
@@ -103,9 +118,7 @@ class FriendsController extends ArController
             $data['url'] = $this->generateUrl('user_friend_request', array('slug' => $user->getSlug()));
         }
         
-        
-        
-        
+ 
         return $data;
     }
     
@@ -127,6 +140,8 @@ class FriendsController extends ArController
 
         $this->em->persist($notification);       
         $this->em->flush();
+        
+        return $notification;
     }
     
     private function checkFriend(Request $request, $slug = false)
@@ -166,21 +181,25 @@ class FriendsController extends ArController
         if (($this->friend->getStatus() === UserFriend::REQUEST)
            && ($this->friend->getFriend()->getId() === $this->authUser->getId()))
         {
+
+            $this->friend->setStatus(UserFriend::IGNORE);
+            $this->em->persist($this->friend);
+            
             $notification = $this->em->getRepository('BackendBundle:Notification')
                                     ->findFriendNotification($this->friend->getFriend(), $this->friend->getUser());
             
             if ($notification)
             {
+                //$this->pushNotification($notification, Notification::IGNORE_ALL);
                 $this->em->remove($notification);
             }
-            
-            $this->friend->setStatus(UserFriend::IGNORE);
-            $this->em->persist($this->friend);
             $this->em->flush();
-            
  
             $response = new JsonResponse();
-            $response->setData($this->processFriendUser($this->currenUser));
+            $response->setData($this->processFriendUser($this->currenUser, $this->authUser));
+            
+            $pusher = $this->container->get('gos_web_socket.wamp.pusher');
+            $pusher->push($this->processFriendUser($this->authUser, $this->currenUser) , 'notification_user');
             
             return $response;       
         }
@@ -204,16 +223,13 @@ class FriendsController extends ArController
         {
             $this->em->remove($this->friend);
             
-            /*
-            // borra de la lista de usuarios aceptados
-            $generalList = $this->em->getRepository('WallBundle:WallList')->findGeneral();
-            $generalList->removeUser($this->friend->getFriend());
-            $this->em->persist($generalList);
-            */
             $this->em->flush();
 
             $response = new JsonResponse();
-            $response->setData($this->processFriendUser($this->currenUser));
+            $response->setData($this->processFriendUser($this->currenUser, $this->authUser));
+            
+            $pusher = $this->container->get('gos_web_socket.wamp.pusher');
+            $pusher->push($this->processFriendUser($this->authUser, $this->currenUser) , 'notification_user');
             
             return $response;
         }
@@ -233,6 +249,7 @@ class FriendsController extends ArController
         if (($this->friend->getStatus() === UserFriend::IGNORE)
            && ($this->friend->getFriend()->getId() === $this->authUser->getId()))
         {
+            
             $notification = $this->em->getRepository('BackendBundle:Notification')
                                     ->findFriendNotification($this->friend->getFriend(), $this->friend->getUser());
             
@@ -242,38 +259,38 @@ class FriendsController extends ArController
             }
             
             $this->em->remove($this->friend);
-            
-            
             $this->em->flush();
             
+            $pusher = $this->container->get('gos_web_socket.wamp.pusher');
+            $pusher->push($this->processFriendUser($this->authUser, $this->currenUser) , 'notification_user');
+            
             $response = new JsonResponse();
-            $response->setData($this->processFriendUser($this->currenUser));
+            $response->setData($this->processFriendUser($this->currenUser, $this->authUser));
             
             return $response;
         }
         else if (($this->friend->getStatus() === UserFriend::REQUEST)
            && ($this->friend->getFriend()->getId() === $this->authUser->getId()))
         {
+                $this->friend->setlist($this->em->getRepository('WallBundle:WallList')->findGeneral());
+                $this->friend->setStatus(UserFriend::ACCEPT);
+                $this->em->persist($this->friend);
+                
                 $notification = $this->em->getRepository('BackendBundle:Notification')
                                     ->findFriendNotification($this->friend->getFriend(), $this->friend->getUser());
-            
+                
                 if ($notification)
                 {
                     $this->em->remove($notification);
                 }
                 
-                $this->friend->setlist($this->em->getRepository('WallBundle:WallList')->findGeneral());
-                $this->friend->setStatus(UserFriend::ACCEPT);
-                $this->em->persist($this->friend);
-                /*
-                $generalList = $this->em->getRepository('WallBundle:WallList')->findGeneral();
-                $generalList->addUser($this->friend->getFriend());
-                $this->em->persist($generalList);
-                */
                 $this->em->flush();
                 
+                $pusher = $this->container->get('gos_web_socket.wamp.pusher');
+                $pusher->push($this->processFriendUser($this->authUser, $this->currenUser) , 'notification_user');
+                
                 $response = new JsonResponse();
-                $response->setData($this->processFriendUser($this->currenUser));
+                $response->setData($this->processFriendUser($this->currenUser, $this->authUser));
             
                 return $response;
         }
@@ -314,6 +331,16 @@ class FriendsController extends ArController
                && ($this->friend->getUser()->getId() === $this->authUser->getId()))
             {
                 $this->em->remove($this->friend);
+                
+                
+                $notification = $this->em->getRepository('BackendBundle:Notification')
+                                    ->findFriendNotification($this->currenUser,$this->aUser);
+                
+                if ($notification)
+                {   
+                    $this->em->remove($notification);
+                }
+                
                 $this->em->flush();
             } 
             else 
@@ -341,17 +368,19 @@ class FriendsController extends ArController
             
             if ($notification)
             {
-                //echo 'aqui';
-                //exit();
                 $this->em->remove($notification);
                 $this->em->flush();
             }
             
             $this->addFriendNotification($this->aUser, $this->currenUser);
+            
         }
         
+        $pusher = $this->container->get('gos_web_socket.wamp.pusher');
+        $pusher->push($this->processFriendUser($this->authUser, $this->currenUser) , 'notification_user');
+        
         $response = new JsonResponse();
-        $response->setData($this->processFriendUser($this->currenUser));
+        $response->setData($this->processFriendUser($this->currenUser, $this->authUser));
             
         return $response;
     }

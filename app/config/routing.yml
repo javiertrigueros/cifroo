@@ -22,9 +22,7 @@ linkedin_login:
     path: /connect/check-linkedin
     options: { i18n: false }
     
-api_login_check:
-    path: /api/login_check
-    
+
 arquematics_wall:
     resource: "@WallBundle/Resources/config/routing.yml"
 

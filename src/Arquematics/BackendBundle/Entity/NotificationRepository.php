@@ -12,8 +12,8 @@ use Doctrine\ORM\EntityRepository;
  */
 class NotificationRepository extends EntityRepository
 {
-
-	public function findLastNotifications($user, $limit = 10)
+    
+    public function findLastNotifications($user, $limit = 10)
     {
         $query = $this->getEntityManager()->
         	createQuery("

@@ -1,0 +1,26 @@
+message_user:
+    channel: message/{channel_slug}/{user_id}
+    handler:
+        callback: 'message.topic'
+    requirements:
+        channel_slug:
+            pattern: '[a-z]+'
+        user_id:
+            pattern: '\d+'
+            
+comment_user:
+    channel: comment/{user_id}
+    handler:
+        callback: 'comment.topic'
+    requirements:
+        user_id:
+            pattern: '\d+'
+            
+vote_user:
+    channel: vote/{user_id}
+    handler:
+        callback: 'vote.topic'
+    requirements:
+        user_id:
+            pattern: '\d+'
+            

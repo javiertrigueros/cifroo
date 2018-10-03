@@ -1,4 +1,4 @@
-var arquematics = (function (arquematics, $) {
+var arquematics = (function (arquematics, $, Mustache) {
     
 arquematics.notifications = {
     
@@ -9,13 +9,28 @@ arquematics.notifications = {
         content_notifications:      '#navbar-notifications',
 
         cmd_notification_accept:    '.cmd-notification-accept',
-        cmd_notification_block:     '.cmd-notification-block'
+        cmd_notification_block:     '.cmd-notification-block',
+       
+        content_bell_count:         '.notifications-bell-count',
+        
+        template_notification_form:      '#user-notification-template'
     },
     configure: function(options)
     {
         if (!options){options = {};}
         this.options = $.extend(options, this.options,options);
         this.isMovile = ($(window).width() <= 400);
+    },
+    
+    reloadNotification: function()
+    {
+       var options = this.options
+       ,that = this;
+        
+        $.when(this.getNotifications())
+        .then(function (data){
+           that._addNodeHandlers($(options.content_notifications));
+        }); 
     },
     initHandler: function()
     {
@@ -48,14 +63,6 @@ arquematics.notifications = {
         });
         
         this._addNodeHandlers($(options.content_notifications));
-        
-        setInterval(
-        function() {
-            $.when(that.getNotifications())
-                .then(function (data){
-                    
-            });
-        }, options.timeout);
     },
     
     _doPostRequest: function($node)
@@ -81,6 +88,7 @@ arquematics.notifications = {
        var options = this.options
        ,that = this;
        
+       $node.find(options.cmd_notification_block + ',' + options.cmd_notification_accept).off();
        $node.find(options.cmd_notification_block + ',' + options.cmd_notification_accept).on("click", function(e)
        {
             e.preventDefault();
@@ -126,7 +134,9 @@ arquematics.notifications = {
                         $notificationsBellNode.data('wait_ajax', true);
                     
                         $notificationsBellCount.text(data.count);
-                        $notificationsBellCount.show();  
+                        $notificationsBellCount
+                                .removeClass('hide')
+                                .show();  
                     }
                     else
                     {
@@ -161,4 +171,4 @@ arquematics.notifications = {
   
 return arquematics;
     
-}( arquematics || {}, jQuery));
+}( arquematics || {}, jQuery, Mustache));

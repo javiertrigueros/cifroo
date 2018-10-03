@@ -2,7 +2,6 @@ channels:
     path:     /channels
     defaults: { _controller: WallBundle:Channel:list }
     
-
 channels_create:
     path:     /channels/create
     defaults: { _controller: WallBundle:Channel:create }
@@ -119,10 +118,12 @@ user_messages_update:
 vote:
     path:     /vote/{message_id}
     defaults: { _controller: WallBundle:Vote:create }
+    methods:  [POST]
 
 vote_delete:
-    path:     /vote/{message_id}/{id}
+    path:     /vote/{message_id}
     defaults: { _controller: WallBundle:Vote:delete }
+    methods:  [DELETE]
 
 comment:
     path:     /comment/{channel_slug}/{message_id}

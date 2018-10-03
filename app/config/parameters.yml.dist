@@ -1,7 +1,12 @@
 parameters:
-    sessionname: sessionname
-    pagename: pagename
-    pagedomain: pagedomain
+    websocket_method: ws
+    websocket_host: 127.0.0.1
+    websocket_port: 8025
+    gos_server_host: 127.0.0.1
+    gos_server_port: 8025
+    sessionname: raf6
+    pagename: Raf6
+    pagedomain: raf6.com
     cloud_convert_api: cloud_convert_api
     twitter_client_id: twitter_client_id
     twitter_client_secret: twitter_client_secret

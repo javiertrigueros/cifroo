@@ -24,7 +24,6 @@ class AppKernel extends Kernel
             
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new BM\BackupManagerBundle\BMBackupManagerBundle(),
-            new Liuggio\ExcelBundle\LiuggioExcelBundle(),
  
             new FOS\UserBundle\FOSUserBundle(),
             new Http\HttplugBundle\HttplugBundle(),
@@ -35,7 +34,10 @@ class AppKernel extends Kernel
             
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
             
-            new Misd\PhoneNumberBundle\MisdPhoneNumberBundle()
+            new Misd\PhoneNumberBundle\MisdPhoneNumberBundle(),
+            
+            new Gos\Bundle\WebSocketBundle\GosWebSocketBundle(),
+            new Gos\Bundle\PubSubRouterBundle\GosPubSubRouterBundle()
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

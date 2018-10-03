@@ -4,9 +4,17 @@ services:
         tags:
             - { name: twig.extension }
             
-    imode_notifications:
+    mail_notifications:
       class: Arquematics\BackendBundle\Service\NotificationService
       arguments: ["@twig", "@mailer","@service_container", %notifications_email%]
       
     image_base64:
       class: Arquematics\BackendBundle\Service\ImageBase64
+      
+    userNotification.topic_service:
+        class: Arquematics\BackendBundle\Topic\UserNotificationTopic
+        arguments: 
+            - '@gos_web_socket.websocket.client_manipulator'
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: gos_web_socket.topic }

@@ -1,0 +1,6 @@
+notification_user:
+    channel: user/notification
+    handler:
+        callback: 'userNotification.topic'
+            
+            

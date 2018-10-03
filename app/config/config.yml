@@ -3,6 +3,7 @@ imports:
     - { resource: services.yml }
     - { resource: security.yml }
 
+
 #ubuntu apt-get install xvfb wkhtmltopdf
 knp_snappy:
     process_timeout: 30 # In seconds
@@ -113,8 +114,7 @@ fos_user:
     from_email:
         address: "%mailer_user%"
         sender_name: "%mailer_user%"
-        
-        
+    
 hwi_oauth:
     firewall_names: [main]
     # mirar NTP https://github.com/hwi/HWIOAuthBundle/issues/1169
@@ -169,6 +169,27 @@ stof_doctrine_extensions:
             timestampable: true
             sluggable: true
             
+gos_web_socket:
+    server:
+        host: '%gos_server_host%'   #The port the socket server will listen on
+        port: '%gos_server_port%'   #The host ip to bind to
+        router:
+            resources:
+                - '@WallBundle/Resources/config/pubsub/routing.yml'
+                - '@BackendBundle/Resources/config/pubsub/routing.yml'
+    topics:
+        - '@message.topic_service'
+        - '@comment.topic_service'
+        - '@vote.topic_service'
+        - '@userNotification.topic_service'
+    client:
+        firewall: main
+        session_handler: 'session.handler.pdo'
+    pushers:
+        wamp:
+            host: '%gos_server_host%'
+            port: '%gos_server_port%'
+        
 framework:
     assets:
         version: 'v5'

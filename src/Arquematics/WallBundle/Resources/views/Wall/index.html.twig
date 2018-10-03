@@ -116,7 +116,7 @@
                         <form id="arquematics-upload-chunk-preview" class="hide" method="post" action="">
                                 {#<?php echo $formFileChunkPreview->renderHiddenFields() ?>#}
                         </form>
-
+                        <div id="spacer-wall" class="m-b-2 clearfix hide"></div>
                         <hr class="m-y-0">
                         <div id="content" class="bg-white">
                             <div class="wall-loader loader hide">
@@ -220,7 +220,7 @@
             {% endverbatim %} 
             {% verbatim %}
             {{#selected}}
-                <a data-id="{{id}}" data-count="{{count}}" data-hash="{{hash}}" class="cmd-tag-profile user-tag tag-panel-item user-tag-selected" href="{{href}}">
+                <a data-name="{{name}}" data-id="{{id}}" data-count="{{count}}" data-hash="{{hash}}" class="cmd-tag-profile user-tag tag-panel-item user-tag-selected" href="{{href}}">
                     <span class="label label-primary active tag-active">
                         <span class="tag-text">{{name}}&nbsp;({{count}})</span>
                         <i class="cmd-filter-tag tag-remove-circle fa fa-times-circle" style="display: inline-block;"></i>
@@ -231,7 +231,7 @@
         
             {% verbatim %}
             {{^selected}}
-                <a data-id="{{id}}" data-count="{{count}}" data-hash="{{hash}}" class="cmd-tag-profile user-tag tag-panel-item" href="{{href}}">
+                <a data-name="{{name}}" data-id="{{id}}" data-count="{{count}}" data-hash="{{hash}}" class="cmd-tag-profile user-tag tag-panel-item" href="{{href}}">
                     <span class="label label-primary">
                         <span class="tag-text">{{name}}&nbsp;({{count}})</span>
                         <i class="cmd-filter-tag tag-remove-circle fa fa-times-circle hide" style="display: inline-block;"></i>
@@ -567,7 +567,7 @@
 <script id="template-tag" type="text/x-jquery-tmpl">
 {% verbatim %}
 {{#selected}}
-<a data-id="{{id}}" data-count="{{count}}" data-hash="{{hash}}" class="cmd-tag-profile user-tag tag-panel-item user-tag-selected" href="{{href}}">
+<a data-name="{{name}}" data-id="{{id}}" data-count="{{count}}" data-hash="{{hash}}" class="cmd-tag-profile user-tag tag-panel-item user-tag-selected" href="{{href}}">
     <span class="label label-primary active tag-active">
         <span class="tag-text">{{name}}&nbsp;({{count}})</span>
         <i class="cmd-filter-tag tag-remove-circle fa fa-times-circle" style="display: inline-block;"></i>
@@ -575,7 +575,7 @@
 </a>
 {{/selected}}
 {{^selected}}
-<a data-id="{{id}}" data-count="{{count}}" data-hash="{{hash}}" class="cmd-tag-profile user-tag tag-panel-item" href="{{href}}">
+<a data-name="{{name}}" data-id="{{id}}" data-count="{{count}}" data-hash="{{hash}}" class="cmd-tag-profile user-tag tag-panel-item" href="{{href}}">
     <span class="label label-primary">
         <span class="tag-text">{{name}}&nbsp;({{count}})</span>
         <i class="cmd-filter-tag tag-remove-circle fa fa-times-circle hide" style="display: inline-block;"></i>
@@ -690,6 +690,19 @@
      </div>
  </div>
 </script>
+
+<script id="user-notification-template" type="text/x-jquery-tmpl">
+  <a id="notification-{% verbatim %}{{ from }}{% endverbatim %}" href ="{% verbatim %}{{ url }}{% endverbatim %}" class="notification-item">
+    <div data-href="{% verbatim %}{{ url }}{% endverbatim %}" class="widget-notifications-item">
+        <div class="widget-notifications-description">{% verbatim %}{{ shortMessage }}{% endverbatim %}</div>
+        <div class="widget-notifications-icon fa fa-user bg-danger"></div>
+        <div class="widget-notifications-description">
+            <a data-notification_id="{% verbatim %}{{ id }}{% endverbatim %}" href="{% verbatim %}{{ user_friend_accept }}{% endverbatim %}" class="btn btn-success cmd-notification-accept btn-xs">{% trans %}cmd.accept{% endtrans %}</a>
+            <a data-notification_id="{% verbatim %}{{ id }}{% endverbatim %}" href="{% verbatim %}{{ user_friend_block }}{% endverbatim %}" class="btn btn-danger cmd-notification-block btn-xs">{% trans %}cmd.lock{% endtrans %}</a>
+        </div>
+    </div>
+   </a>
+</script>
 {% endblock %}
     
 {% block stylesheets %}
@@ -716,6 +729,8 @@ filter='?cssrewrite,uglifycss' %}
     <script src="{{ asset('bundles/wall/js/bower_components/jquery-timeago/jquery.timeago.js') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/wall/js/bower_components/jquery-timeago/locales/jquery.timeago.'  ~ culture ~ '.js') }}" type="text/javascript"></script>
 
+    <script src="{{ asset('bundles/goswebsocket/js/vendor/autobahn.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/goswebsocket/js/gos_web_socket_client.js') }}" type="text/javascript"></script>
     {#
     modificados
     'bundles/wall/js/bower_components/javascript-load-image/js/load-image.js' (puestos ; y así ... para que pase uglify_js) https://github.com/blueimp/JavaScript-Load-Image 
@@ -768,7 +783,8 @@ filter='?cssrewrite,uglifycss' %}
     <script src="{{ asset('bundles/wall/js/arquematics/wall/widget/arquematics.social.js') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/wall/js/arquematics/wall/dropzone/arquematics.dropzone.js') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/user/js/arquematics/arquematics.userMessages.js') }}" type="text/javascript"></script>
-   
+    <script src="{{ asset('bundles/user/js/arquematics/arquematics.notifications.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/wall/js/arquematics/core/arquematics.websocket.js') }}" type="text/javascript"></script>
    {#
    {% javascripts 
     'bundles/wall/js/arquematics/core/arquematics.js'
@@ -797,7 +813,7 @@ filter='?cssrewrite,uglifycss' %}
     
     <script type="text/javascript">
     $(document).ready(function(){
-        
+                      
         arquematics.crypt = arquematics.utils.read('{{ authUser.id }}-{{ sessionname }}-key'  ,'arquematics.ecc');
         arquematics.crypt.setPublicEncKeys([
         {% for user in friends %}
@@ -807,6 +823,11 @@ filter='?cssrewrite,uglifycss' %}
             {% endif %}
         {% endfor %}
         ]);
+        
+        arquematics.notifications.init({'timeout': 60 * 1000,
+                                    'stopGetNotifications': false,
+                                    'notifications':'{{ path('user_notifications') }}',
+                                    'url': '{{ path('ajax_notifications_to_viewed') }}' });
         
         {% if authUser.lock %}
         arquematics.userMessages.init({
@@ -855,12 +876,23 @@ filter='?cssrewrite,uglifycss' %}
             });
         {% endif %}
         
-        
-
-        arquematics.wall.init(
-                { url_delete_comment: '/wall/comment-delete/',
+        {% if showSendControls %}
+            arquematics.wall.init(
+                { 
+                  userRequest: false,
+                  channel: '{{ channel.slug }}',
+                  url_delete_comment: '/wall/comment-delete/',
                   url_delete_message: '/wall/message-delete/'
                 });
+         {% else %}
+            arquematics.wall.init(
+                { 
+                  userRequest: '{{ currenUser.id }}',
+                  channel: '{{ channel.slug }}',
+                  url_delete_comment: '/wall/comment-delete/',
+                  url_delete_message: '/wall/message-delete/'
+                });
+         {% endif %}
         
         arquematics.tab.subscribeTab(arquematics.wall);
         
@@ -949,7 +981,13 @@ filter='?cssrewrite,uglifycss' %}
         });
        
         arquematics.wall.subscribeTool(arquematics.dropzone);
-       
+        
+        var _WS_URI = "{{ websocketMethod }}://{{ websocketHost }}:{{ websocketPort }}";
+        
+        var webSocketService = new arquematics.websocket(_WS_URI);
+            
+        webSocketService.subscribeUsers();  
+        
     });
     </script>  
 {% endblock %}

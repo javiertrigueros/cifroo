@@ -45,9 +45,23 @@ class VoteController extends ArController
             //actualiza los enlaces despues del flush
             $this->em->refresh($this->wallMessage);
             
+            $messagesEnc = $this->em->getRepository('WallBundle:WallMessageEnc')
+                                ->findByMenssage($this->wallMessage); 
+                
+            $dataPush = [];
+            if ($messagesEnc && count($messagesEnc) > 0)
+            {
+                foreach ($messagesEnc as $messageEnc)
+                {
+                    $dataPush[$messageEnc->getUser()->getId()] = $this->processData($this->wallMessage, $messageEnc->getUser());
+                }
+            }
             
+            $pusher = $this->container->get('gos_web_socket.wamp.pusher');
+            $pusher->push($dataPush, 'vote_user', array('user_id' => $this->authUser->getId())); 
+               
             $response = new JsonResponse();
-            $response->setData($this->processData($this->wallMessage));
+            $response->setData($this->processData($this->wallMessage, $this->authUser));
             return $response;
         }
         else
@@ -58,7 +72,7 @@ class VoteController extends ArController
         }
     }
     
-    private function processData($message)
+    private function processData($message, $authUser)
     {
         $translator = $this->get('translator');
         
@@ -67,28 +81,31 @@ class VoteController extends ArController
         $messageData['voteURL'] = $this->generateUrl('vote', array('message_id' => $message->getId()));
         
         $messageData['voteCountReal'] = count($messageData['votes']);
+        //esta en sentido inverso
+        $messageData['like'] = true;
         
-        if ($message->hasVote($this->authUser)) 
+        if ($message->hasVote($authUser)) 
         {
             $messageData['voteCount'] = count($messageData['votes']) -1;
           
             if ($messageData['voteCount'] == 0)
             {
                 $messageData['voteByMe'] = $translator->trans('wall.like_you_singular'); 
-                $messageData['voteNames'] =  $message->getVotesUserNames($this->authUser);
+                $messageData['voteNames'] =  $message->getVotesUserNames($authUser);
             }
             else if ($messageData['voteCount'] == 1 )
             {
                 $messageData['voteByMe'] = $translator->trans('wall.like_you_plural_one'); 
-                $messageData['voteNames'] =  $message->getVotesUserNames($this->authUser);
+                $messageData['voteNames'] =  $message->getVotesUserNames($authUser);
             }
             else
             {
                 $messageData['voteByMe'] =  $translator->trans('wall.like_you_plural_two', array('%count%' => $messageData['voteCount']));
-                $messageData['voteNames'] =  $message->getVotesUserNames($this->authUser);
+                $messageData['voteNames'] =  $message->getVotesUserNames($authUser);
             }
+            
+            $messageData['like'] = false;
           
-            $messageData['voteURL'] = $this->generateUrl('vote_delete', array('message_id' => $message->getId(), 'id' => $this->authUser->getId()) );
         }
         else if (count($messageData['votes']) == 0)
         {
@@ -99,18 +116,18 @@ class VoteController extends ArController
         else if (count($messageData['votes']) == 1)
         {
            $messageData['voteCount'] = $translator->trans('wall.like_plural_one');
-           $messageData['voteNames'] =  $message->getVotesUserNames($this->authUser);
+           $messageData['voteNames'] =  $message->getVotesUserNames($authUser);
         }
         else
         {
            $messageData['voteCount'] = $translator->trans('wall.like_plural_two', array('%count%' => count($messageData['votes'])));
-           $messageData['voteNames'] = $message->getVotesUserNames($this->authUser);
+           $messageData['voteNames'] = $message->getVotesUserNames($authUser);
         }
         
         return $messageData;
     }
     
-    public function deleteAction($message_id, $id,Request $request)
+    public function deleteAction($message_id,Request $request)
     {
         if (!$this->checkView($request))
         {
@@ -140,9 +157,24 @@ class VoteController extends ArController
                 //actualiza los enlaces despues del flush
                 $this->em->refresh($this->wallMessage);
                 
+                $messagesEnc = $this->em->getRepository('WallBundle:WallMessageEnc')
+                                ->findByMenssage($this->wallMessage); 
+                $dataPush = [];
+                if ($messagesEnc && count($messagesEnc) > 0)
+                {
+                    foreach ($messagesEnc as $messageEnc)
+                    {
+                        $dataPush[$messageEnc->getUser()->getId()] = $this->processData($this->wallMessage, $messageEnc->getUser());
+                    }
+                }
+                
+                $pusher = $this->container->get('gos_web_socket.wamp.pusher');
+                $pusher->push($dataPush, 'vote_user', array('user_id' => $this->authUser->getId())); 
+             
+                
 
                 $response = new JsonResponse();
-                $response->setData($this->processData($this->wallMessage));
+                $response->setData($this->processData($this->wallMessage, $this->authUser));
             
                 return $response;
             }

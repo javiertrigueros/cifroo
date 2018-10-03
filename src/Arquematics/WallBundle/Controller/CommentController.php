@@ -52,11 +52,14 @@ class CommentController extends ArController
                 $this->currentChannel = $this->em->getRepository('WallBundle:ArChannel')
                                         ->findOneBy(array('slug' => $channel_slug)); 
                 
+                /*
                 $data = $this->wallComment->jsonSerialize();
                 
                 $wallCommentEnc = $this->em->getRepository('WallBundle:WallCommentEnc')->findByCommentUser($this->wallComment, $this->authUser);
                 $data['pass'] = $wallCommentEnc->getContent();
                 
+                $data['messageId'] = $this->wallComment->getMessage()->getId();
+                        
                 $data['user']['image'] = ($data['user']['image'])? $this->generateUrl('user_profile_avatar', array('fileName' => $data['user']['image'])) 
                                 :  $this->get('assets.packages')
                                         ->getUrl('bundles/user/img/avatars/unknown.png', $packageName = null);
@@ -64,6 +67,23 @@ class CommentController extends ArController
                 $data['user']['url'] = $this->generateUrl('wall', array('channel_slug' => $this->currentChannel->getSlug(),  'usename_slug' => $this->wallComment->getCreatedBy()->getSlug()));
 
                 $data['commentDeleteURL'] = $this->generateUrl('comment_delete', array('message_id' => $this->wallMessage->getId(), 'id' => $this->wallComment->getId()));
+                */
+                $data = $this->processComment($this->wallComment, $this->authUser);
+                
+                $messagesEnc = $this->em->getRepository('WallBundle:WallCommentEnc')
+                                ->findByComment($this->wallComment); 
+                
+                $dataPush = [];
+                if ($messagesEnc && count($messagesEnc) > 0)
+                {
+                    foreach ($messagesEnc as $messageEnc)
+                    {
+                        $dataPush[$messageEnc->getUser()->getId()] = $this->processCommentEnc($this->wallComment, $messageEnc);
+                    }
+                }
+                
+                $pusher = $this->container->get('gos_web_socket.wamp.pusher');
+                $pusher->push($dataPush, 'comment_user', array('user_id' => $this->authUser->getId())); 
                 
                 $response = new JsonResponse();
                 $response->setData($data);
@@ -84,6 +104,50 @@ class CommentController extends ArController
         }
         
         
+    }
+    
+    private function processCommentEnc($comment, $messageEnc)
+    {
+        $data = $comment->jsonSerialize();
+                
+        $data['pass'] = $messageEnc->getContent();
+                
+        $data['messageId'] = $comment->getMessage()->getId();
+                        
+        $data['user']['image'] = ($data['user']['image'])? $this->generateUrl('user_profile_avatar', array('fileName' => $data['user']['image'])) 
+                                :  $this->get('assets.packages')
+                                        ->getUrl('bundles/user/img/avatars/unknown.png', $packageName = null);
+                
+        $data['user']['url'] = $this->generateUrl('wall', array('channel_slug' => $this->currentChannel->getSlug(),  'usename_slug' => $comment->getCreatedBy()->getSlug()));
+
+        if ($comment->canDelete($messageEnc->getUser()))
+        {
+            $data['commentDeleteURL'] = $this->generateUrl('comment_delete', array('message_id' => $data['messageId'], 'id' => $comment->getId()));  
+        }
+                
+        return $data;
+         
+    }
+    
+    private function processComment($comment, $user )
+    {
+        $data = $comment->jsonSerialize();
+                
+        $wallCommentEnc = $this->em->getRepository('WallBundle:WallCommentEnc')->findByCommentUser($comment, $user);
+        $data['pass'] = $wallCommentEnc->getContent();
+                
+        $data['messageId'] = $comment->getMessage()->getId();
+                        
+        $data['user']['image'] = ($data['user']['image'])? $this->generateUrl('user_profile_avatar', array('fileName' => $data['user']['image'])) 
+                                :  $this->get('assets.packages')
+                                        ->getUrl('bundles/user/img/avatars/unknown.png', $packageName = null);
+                
+        $data['user']['url'] = $this->generateUrl('wall', array('channel_slug' => $this->currentChannel->getSlug(),  'usename_slug' => $comment->getCreatedBy()->getSlug()));
+
+  
+        $data['commentDeleteURL'] = $this->generateUrl('comment_delete', array('message_id' => $data['messageId'], 'id' => $comment->getId()));
+                
+        return $data;
     }
     
     public function deleteAction($message_id, $id,Request $request)
@@ -107,6 +171,10 @@ class CommentController extends ArController
                 $data = $wallComment->jsonSerialize();
                 $this->em->remove($wallComment);
                 $this->em->flush();
+                
+                $pusher = $this->container->get('gos_web_socket.wamp.pusher');
+                $pusher->push($data, 'comment_user', array('user_id' => $this->authUser->getId())); 
+               
 
                 $response = new JsonResponse();
                 $response->setData($data);

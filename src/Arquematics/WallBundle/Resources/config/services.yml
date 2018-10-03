@@ -1,4 +1,29 @@
 services:
+    
+    vote.topic_service:
+        class: Arquematics\WallBundle\Topic\VoteTopic
+        arguments: 
+            - '@gos_web_socket.websocket.client_manipulator'
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: gos_web_socket.topic }
+            
+    message.topic_service:
+        class: Arquematics\WallBundle\Topic\MessageTopic
+        arguments: 
+            - '@gos_web_socket.websocket.client_manipulator'
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: gos_web_socket.topic }
+            
+    comment.topic_service:
+        class: Arquematics\WallBundle\Topic\CommentTopic
+        arguments: 
+            - '@gos_web_socket.websocket.client_manipulator'
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: gos_web_socket.topic }
+    
     user.publish.listener:
         class: Arquematics\WallBundle\Listener\UserPostPersist
         arguments: ['@session']

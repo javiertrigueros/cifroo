@@ -14,7 +14,7 @@
  * @param {type} $
  * @param {type} arquematics
  */
-var arquematics =  (function (arquematics , $, Mustache,  List, moment) {
+var arquematics =  (function (arquematics , $, Mustache,  List) {
 
 arquematics.userFriend =  {
 	options: {
@@ -44,6 +44,13 @@ arquematics.userFriend =  {
                  
        },
        isMovile: false,
+       
+       updateUserData: function (jsonData)
+        {
+           var $contentNode = this._parseData(jsonData);
+           $('#friend-' + jsonData.id).replaceWith( $contentNode );
+           this._addNodeHandlers($contentNode);
+        },
        
        configure: function(options)
        {
@@ -126,13 +133,18 @@ arquematics.userFriend =  {
                 
                 $.when(that.addFriend($node))
                 .done(function (user){
+                    
+                    $('body').removeClass('loading');
+                    
                     var $contentNode = that._parseData(user);
                     $('#friend-' + user.id).replaceWith( $contentNode );
                     that._addNodeHandlers($contentNode);
                     
+                    arquematics.notifications.reloadNotification();
                     //user.status 3 es el estado de petición de amistad
                     //1 estado de aceptación
-                    $('body').trigger('userChange', [user]);
+                    //$('body').trigger('userChange', [user]);
+                    
                 });             
             });
         },
@@ -140,6 +152,8 @@ arquematics.userFriend =  {
         {
             return  $(Mustache.render( $(this.options.template_follower).html(), data)); 
         },
+        
+        
         
         _initListHandlers: function () 
         {
@@ -250,7 +264,6 @@ arquematics.userFriend =  {
                 var $contentNode = that._parseData(user);
                 $('#friend-' + user.id).replaceWith( $contentNode );
                 that._addNodeHandlers($contentNode);
-                
             });
             
             $.when(this.getAllFriendList())
@@ -274,4 +287,4 @@ arquematics.userFriend =  {
 
 return arquematics;
 
-}( arquematics || {}, jQuery, Mustache, List, moment));
+}( arquematics || {}, jQuery, Mustache, List));

@@ -72,8 +72,6 @@
    {% endjavascripts %} 
  
 
-  <script  src="{{ asset('bundles/user/js/arquematics/arquematics.notifications.js') }}" type="text/javascript"></script>
-  
   <script type="text/javascript">
     pxInit.unshift(function() {
       var file = String(document.location).split('/').pop();
@@ -98,12 +96,6 @@
     for (var i = 0, len = pxInit.length; i < len; i++) {
       pxInit[i].call(null);
     }
-    
-    
-    arquematics.notifications.init({'timeout': 60 * 1000,
-                                    'stopGetNotifications': false,
-                                    'notifications':'{{ path('user_notifications') }}',
-                                    'url': '{{ path('ajax_notifications_to_viewed') }}' });
     
     $(".cmd-menu-close").on("click", function(event) {
         event.preventDefault();

@@ -41,7 +41,7 @@ class UserRepository extends EntityRepository
         
         return $query->getResult();
     }
-
+    
     public function deleteUser($user)
     {
         $sql = "delete from User where User.id = :id";
