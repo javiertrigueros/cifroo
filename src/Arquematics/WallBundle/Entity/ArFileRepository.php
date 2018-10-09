@@ -11,6 +11,8 @@ class ArFileRepository extends EntityRepository
 {
     public function findByUser($authUser,  $hash = false, $hashSmall = false, $group = false, $currentPage = 1)
     {
+        
+            
         if ((!$hash) && (!$group))
         {
             //arFiles
@@ -20,9 +22,8 @@ class ArFileRepository extends EntityRepository
                     FROM WallBundle:arFile fi
                     LEFT JOIN fi.wallMessage m
                     LEFT JOIN m.channels ch
-                    LEFT JOIN m.createdBy u
-                   
-                    WHERE (ch.open = 1) AND (
+                    LEFT JOIN fi.createdBy u
+                    WHERE ((ch.open = 1) OR (ch.id IS NULL)) AND (
                                 (u = :authUser) OR (u.id in 
                                     (
                                         SELECT uu.id
@@ -40,9 +41,8 @@ class ArFileRepository extends EntityRepository
                                     )
                                 )
                             )
-                    ORDER BY m.createdAt DESC
+                    ORDER BY fi.createdAt DESC
             ")
-            //->setParameter('list', $list)
             ->setParameter('authUser', $authUser)
             ->setParameter('status', UserFriend::ACCEPT)
             ;
@@ -57,9 +57,9 @@ class ArFileRepository extends EntityRepository
                     FROM WallBundle:arFile fi
                     LEFT JOIN fi.wallMessage m
                     LEFT JOIN m.channels ch
-                    LEFT JOIN m.createdBy u
+                    LEFT JOIN fi.createdBy u
                     LEFT JOIN fi.arFavorites fav
-                    WHERE (ch.open = 1) AND (fav.createdBy = :authUser) AND (
+                    WHERE ((ch.open = 1) OR (ch.id IS NULL)) AND (fav.createdBy = :authUser) AND (
                                 (u = :authUser) OR (u.id in 
                                     (
                                         SELECT uu.id
@@ -77,9 +77,8 @@ class ArFileRepository extends EntityRepository
                                     )
                                 )
                             )
-                    ORDER BY m.createdAt DESC
+                    ORDER BY fi.createdAt DESC
                 ")
-                //->setParameter('list', $list)
                 ->setParameter('authUser', $authUser)
                 ->setParameter('status', UserFriend::ACCEPT)
                 ;
@@ -92,8 +91,8 @@ class ArFileRepository extends EntityRepository
                     FROM WallBundle:arFile fi
                     LEFT JOIN fi.wallMessage m
                     LEFT JOIN m.channels ch
-                    LEFT JOIN m.createdBy u
-                    WHERE (ch.open = 1) AND (
+                    LEFT JOIN fi.createdBy u
+                    WHERE ((ch.open = 1) OR (ch.id IS NULL)) AND (
                                 (u = :authUser) OR (u.id in 
                                     (
                                         SELECT uu.id
@@ -111,9 +110,8 @@ class ArFileRepository extends EntityRepository
                                     )
                                 )
                             )
-                    ORDER BY m.createdAt DESC
+                    ORDER BY fi.createdAt DESC
                 ")
-                //->setParameter('list', $list)
                 ->setParameter('authUser', $authUser)
                 ->setParameter('status', UserFriend::ACCEPT)
                 ;
@@ -126,8 +124,8 @@ class ArFileRepository extends EntityRepository
                     FROM WallBundle:arFile fi
                     LEFT JOIN fi.wallMessage m
                     LEFT JOIN m.channels ch
-                    LEFT JOIN m.createdBy u
-                    WHERE (ch.open = 1) AND (fi.groupType = :group) AND (
+                    LEFT JOIN fi.createdBy u
+                    WHERE ((ch.open = 1) OR (ch.id IS NULL)) AND (fi.groupType = :group) AND (
                                 (u = :authUser) OR (u.id in 
                                     (
                                         SELECT uu.id
@@ -145,9 +143,8 @@ class ArFileRepository extends EntityRepository
                                     )
                                 )
                             )
-                    ORDER BY m.createdAt DESC
+                    ORDER BY fi.createdAt DESC
                 ")
-                //->setParameter('list', $list)
                 ->setParameter('authUser', $authUser)
                 ->setParameter('group', $group)
                 ->setParameter('status', UserFriend::ACCEPT)
@@ -164,9 +161,9 @@ class ArFileRepository extends EntityRepository
                     FROM WallBundle:arFile fi
                     LEFT JOIN fi.wallMessage m
                     LEFT JOIN m.channels ch
-                    LEFT JOIN m.createdBy u
+                    LEFT JOIN fi.createdBy u
                     LEFT JOIN fi.arFavorites fav
-                    WHERE (ch.open = 1) AND ((fi.hash like :hash) OR (fi.hashSmall like :hashSmall)) AND (fav.createdBy = :authUser)  AND (
+                    WHERE ((ch.open = 1) OR (ch.id IS NULL)) AND ((fi.hash like :hash) OR (fi.hashSmall like :hashSmall)) AND (fav.createdBy = :authUser)  AND (
                                 (u = :authUser) OR (u.id in 
                                     (
                                         SELECT uu.id
@@ -184,9 +181,8 @@ class ArFileRepository extends EntityRepository
                                     )
                                 )
                             )
-                    ORDER BY m.createdAt DESC
+                    ORDER BY fi.createdAt DESC
                 ")
-                ->setParameter('list', $list)
                 ->setParameter('authUser', $authUser)
                 ->setParameter('hash', '%'.$hash.'%')
                 ->setParameter('hashSmall', '%'.$hashSmall.'%')
@@ -201,8 +197,8 @@ class ArFileRepository extends EntityRepository
                     FROM WallBundle:arFile fi
                     LEFT JOIN fi.wallMessage m
                     LEFT JOIN m.channels ch
-                    LEFT JOIN m.createdBy u
-                    WHERE (ch.open = 1) AND ((fi.hash like :hash) OR (fi.hashSmall like :hashSmall)) AND (
+                    LEFT JOIN fi.createdBy u
+                    WHERE ((ch.open = 1) OR (ch.id IS NULL)) AND ((fi.hash like :hash) OR (fi.hashSmall like :hashSmall)) AND (
                                 (u = :authUser) OR (u.id in 
                                     (
                                         SELECT uu.id
@@ -220,9 +216,8 @@ class ArFileRepository extends EntityRepository
                                     )
                                 )
                             )
-                    ORDER BY m.createdAt DESC
+                    ORDER BY fi.createdAt DESC
                 ")
-                //->setParameter('list', $list)
                 ->setParameter('authUser', $authUser)
                 ->setParameter('hash', '%'.$hash.'%')
                 ->setParameter('hashSmall', '%'.$hashSmall.'%')
@@ -237,8 +232,8 @@ class ArFileRepository extends EntityRepository
                     FROM WallBundle:arFile fi
                     LEFT JOIN fi.wallMessage m
                     LEFT JOIN m.channels ch
-                    LEFT JOIN m.createdBy u
-                    WHERE (ch.open = 1) AND ((fi.hash Like :hash) OR (fi.hashSmall Like :hashSmall)) AND (fi.groupType = :group) AND (
+                    LEFT JOIN fi.createdBy u
+                    WHERE ((ch.open = 1) OR (ch.id IS NULL)) AND ((fi.hash Like :hash) OR (fi.hashSmall Like :hashSmall)) AND (fi.groupType = :group) AND (
                                 (u = :authUser) OR (u.id in 
                                     (
                                         SELECT uu.id
@@ -256,7 +251,7 @@ class ArFileRepository extends EntityRepository
                                     )
                                 )
                             )
-                    ORDER BY m.createdAt DESC
+                    ORDER BY fi.createdAt DESC
                 ")
                 //->setParameter('list', $list)
                 ->setParameter('authUser', $authUser)

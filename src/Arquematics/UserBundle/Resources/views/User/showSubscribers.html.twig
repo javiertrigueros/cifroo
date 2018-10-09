@@ -1,0 +1,25 @@
+{% if subscribers|length == 0 %}
+<li id="direct_messages" class="configurador-menu px-nav-item px-nav-dropdown">   
+    <a href="#">
+            <i class="px-nav-icon fa ion-at"></i>
+            <span class="px-nav-label">{% trans %}control_panel.direc_messages{% endtrans %}</span>
+    </a>
+</li>
+{% else %}
+<li id="direct_messages" class="configurador-menu px-nav-item px-nav-dropdown {% if menuSection is defined and menuSection == "dd" %} px-open {% endif %}">
+        <a href="#">
+            <i class="px-nav-icon fa ion-at"></i>
+            <span class="px-nav-label">{% trans %}control_panel.direc_messages{% endtrans %}</span>
+        </a>
+
+        <ul class="px-nav-dropdown-menu">
+            {% for subscriber in subscribers %}
+              <li class="px-nav-item {% if currentSubscriberId is defined  and currentSubscriberId == subscriber.id %} active {% endif %}">
+              <a href="{{ path('direc_message', {"usename_slug": subscriber.slug } ) }}">
+                  <span class="px-nav-label">{{ subscriber.name }}</span>
+              </a>
+              </li>  
+            {% endfor %}
+        </ul>
+</li>
+{% endif %}

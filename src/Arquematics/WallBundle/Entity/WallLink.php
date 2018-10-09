@@ -163,6 +163,32 @@ class WallLink implements JsonSerializable
     }
     
     /**
+     * @var DirectMessage $directMessage
+     * 
+     * @ORM\ManyToOne(targetEntity="DirectMessage", inversedBy="wallLinks")
+     * @ORM\JoinColumn(name="direct_message_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
+     * 
+     */
+    private $directMessage;
+    
+    public function setDirectMessage($directMessage = null)
+    {
+        $this->directMessage = $directMessage;
+
+        return $this;
+    }
+
+    /**
+     * Get WallMessage
+     *
+     * @return WallMessage 
+     */
+    public function getDirectMessage()
+    {
+        return $this->directMessage;
+    }
+    
+    /**
      * @var WallMessage $wallMessage
      * 
      * @ORM\ManyToOne(targetEntity="WallMessage", inversedBy="wallLinks")

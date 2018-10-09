@@ -28,6 +28,34 @@ use Arquematics\UserBundle\Form\UserType;
 
 class UserController extends ArController
 {
+    public function getSubscribersAction(Request $request)
+    {
+        if (!$this->checkView($request))
+        {
+          return $this->redirect($this->generateUrl('homepage'));  
+        }
+        
+        $subscribers = $this->em->getRepository('UserBundle:User')->findByFriendAccept($this->authUser);
+        
+        return $this->render('UserBundle:User:showSubscribers.html.twig', array(
+            "subscribers" => $subscribers,
+            "menuSection" => '',
+            "currentSubscriberId" => -1
+        )); 
+    }
+    
+    public function showSubscribersAction($authUser, $menuSection, $currentSubscriberId = -1)
+    {
+        $this->em = $this->getDoctrine()->getManager();
+        
+        $subscribers = $this->em->getRepository('UserBundle:User')->findByFriendAccept($authUser);
+        
+        return $this->render('UserBundle:User:showSubscribers.html.twig', array(
+            "subscribers" => $subscribers,
+            "menuSection" => $menuSection,
+            "currentSubscriberId" => $currentSubscriberId
+        ));
+    }
     
     public function autologinAction(Request $request)
     {

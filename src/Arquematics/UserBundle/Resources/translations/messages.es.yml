@@ -163,3 +163,5 @@ control_panel.subscribers_list: "Lista de suscriptores"
 
 control_panel.send_all_messages_title: "¿Desea compartir el contenido antiguo?"
 control_panel.send_all_messages_text: "Si desea compartir el contenido antiguo, la operación puede durar un tiempo."
+
+control_panel.direc_messages: "Mensajes directos"

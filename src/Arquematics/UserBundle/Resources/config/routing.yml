@@ -124,3 +124,7 @@ user_profile_image_resize:
     # javier 3.3
     path:  /resizeImage
     defaults: { _controller: UserBundle:User:resizeProfileImage }
+    
+user_subscribers:
+    path:  /getSubscribers
+    defaults: { _controller: UserBundle:User:getSubscribers }

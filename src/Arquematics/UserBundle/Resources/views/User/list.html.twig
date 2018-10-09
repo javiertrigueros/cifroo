@@ -185,6 +185,7 @@
             arquematics.notifications.init({'timeout': 60 * 1000,
                                     'stopGetNotifications': false,
                                     'notifications':'{{ path('user_notifications') }}',
+                                    'subscribers': '{{ path('user_subscribers') }}',
                                     'url': '{{ path('ajax_notifications_to_viewed') }}' });
             
             {% if authUser.lock %}

@@ -7,6 +7,7 @@ arquematics.notifications = {
         
         content_item:               '.notification-item',
         content_notifications:      '#navbar-notifications',
+        direct_messages:            '#direct_messages',
 
         cmd_notification_accept:    '.cmd-notification-accept',
         cmd_notification_block:     '.cmd-notification-block',
@@ -27,7 +28,7 @@ arquematics.notifications = {
        var options = this.options
        ,that = this;
         
-        $.when(this.getNotifications())
+        $.when(this.getNotifications(), that.getSubscribers())
         .then(function (data){
            that._addNodeHandlers($(options.content_notifications));
         }); 
@@ -101,12 +102,41 @@ arquematics.notifications = {
             .then(function (respose){
                 $(options.content_notifications).empty();
         
-                $.when(that.getNotifications())
+                $.when(that.getNotifications(), that.getSubscribers())
                 .then(function (data){
                    $('body').trigger('userChange', [respose]);
                 });
             }); 
        });
+    },
+    
+    getSubscribers: function()
+    {
+        var options = this.options
+        ,that = this
+        ,d = $.Deferred();
+        
+        $.ajax({
+                type: "GET",
+                url: options.subscribers,
+                success:function(data)
+                {
+                    var $node = $(data);
+
+                    $(options.direct_messages).empty();
+                    $(options.direct_messages).html($node);
+                    
+                    d.resolve(data);      
+                },
+                error: function ()
+                {
+                     d.reject();
+                }
+            }); 
+
+        return d;
+        
+       
     },
     
     getNotifications: function()

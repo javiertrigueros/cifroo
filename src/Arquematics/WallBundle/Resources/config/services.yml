@@ -7,6 +7,14 @@ services:
             - '@doctrine.orm.entity_manager'
         tags:
             - { name: gos_web_socket.topic }
+    
+    direct.topic_service:
+        class: Arquematics\WallBundle\Topic\DirectTopic
+        arguments: 
+            - '@gos_web_socket.websocket.client_manipulator'
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: gos_web_socket.topic }
             
     message.topic_service:
         class: Arquematics\WallBundle\Topic\MessageTopic
@@ -26,6 +34,12 @@ services:
     
     user.publish.listener:
         class: Arquematics\WallBundle\Listener\UserPostPersist
+        arguments: ['@session']
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
+    
+    directmessage.publish.listener:
+        class: Arquematics\WallBundle\Listener\DirectMessagePostPersist
         arguments: ['@session']
         tags:
             - { name: doctrine.event_listener, event: postPersist }

@@ -848,13 +848,7 @@ class WallController extends ArController
         
         $this->wallMessage = new WallMessage();
                 
-        /*
-        $form = $this->createForm(new WallMessageType($this->authUser), $this->wallMessage );
-        $formLink = $this->createForm(new LinkType($this->authUser));
-        $formTag = $this->createForm(new TagType());
-        $formComment = $this->createForm(new CommentType(['message' => null, 'user' => $this->authUser]));
-        */
-       
+        
         $form = $this->createForm(WallMessageType::class, $this->wallMessage , ['entity_manager' => $this->getDoctrine()->getManager(), 'user' => $this->authUser,'channel' => $this->currentChannel]);
         $formLink = $this->createForm(LinkType::class,null, ['entity_manager' => $this->getDoctrine()->getManager(),'user' => $this->authUser]);
         $formTag = $this->createForm(TagType::class, null, ['entity_manager' => $this->getDoctrine()->getManager()]);

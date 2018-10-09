@@ -9,11 +9,8 @@ use Arquematics\WallBundle\Entity\WallLink;
 use Arquematics\WallBundle\Entity\WallList;
 
 use Doctrine\ORM\Mapping as ORM;
-use Arquematics\BackendBundle\Entity\Headquarter;
 
 use JsonSerializable;
-
-use Arquematics\WallBundle\Utils\ARUtil;
 /**
  * Class WallMessage
  *
@@ -735,12 +732,12 @@ class WallMessage implements JsonSerializable
         return $ret;
     }
     
-    
+    /*
     public function hasMainLink()
     {
         return (count($this->getWallLinks()) > 0);
-    }
-    
+    }*/
+    /*
     public function getMainLink()
     {
        $ret = '';
@@ -752,8 +749,8 @@ class WallMessage implements JsonSerializable
        }
        
        return $ret;
-    }
-    
+    }*/
+    /*
     public function getFilterContent()
     {
         //borra la url si empieza por una
@@ -767,7 +764,7 @@ class WallMessage implements JsonSerializable
         {
            return trim($this->getContent());
         }
-    }
+    }*/
             
     public function jsonSerialize()
     {
@@ -833,13 +830,12 @@ class WallMessage implements JsonSerializable
         return [
             'id'            =>  $this->getId(),
             'createdAt'     =>  $this->getCreatedAt()->format("Y-m-d").' '.$this->getCreatedAt()->format("H:i:s"),
-            //'createdAt'     =>  $this->getCreatedAt()->getTimestamp() * 1000,
             'user'          => [
                                 'id'   => $userProfile->getId(),
                                 'name' => $userProfile->getName(). ' '. $userProfile->getLastName(),
                                 'image' => $userProfile->getImage(), 
                             ],
-            'content'       =>  $this->getFilterContent(),
+            'content'       =>  trim($this->getContent()),
             'isPublish'     =>  $this->getPublish(), 
             'channel'       =>  $channels,
             'tags'          =>  $tags,

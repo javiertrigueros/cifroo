@@ -192,6 +192,45 @@ arquematics.websocket.requestFriendHandler = function (session)
     
 };
 
+arquematics.websocket.directMessageHandler = function (session)
+{
+    var userId = arquematics.crypt.getUserId();
+    
+        session.subscribe("direct/"  + arquematics.wall.getCurrenUser(), function(uri, payload){
+
+            var dataPush = JSON.parse(payload.msg);
+            
+            if (dataPush && dataPush[userId])
+            {
+                arquematics.wall.renderAndNotify(dataPush[userId]);
+            }
+            
+        });
+        
+        session.subscribe("direct/"  + arquematics.wall.getAuthUser(), function(uri, payload){
+
+            var dataPush = JSON.parse(payload.msg);
+            
+            if (dataPush && dataPush[userId])
+            {
+                arquematics.wall.renderAndNotify(dataPush[userId]);
+            }
+            
+        });
+        
+        session.subscribe("user/notification", function(uri, payload){
+            var dataPush = JSON.parse(payload.msg);
+            
+            if (userId == dataPush.authUserId)
+            {
+               arquematics.notifications.reloadNotification();
+               arquematics.userFriend.updateUserData(dataPush);
+            }
+        });
+        
+    
+};
+
 arquematics.websocket.errorHandler = function (error) {
     console.log('Websocket server connection failed', error);
 };
@@ -207,6 +246,12 @@ arquematics.websocket.prototype = {
     {
         $.when(this.connect())
              .then(arquematics.websocket.requestFriendHandler, 
+                   arquematics.websocket.errorHandler);  
+    },
+    directMessage:  function()
+    {
+        $.when(this.connect())
+             .then(arquematics.websocket.directMessageHandler, 
                    arquematics.websocket.errorHandler);  
     }
 };

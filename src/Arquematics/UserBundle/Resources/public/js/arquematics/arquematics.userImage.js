@@ -15,7 +15,7 @@
  * @param {type} jQuery
  * @returns {arquematics}
  */
-(function (arquematics , jQuery) {
+var arquematics = (function (arquematics , jQuery) {
 
 arquematics.userImage =  {
 	options: {

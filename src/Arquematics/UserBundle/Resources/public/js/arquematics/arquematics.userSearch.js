@@ -14,7 +14,7 @@
  * @param {type} $
  * @param {type} arquematics
  */
-(function (arquematics , jQuery,  List, moment) {
+var arquematics = (function (arquematics , $,  List) {
 
 arquematics.userSearch =  {
 	options: {
@@ -249,5 +249,6 @@ arquematics.userSearch =  {
         }
 };
 
+return arquematics;
 
-}( arquematics || {}, jQuery, List, moment));
+}( arquematics || {}, jQuery, List));

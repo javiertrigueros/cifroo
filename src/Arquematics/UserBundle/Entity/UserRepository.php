@@ -16,6 +16,24 @@ use Arquematics\UserBundle\Entity\UserFriend;
  */
 class UserRepository extends EntityRepository
 {
+    public function findByFriendAccept($user)
+    {
+       $dql = '
+            SELECT u
+            FROM UserBundle:User u
+            LEFT JOIN u.friends f
+            LEFT JOIN u.users uu
+            WHERE (u != :user) AND (((f.user = :user) OR (f.friend = :user)) OR ((uu.user = :user) OR (uu.friend = :user))) AND ((f.status = :statusAc) OR (uu.status = :statusAc))'
+            ;
+        
+        $query = $this->getEntityManager($dql)
+                ->createQuery($dql)
+                ->setParameter("user",$user)
+                ->setParameter("statusAc",UserFriend::ACCEPT)
+        ; 
+        
+        return $query->getResult();
+    }
     
     public function findByFriend($user)
     {

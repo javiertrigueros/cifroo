@@ -119,6 +119,15 @@ arquematics.wall = {
             this._initControlHandlers();
 	},
         
+        getCurrenUser: function()
+        {
+           return this.options.currenUser;   
+        },
+        getAuthUser: function()
+        {
+            return this.options.authUser;  
+        },
+        
         getSlug: function()
         {
            return this.options.channel;  
@@ -1004,26 +1013,17 @@ arquematics.wall = {
 
                pass = false || pass;
                
-                           $.ajax({
-                            type: "POST",
-                            url: $form.attr('action'),
-                            datatype: "json",
-                            data: formData,
-                            cache: false,
-                            success: function(dataJSON)
-                            {
-                                /*
-                                var $contentNode = arquematics.wall.parseData(dataJSON);
+               $.ajax({
+                    type: "POST",
+                    url: $form.attr('action'),
+                    datatype: "json",
+                    data: formData,
+                    cache: false,
+                    success: function(dataJSON)
+                    {
                         
-                                $(options.content).prepend($contentNode);
+                        //arquematics.wall.renderAndNotify(dataJSON);
                         
-                                arquematics.wall.addNodeHandlers($contentNode);
-                                
-                                $contentNode.find('.message').animate({'backgroundColor':'#ffff'},200);
-                                //se ha agregado contenido a wall
-                                //y lo notifica
-                                arquematics.wall.notify(new arquematics.wall.message(dataJSON));
-                                */
                                 arquematics.wall.reset();
                         
                                 arquematics.wall.unlock();

@@ -6,32 +6,7 @@
     
     <div class="px-content">
         
-        {% if not showSendControls %}
-        <div class="page-header">
-            <div class="row">
-                <div class="col-md-4 text-xs-center text-md-left text-nowrap">
-                <h1>
-                    <i class="fa fa-hashtag"></i>
-                    {{ currenUser.profile.name }}&nbsp;{{ currenUser.profile.lastname }}
-                </h1>
-                </div>
-          
-            <hr class="page-wide-block visible-xs visible-sm">
 
-            <div class="col-xs-12 width-md-auto width-lg-auto width-xl-auto pull-md-right">
-                <a href="{{ path('wall', {'channel_slug': channel.slug }) }}" class="btn btn-back btn-block">
-                <span class="btn-label-icon left fa fa-chevron-left"></span>
-                {% trans %}control_panel.back{% endtrans %}
-                </a>
-            </div>
-
-            <!-- Spacer -->
-            <div class="m-b-2 visible-xs visible-sm clearfix"></div>
-
-            </div>
-        </div>
-        {% endif %}
-        
         <div class="row m-t-1">
         
             <div id="movile-profilecol" class="col-md-3 col-lg-3 hide"></div>
@@ -42,8 +17,7 @@
                     
                     <div class="tab-pane fade active in" id="profile-board">
                         
-                        
-                        <form id="wall_send_content" action="{{ path("wall", {"channel_slug": channel.slug }) }}" class="widget-tree-comments-item form-control-message {% if not showSendControls %}hide{% endif %}" method="POST" enctype="multipart/form-data">
+                        <form id="wall_send_content" action="{{ path("direc_message", {"usename_slug": currenUser.slug }) }}" class="widget-tree-comments-item form-control-message" method="POST" enctype="multipart/form-data">
                         {% if authUser.profile.image %}
                             <img src="{{ path("user_profile_avatar",  {'fileName':authUser.profile.image}) }}" alt="" class="widget-tree-comments-avatar border-round hidden-xs"/>
                         {% else %}
@@ -155,55 +129,6 @@
 </script>  
 <!-- The template to display profile data -->
 <script id="template-profile" type="text/x-jquery-tmpl">
-
-{% if not showSendControls %}
-      
-<div class="panel box hide">
-    <div class="box-row">
-        <div class="box-cell p-x-3 p-y-1">
-            <div class="pull-xs-left font-weight-semibold font-size-12">{% trans %}wall.tags_label{% endtrans %}</div>
-            <div class="pull-xs-right text-success font-size-12"><i class="fa fa-caret-down"></i></div>
-        </div>
-    </div>
-    
-    
-    <div class="box-row panel-body p-a-1 tag-panel" style="display:block;padding:10px">
-        {% verbatim %}
-        {{#tags}}
-        {% endverbatim %} 
-            {% verbatim %}
-            {{#selected}}
-                <a data-id="{{id}}" data-count="{{count}}" data-hash="{{hash}}" class="cmd-tag-profile user-tag tag-panel-item user-tag-selected" href="{{href}}">
-                    <span class="label label-primary active tag-active">
-                        <span class="tag-text">{{name}}&nbsp;({{count}})</span>
-                        <i class="cmd-filter-tag tag-remove-circle fa fa-times-circle" style="display: inline-block;"></i>
-                    </span>
-                </a>
-            {{/selected}}  
-            {% endverbatim %}
-        
-            {% verbatim %}
-            {{^selected}}
-                <a data-id="{{id}}" data-count="{{count}}" data-hash="{{hash}}" class="cmd-tag-profile user-tag tag-panel-item" href="{{href}}">
-                    <span class="label label-primary">
-                        <span class="tag-text">
-                            <span class="tag-text">{{name}}&nbsp;({{count}})</span>
-                            <i class="cmd-filter-tag tag-remove-circle fa fa-times-circle hide" style="display: inline-block;"></i>
-                        </span>
-                    </span>
-                </a>
-            {{/selected}}  
-            {% endverbatim %}    
-        
-        {% verbatim %}
-        {{/tags}}
-        {% endverbatim %}
-    </div>
-</div>
-{% endif %} 
-    
-{% if showSendControls %}  
-    
 <div class="panel box hide">
     <div class="box-row">
         <div class="box-cell p-x-3 p-y-1">
@@ -260,7 +185,6 @@
     {{/isLastPage}}
     {% endverbatim %}
 </div>
-{% endif %}
 </script>   
 
 <!-- The template to display links available -->
@@ -466,85 +390,6 @@
         {% endverbatim %}
     </div>
     
-    <div id="interactive-zone-{% verbatim %}{{ id }}{% endverbatim %}" class="widget-tree-comments-footer interactive-zone">
-        {% verbatim %}
-        {{#countText}}
-            <a href="#message-{{ id }}" data-id="{{ id }}" class="cmd-show-comment hidden-sm hidden-md hidden-lg"><i class="fa fa-plus-square"></i>&nbsp;{{countText}}</a>
-            <div class="clearfix hidden-sm hidden-md hidden-lg"></div>
-        {{/countText}}
-        {{#voteByMe}}
-              {{#voteCount}}
-               <a data-vote-count-real="{{ voteCountReal }}" data-content="{{ voteNames }}" id="like-control-{{ id }}" class="tool-votes cmd-like-message hidden-xs" href="{{ voteURL }}" data-like="false" data-id="{{ id }}"><i class="fa fa-thumbs-o-up"></i>&nbsp;{{voteByMe}}</a>
-               <a data-vote-count-real="{{ voteCountReal }}" data-content="{{ voteNames }}" id="like-control-movile-{{ id }}" class="tool-votes cmd-like-message-movile hidden-sm hidden-md hidden-lg" href="{{ voteURL }}" data-like="false" data-id="{{ id }}"><i class="fa fa-thumbs-o-up"></i></a>               
-               <a data-id="{{ id }}" id="like-control-movile-text-{{ id }}" class="hidden-sm hidden-md hidden-lg cmd-like-message-movile-text" href="#like-control-movile-{{ id }}">{{voteByMe}}</a>
-              {{/voteCount}}
-              
-              {{^voteCount}}
-                <a data-vote-count-real="{{ voteCountReal }}" data-content="{{ voteNames }}" id="like-control-{{ id }}" class="tool-votes cmd-like-message hidden-xs" href="{{ voteURL }}" data-like="false" data-id="{{ id }}"><i class="fa fa-thumbs-o-up"></i>&nbsp;{{voteByMe}}</a>
-                <a data-vote-count-real="{{ voteCountReal }}" data-content="{{ voteNames }}" id="like-control-movile-{{ id }}" class="tool-votes cmd-like-message-movile hidden-sm hidden-md hidden-lg" href="{{ voteURL }}" data-like="false" data-id="{{ id }}"><i class="fa fa-thumbs-o-up"></i></a>
-                <a data-id="{{ id }}" class="hidden-sm hidden-md hidden-lg cmd-like-message-movile-text" id="like-control-movile-text-{{ id }}" href="#like-control-movile-{{ id }}">{{voteByMe}}</a>
-              {{/voteCount}}
-               <span class="hidden-xs">·</span>
-        {{/voteByMe}}
-            
-        {{^voteByMe}}
-            {{#voteCount}}
-               <a data-vote-count-real="{{ voteCountReal }}" data-content="{{ voteNames }}" id="like-control-{{ id }}" class="tool-votes cmd-like-message hidden-xs" href="{{ voteURL }}" data-like="true" data-id="{{ id }}"><i class="fa fa-thumbs-o-up"></i>&nbsp;{{voteCount}}</a>
-               <a data-vote-count-real="{{ voteCountReal }}" data-content="{{ voteNames }}" id="like-control-movile-{{ id }}" class="tool-votes cmd-like-message-movile hidden-sm hidden-md hidden-lg" href="{{ voteURL }}" data-like="true" data-id="{{ id }}"><i class="fa fa-thumbs-o-up"></i></a>
-               <a data-id="{{ id }}" class="hidden-sm hidden-md hidden-lg cmd-like-message-movile-text" id="like-control-movile-text-{{ id }}" href="#like-control-movile-{{ id }}">{{voteCount}}</a>
-            {{/voteCount}}
-            <span class="hidden-xs hidden-sm">·</span>
-        {{/voteByMe}}
-        
-        <span  class="hidden-sm hidden-md hidden-lg">·</span>      
-        <a href="#" data-id="{{ id }}" class="cmd-show-form-comment"><i class="fa fa-comment-o"></i>&nbsp;{% endverbatim %}{% trans %}wall.comment_label{% endtrans %}{% verbatim %}</a>
-        {{#countText}}
-            <span class="hidden-xs">·</span>
-            <a href="#message-{{ id }}" data-id="{{ id }}" class="cmd-show-comment hidden-xs"><i class="fa fa-plus-square"></i>&nbsp;{{countText}}</a>
-        {{/countText}} 
-        {% endverbatim %}
-    </div>
-    
-    
-    <div class="comments-list">
-    {% verbatim %}
-    {{#comments}}
-    {% endverbatim %}
-        <div id="comments-item-{% verbatim %}{{ id }}{% endverbatim %}" class="widget-tree-comments-item {% verbatim %}{{#hide}}{% endverbatim %}hide{% verbatim %}{{/hide}}{% endverbatim %}">
-            <img src="{% verbatim %}{{ user.image }}{% endverbatim %}" class="widget-tree-comments-avatar">
-            <div class="widget-tree-comments-header">
-                <a class="message-name" href="{% verbatim %} {{ user.url }} {% endverbatim %}">{% verbatim %} {{ user.name }} {% endverbatim %}</a><span class="mytime message-time" title="{% verbatim %}{{createdAt}}{% endverbatim %}"></span>
-                {% verbatim %}
-                {{#commentDeleteURL}}
-                {% endverbatim %}
-                <span data-delete-url="{% verbatim %}{{ commentDeleteURL }}{% endverbatim %}" data-comment-id="{% verbatim %}{{ id }}{% endverbatim %}" id="remove-comment-{% verbatim %}{{ id }}{% endverbatim %}" class="cmd-comment-delete fa fa-trash comment-icon-remove"></span>    
-                {% verbatim %}
-                {{/commentDeleteURL}}
-                {% endverbatim %}
-            </div>
-            <div class="widget-tree-comments-text message-comment-content">{% verbatim %}{{ content }}{% endverbatim %}</div>
-        </div>
-    {% verbatim %}
-    {{/comments}}
-    {% endverbatim %}
-    </div>
-    
-    
-    <form id="wall-send-comment-{% verbatim %}{{ id }}{% endverbatim %}" action="{% verbatim %}{{ commentURL }}{% endverbatim %}" class="formControl widget-tree-comments-item hide interactive-zone-comment">
-        {% if authUser.profile.image %}
-            <img src="{{ path("user_profile_avatar",  {'fileName':authUser.profile.image}) }}" class="widget-tree-comments-avatar border-round hidden-xs"/>
-        {% else %}
-            <img src="{{ asset('bundles/user/img/avatars/unknown.png') }}" alt="" class="widget-tree-comments-avatar border-round hidden-xs" />
-        {% endif %}
-        <textarea placeholder="{% trans %}wall.comment_content_label{% endtrans %}" id="wallbundle_wall_content" name="wallbundle_comment[content]" maxlength="200" rows="1" class="widget-tree-comments-input form-control autosize" autocomplete="off"></textarea>
-        <input class="form-control-pass form-control hide" id="wallbundle_comment_pass" name="wallbundle_comment[pass]" type="text">
-        {{ form_widget(formComment._token) }}   
-        <div class="pull-left control-footer">
-            <button type="button" data-loading-text="{% trans %}wall.cmd_loading{% endtrans %}" class="btn btn-primary cmd-comment">
-                {% trans %}wall.cmd_comment{% endtrans %}
-            </button>
-        </div>
-    </form>
     
 </div>
 <hr data-message-id="{% verbatim %}{{ id }}{% endverbatim %}" class="m-y-0">
@@ -824,8 +669,8 @@ filter='?cssrewrite,uglifycss' %}
         
         arquematics.notifications.init({'timeout': 60 * 1000,
                                     'stopGetNotifications': false,
-                                    'subscribers': '{{ path('user_subscribers') }}',
                                     'notifications':'{{ path('user_notifications') }}',
+                                    'subscribers': '{{ path('user_subscribers') }}',
                                     'url': '{{ path('ajax_notifications_to_viewed') }}' });
         
         {% if authUser.lock %}
@@ -856,67 +701,29 @@ filter='?cssrewrite,uglifycss' %}
         
         arquematics.tab.init({
             element:'.control-update',
-            showTabs: {% if showSendControls %}true{% else %}false{% endif %} 
+            showTabs: true
         });
         
-        {% if showSendControls %}
-            $(document).infinite({
-                url : '{{ path("wall", {"channel_slug": channel.slug }) }}',
+      
+          $(document).infinite({
+                url : '{{ path("direc_message", {"usename_slug": currenUser.slug }) }}',
                 initPage: 1,
                 trigger: 60,
                 showOnLoad: '.wall-loader'
             });
-        {% else %}
-            $(document).infinite({
-                url : '{{ path("wall" ,  {'usename_slug':currenUser.slug,"channel_slug": channel.slug }) }}',
-                initPage: 1,
-                trigger: 60,
-                showOnLoad: '.wall-loader'
-            });
-        {% endif %}
         
-        {% if showSendControls %}
+        
+  
             arquematics.wall.init(
-                { 
-                  userRequest: false,
-                  channel: '{{ channel.slug }}',
-                  url_delete_comment: '/wall/comment-delete/',
-                  url_delete_message: '/wall/message-delete/'
+                {
+                    currenUser: {{ currenUser.id }},
+                    authUser: {{ authUser.id }}
                 });
-         {% else %}
-            arquematics.wall.init(
-                { 
-                  userRequest: '{{ currenUser.id }}',
-                  channel: '{{ channel.slug }}',
-                  url_delete_comment: '/wall/comment-delete/',
-                  url_delete_message: '/wall/message-delete/'
-                });
-         {% endif %}
+        
         
         arquematics.tab.subscribeTab(arquematics.wall);
         
-        
-        
-        {% if showSendControls %}
-            arquematics.tag.init({
-                text_search: '{% trans %}system.search_tag{% endtrans %}',
-                showControls: true,
-                wall_url:'{{ path("wall", {"channel_slug": channel.slug }) }}',
-                wall_search_url:'{{ path("tag_search", {'channel_slug': channel.slug}) }}',
-                wall_more_url:'{{ path("tag_more", {'channel_slug': channel.slug}) }}'
-            });
-        {% else %}
-            arquematics.tag.init({
-                text_search: '{{ "system.search_tag_user" | trans({'%user%': currenUser.name |capitalize  })  }}',
-                showControls: false,
-                wall_url:'{{ path("wall" ,  {'usename_slug':currenUser.slug, "channel_slug": channel.slug }) }}',
-                wall_search_url:'{{ path("tag_search",  {'channel_slug': channel.slug, 'usename_slug':currenUser.slug}) }}',
-                wall_more_url:'{{ path("tag_more",  {'channel_slug': channel.slug, 'usename_slug':currenUser.slug}) }}'
-            });
-        {% endif %}
-
-        arquematics.wall.subscribeTool(arquematics.tag);
-        
+       
         $('#wallMessage_message').social({
             twitter:{% if authUser.hasTwitter() %}true{% else %}false{% endif %},
             facebook:false,
@@ -985,7 +792,7 @@ filter='?cssrewrite,uglifycss' %}
         
         var webSocketService = new arquematics.websocket(_WS_URI);
             
-        webSocketService.subscribeUsers();  
+        webSocketService.directMessage();  
         
     });
     </script>  

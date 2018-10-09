@@ -1,3 +1,8 @@
+direc_message:
+    path:     /direcMessage/{usename_slug}
+    defaults: { _controller: WallBundle:Message:index, usename_slug: null }
+    methods:  [GET, POST]
+
 channels:
     path:     /channels
     defaults: { _controller: WallBundle:Channel:list }

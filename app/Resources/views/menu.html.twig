@@ -75,6 +75,14 @@
     {% else %}
     {{ render(controller("WallBundle:Channel:showList", { 'menuSection': menuSection})) }}   
     {% endif %}
+    
+    {% if currentSubscriberId is defined %}
+     {{ render(controller("UserBundle:User:showSubscribers", { 'authUser': app.user, 'menuSection': menuSection, 'currentSubscriberId':  currentSubscriberId })) }}
+    {% else %}  
+     {{ render(controller("UserBundle:User:showSubscribers", { 'authUser': app.user, 'menuSection': menuSection })) }}
+    {% endif %}
+    
+    
     <li class="px-nav-item {% if menuSection is defined and menuSection == "explorer" %} active {% endif %}">
             <a href="{{ path('explorer') }}">
                 <i class="px-nav-icon ion-document"></i>

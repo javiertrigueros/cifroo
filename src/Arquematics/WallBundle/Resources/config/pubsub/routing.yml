@@ -1,3 +1,11 @@
+direct_message:
+    channel: direct/{user_id}
+    handler:
+        callback: 'direct.topic'
+    requirements:
+        user_id:
+            pattern: '\d+'
+
 message_user:
     channel: message/{channel_slug}/{user_id}
     handler:

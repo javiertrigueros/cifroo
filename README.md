@@ -22,6 +22,7 @@ composer install
 Crea la base de datos y carga los datos de ejemplo
 
 ```
+bin/console doctrine:database:create
 bin/console doctrine:schema:update --force
 bin/console doctrine:fixtures:load --no-interaction
 ```
@@ -38,8 +39,4 @@ Inicializa la base de datos y crea el usuario administrador.
 
 ```
 bin/console app:init
-```
-Inicia el servicio de websocket
-```
-php bin/console gos:websocket:server
 ```
