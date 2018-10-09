@@ -40,3 +40,9 @@ Inicializa la base de datos y crea el usuario administrador.
 ```
 bin/console app:init
 ```
+Inicia el servicio de websockets
+
+```
+php bin/console gos:websocket:server
+```
+
