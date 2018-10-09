@@ -19,10 +19,9 @@ Instalar las dependencias.
 composer install
 ```
 
-Crea la base de datos y carga los datos de ejemplo
+La base de datos debe estar ya creada con esto se generan las tablas.
 
 ```
-bin/console doctrine:database:create
 bin/console doctrine:schema:update --force
 bin/console doctrine:fixtures:load --no-interaction
 ```
