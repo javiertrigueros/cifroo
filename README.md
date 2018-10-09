@@ -19,7 +19,7 @@ Instalar las dependencias.
 composer install
 ```
 
-La base de datos debe estar ya creada con esto se generan las tablas.
+La base de datos debe estar ya creada...
 
 ```
 bin/console doctrine:schema:update --force
